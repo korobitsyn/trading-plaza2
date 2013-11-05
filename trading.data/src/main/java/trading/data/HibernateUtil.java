@@ -13,10 +13,11 @@ import trading.data.model.Level1;
  *
  */
 public class HibernateUtil {
-	 private static SessionFactory sessionFactory = buildSessionFactory();  
+	 private static SessionFactory sessionFactory = null;//buildSessionFactory();  
 	 private static ServiceRegistry serviceRegistry;	
 	 
-	 private static SessionFactory buildSessionFactory() {  
+	 private static SessionFactory buildSessionFactory() {
+		 
 		 Configuration configuration = new Configuration().configure()
 				 .addAnnotatedClass(Instrument.class)
 				 .addAnnotatedClass(Level1.class);
