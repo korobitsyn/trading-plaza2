@@ -13,7 +13,7 @@ import trading.data.model.Level1;
  *
  */
 public class HibernateUtil {
-	 private static SessionFactory sessionFactory = null;//buildSessionFactory();  
+	 private static SessionFactory sessionFactory = buildSessionFactory();  
 	 private static ServiceRegistry serviceRegistry;	
 	 
 	 private static SessionFactory buildSessionFactory() {
