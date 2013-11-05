@@ -1,4 +1,4 @@
---
+﻿--
 -- PostgreSQL database dump
 --
 
@@ -31,42 +31,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
---
--- TOC entry 178 (class 1255 OID 16471)
--- Dependencies: 5 501
--- Name: level1_receive_trigger(); Type: FUNCTION; Schema: public; Owner: postgres
---
 
-CREATE FUNCTION level1_receive_trigger() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-
-    BEGIN
-
-        -- Work out the increment/decrement amount(s).
-        IF (TG_OP = 'DELETE') THEN
-
-
-        ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO level1(instrument,date,last_time, last_price, last_size,last_price_delta,bid,bid_size,ask,ask_size) 
-		 VALUES (NEW.instrument,NEW.date,NEW.last_time, NEW.last_price, NEW.last_size,NEW.last_price_delta,NEW.bid,NEW.bid_size,NEW.ask,NEW.ask_size);
-		 return NEW;
-
-        ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO level1(instrument,date,last_time, last_price, last_size,last_price_delta,bid,bid_size,ask,ask_size) 
-		 VALUES (NEW.instrument,NEW.date,NEW.last_time, NEW.last_price, NEW.last_size,NEW.last_price_delta,NEW.bid,NEW.bid_size,NEW.ask,NEW.ask_size);
-		 return NEW;
-
-        END IF;
-
-
-        RETURN NULL;
-
-    END;
-$$;
-
-
-ALTER FUNCTION public.level1_receive_trigger() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -87,29 +52,7 @@ CREATE TABLE instrument (
 
 ALTER TABLE public.instrument OWNER TO postgres;
 
---
--- TOC entry 165 (class 1259 OID 16484)
--- Dependencies: 164 5
--- Name: instrument_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
-CREATE SEQUENCE instrument_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.instrument_id_seq OWNER TO postgres;
-
---
--- TOC entry 1915 (class 0 OID 0)
--- Dependencies: 165
--- Name: instrument_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE instrument_id_seq OWNED BY instrument.id;
 
 
 --
@@ -120,7 +63,7 @@ ALTER SEQUENCE instrument_id_seq OWNED BY instrument.id;
 
 CREATE TABLE level1 (
     id integer NOT NULL,
-    instrument character varying,
+    instrument_id integer,
     date timestamp without time zone,
     last_time time without time zone,
     last_price double precision,
@@ -129,8 +72,8 @@ CREATE TABLE level1 (
     bid double precision,
     bid_size integer,
     ask integer,
-    ask_size integer,
-    instrument_id integer
+    ask_size integer
+
 );
 
 
@@ -161,17 +104,6 @@ ALTER TABLE public.level1_id_seq OWNER TO postgres;
 ALTER SEQUENCE level1_id_seq OWNED BY level1.id;
 
 
---
--- TOC entry 163 (class 1259 OID 16475)
--- Dependencies: 1906 5
--- Name: level1_receive_view; Type: VIEW; Schema: public; Owner: postgres
---
-
-CREATE VIEW level1_receive_view AS
-    SELECT level1.id, level1.instrument, level1.date, level1.last_time, level1.last_price, level1.last_size, level1.last_price_delta, level1.bid, level1.bid_size, level1.ask, level1.ask_size FROM level1;
-
-
-ALTER TABLE public.level1_receive_view OWNER TO postgres;
 
 --
 -- TOC entry 1798 (class 2604 OID 16460)
@@ -202,13 +134,6 @@ ALTER TABLE ONLY level1
     ADD CONSTRAINT level1_pk PRIMARY KEY (id);
 
 
---
--- TOC entry 1804 (class 2620 OID 16479)
--- Dependencies: 163 178 1908
--- Name: level1_receive_trigger; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER level1_receive_trigger INSTEAD OF INSERT OR DELETE OR UPDATE ON level1_receive_view FOR EACH ROW EXECUTE PROCEDURE level1_receive_trigger();
 
 
 --
