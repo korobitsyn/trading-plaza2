@@ -1,6 +1,6 @@
 package trading.data;
 
-import javax.persistence.EntityManager;
+//import javax.persistence.EntityManager;
 
 import trading.data.model.Instrument;
 
