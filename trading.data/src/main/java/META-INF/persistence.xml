@@ -8,6 +8,7 @@
 			<property name="javax.persistence.jdbc.password" value="1"/>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+			<property name="hibernate.archive.autodetection" value="class,hbm" /> 
 		</properties>
 	</persistence-unit>
 </persistence>
