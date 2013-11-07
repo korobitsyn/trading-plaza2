@@ -19,11 +19,14 @@ public class Subscriber implements ISubscriber {
 	 * Process new message
 	 */
 	public int onMessage(Connection conn, Listener listener, Message message) {
+
+		
 		// Process by message type
 		switch (message.getType()) {
-		// Data message
+		
 		case MessageType.MSG_DATA:
 			DataMessage msgData = (DataMessage) message;
+	
 			System.out.println(String.format(
 					"Reply message. ID=%d, User-Id=%d, content=%s",
 					msgData.getMsgId(), msgData.getUserId(), message));
