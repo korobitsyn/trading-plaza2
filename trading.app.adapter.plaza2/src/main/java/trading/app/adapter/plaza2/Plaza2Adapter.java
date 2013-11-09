@@ -1,5 +1,10 @@
 package trading.app.adapter.plaza2;
 
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Observable;
+
+import ru.micexrts.cgate.CGateException;
 import ru.micexrts.cgate.Connection;
 import ru.micexrts.cgate.ErrorCode;
 import ru.micexrts.cgate.ISubscriber;
@@ -19,32 +24,35 @@ import trading.data.model.Instrument;
  * 
  */
 public class Plaza2Adapter implements ISubscriber {
+	
+	/**
+	 * Instrument info adapter
+	 */
+	private InstrumentAdapter instrumentAdapter = new InstrumentAdapter();
+
+	/**
+	 * Subadapters for different messages (Instrument, quote, level1 etc)
+	 */
+	private Map<String,SpecificAdapter> adaptersByMessage = new Hashtable<String, SpecificAdapter>(){{ 
+		put(InstrumentAdapter.MESSAGE_NAME,instrumentAdapter);	
+		}};
+
+
 	/**
 	 * Process new message
 	 */
 	public int onMessage(Connection conn, Listener listener, Message message) {
-
 		
 		// Process by message type
 		switch (message.getType()) {
-/*		case MessageType.MSG_STREAM_DATA:
-			AbstractDataMessage d;
-			
-			StreamDataMessage streamMsg = (StreamDataMessage) message;
-
-			break;*/
+		// Data messages
+		case MessageType.MSG_DATA:
 		case MessageType.MSG_STREAM_DATA:
+			// Get adapter by message name
 			AbstractDataMessage msgData = (AbstractDataMessage) message;
-			String msgName = msgData.getMsgName();
-
-			// Instrument received
-			switch(msgName){
-			case "fut_instruments":
-				FutInfo.fut_instruments schemeEntity = new FutInfo.fut_instruments(msgData.getData());
-				Instrument instrument = SchemeConverter.convert(schemeEntity);
-				System.out.println(instrument.getCode());
-				//processDataMessage(msgData);
-				break;
+			SpecificAdapter specificAdapter = adaptersByMessage.get(msgData.getMsgName());
+			if(specificAdapter != null){
+				specificAdapter.onMessage(msgData);
 			}
 			break;
 		// Timeout
@@ -59,16 +67,18 @@ public class Plaza2Adapter implements ISubscriber {
 
 		return ErrorCode.OK;
 	}
+
 	
 	/**
-	 * Data message received
-	 * @param message
+	 * Main cycle for dev only
+	 * ToDo: remove later
+	 * @param args
+	 * @throws InterruptedException
 	 */
-	private void processDataMessage(AbstractDataMessage message){
-		int index = message.getMsgIndex();
-		String name = message.getMsgName();
-		int id = message.getMsgId();
-		System.out.println(String.format("Message id = %d, index = %d, name = %s.", id, index, name));
-	}
+	public static void main(String[] args) throws CGateException,
+			InterruptedException {
+
+		new Plaza2Client().run();
+	}	
 
 }

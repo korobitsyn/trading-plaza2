@@ -116,16 +116,6 @@ public class Plaza2Client {
 		}
 	}
 
-	/**
-	 * Main cycle for dev only
-	 * ToDo: remove later
-	 * @param args
-	 * @throws InterruptedException
-	 */
-	public static void main(String[] args) throws CGateException,
-			InterruptedException {
 
-		new Plaza2Client().run();
-	}
 
 }
