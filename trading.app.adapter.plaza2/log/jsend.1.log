@@ -1,31 +1,256 @@
-2013-11-09 11:34:40.745;cgate.env;;New logger was registered: cgate.env.
-2013-11-09 11:34:40.746;cgate.env;;Registered default p2 logger cgate.env.
-2013-11-09 11:34:40.746;cgate.env;;New logger was registered: cgate.user.
-2013-11-09 11:34:40.746;cgate.env;;Registered default p2 logger cgate.user.
-2013-11-09 11:34:40.746;cgate.env;;New logger was registered: cgate.p2iniprovider.
-2013-11-09 11:34:40.746;cgate.env;;Registered default p2 logger cgate.p2iniprovider.
-2013-11-09 11:34:40.746;cgate.env;;Logger was unregistered: 0x7F0420126CA0.
-2013-11-09 11:34:40.746;cgate.env;;Logger ref count after release: 0x0.
-2013-11-09 11:34:40.746;p2mq-cli;;MQ library started.
-2013-11-09 11:34:40.746;p2repl-cli;;Client replication library started
-2013-11-09 11:34:40.746;cgate.env;;New conn impl registered: p2tcp.
-2013-11-09 11:34:40.746;cgate.env;;New conn impl registered: p2lrpcq.
-2013-11-09 11:34:40.747;cgate.env;;New listener impl registered: p2sys.
-2013-11-09 11:34:40.747;cgate.env;;New publisher impl registered: p2sys.
-2013-11-09 11:34:40.747;cgate.env;;New publisher impl registered: p2mq.
-2013-11-09 11:34:40.747;cgate.env;;New listener impl registered: p2repl.
-2013-11-09 11:34:40.747;cgate.env;;New listener impl registered: p2mqreply.
-2013-11-09 11:34:40.747;cgate.env;;New listener impl registered: p2ordbook.
-2013-11-09 11:34:40.747;cgate.env;;New conn impl registered: timer.
-2013-11-09 11:34:40.747;cgate.env;;New listener impl registered: interval_timer.
-2013-11-09 11:34:40.747;cgate.env;;New listener impl registered: cron_timer.
-2013-11-09 11:34:40.747;cgate.user;;Cgate version: 1.3.4
-2013-11-09 11:34:40.747;cgate.user;;OS version: Linux 3.11.0-12-generic #19-Ubuntu SMP Wed Oct 9 16:20:46 UTC 2013 x86_64
-2013-11-09 11:34:40.747;cgate.user;;P2 version: 196.0.
-2013-11-09 11:34:40.747;cgate.user;;Current work path: /home/dima/workspace/trading-plaza2/trading.app.adapter.plaza2
-2013-11-09 11:34:40.747;cgate.user;;Cgate Java version: 1.3.4
-2013-11-09 11:34:40.747;cgate.user;;cg_conn_new settings: p2tcp://127.0.0.1:4001;app_name=plaza2_client
-2013-11-09 11:34:40.747;cgate.env;;New logger was registered: cgate.connection.p2.
-2013-11-09 11:34:40.747;cgate.env;;Registered default p2 logger cgate.connection.p2.
-2013-11-09 11:34:40.747;cgate.connection.p2;;init: connection init. Connection settings: p2tcp://127.0.0.1:4001;app_name=plaza2_client;name=noname1 @cee{name: , obj: 0x7F0420127CF0, thread: 8312}
-2013-11-09 11:34:40.747;cgate.env;;New connection was registered: noname1.
+2013-11-09 15:36:42.623;cgate.env;;New logger was registered: cgate.env.
+2013-11-09 15:36:42.623;cgate.env;;Registered default p2 logger cgate.env.
+2013-11-09 15:36:42.623;cgate.env;;New logger was registered: cgate.user.
+2013-11-09 15:36:42.623;cgate.env;;Registered default p2 logger cgate.user.
+2013-11-09 15:36:42.623;cgate.env;;New logger was registered: cgate.p2iniprovider.
+2013-11-09 15:36:42.623;cgate.env;;Registered default p2 logger cgate.p2iniprovider.
+2013-11-09 15:36:42.623;cgate.env;;Logger was unregistered: 0x7F7A1404C590.
+2013-11-09 15:36:42.623;cgate.env;;Logger ref count after release: 0x0.
+2013-11-09 15:36:42.623;p2mq-cli;;MQ library started.
+2013-11-09 15:36:42.623;p2repl-cli;;Client replication library started
+2013-11-09 15:36:42.623;cgate.env;;New conn impl registered: p2tcp.
+2013-11-09 15:36:42.623;cgate.env;;New conn impl registered: p2lrpcq.
+2013-11-09 15:36:42.623;cgate.env;;New listener impl registered: p2sys.
+2013-11-09 15:36:42.623;cgate.env;;New publisher impl registered: p2sys.
+2013-11-09 15:36:42.623;cgate.env;;New publisher impl registered: p2mq.
+2013-11-09 15:36:42.623;cgate.env;;New listener impl registered: p2repl.
+2013-11-09 15:36:42.623;cgate.env;;New listener impl registered: p2mqreply.
+2013-11-09 15:36:42.623;cgate.env;;New listener impl registered: p2ordbook.
+2013-11-09 15:36:42.623;cgate.env;;New conn impl registered: timer.
+2013-11-09 15:36:42.623;cgate.env;;New listener impl registered: interval_timer.
+2013-11-09 15:36:42.623;cgate.env;;New listener impl registered: cron_timer.
+2013-11-09 15:36:42.623;cgate.user;;Cgate version: 1.3.4
+2013-11-09 15:36:42.624;cgate.user;;OS version: Linux 3.11.0-12-generic #19-Ubuntu SMP Wed Oct 9 16:20:46 UTC 2013 x86_64
+2013-11-09 15:36:42.624;cgate.user;;P2 version: 196.0.
+2013-11-09 15:36:42.624;cgate.user;;Current work path: /home/dima/workspace/trading-plaza2/trading.app.adapter.plaza2
+2013-11-09 15:36:42.624;cgate.user;;Cgate Java version: 1.3.4
+2013-11-09 15:36:42.624;cgate.user;;cg_conn_new settings: p2tcp://127.0.0.1:4001;app_name=plaza2_client
+2013-11-09 15:36:42.624;cgate.env;;New logger was registered: cgate.connection.p2.
+2013-11-09 15:36:42.624;cgate.env;;Registered default p2 logger cgate.connection.p2.
+2013-11-09 15:36:42.624;cgate.connection.p2;;init: connection init. Connection settings: p2tcp://127.0.0.1:4001;app_name=plaza2_client;name=noname1 @cee{name: , obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.624;cgate.env;;New connection was registered: noname1.
+2013-11-09 15:36:42.624;cgate.env;;New logger was registered: cgate.listener.p2repl.
+2013-11-09 15:36:42.624;cgate.env;;Registered default p2 logger cgate.listener.p2repl.
+2013-11-09 15:36:42.624;cgate.env;;New logger was registered: scheme.
+2013-11-09 15:36:42.624;cgate.env;;Registered default p2 logger scheme.
+2013-11-09 15:36:42.624;cgate.listener.p2repl;;init: init listener. @cee{name: , obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.624;p2repl-cli;;Stream created;stream 0x7F7A1404DFD0
+2013-11-09 15:36:42.624;cgate.env;;New listener was registered: noname2.
+2013-11-09 15:36:42.625;cgate.connection.p2;;open: connection open. @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.625;p2mq-cli;;Connection 0x7F7A1404E620 connected; mq-conn 0x1; 'appName=plaza2_client;host=127.0.0.1;port=4001;timeout=2000;localTimeout=500;'
+2013-11-09 15:36:42.625;cgate.connection.p2;;State changed CLOSED -> OPENING @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.625;cgate.connection.p2;;Checking certification for: 127.0.0.1:4001, key: 11111111 @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.625;cgate.connection.p2;;State changed OPENING -> ACTIVE @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.641;cgate.env;;New logger was registered: cgate.listener.p2mqreply.
+2013-11-09 15:36:42.641;cgate.env;;Registered default p2 logger cgate.listener.p2mqreply.
+2013-11-09 15:36:42.641;cgate.listener.p2mqreply;;init: init listener. @cee{name: , obj: 0x7F7A14051C70, thread: 11254}
+2013-11-09 15:36:42.641;cgate.env;;New listener was registered: noname3.
+2013-11-09 15:36:42.641;cgate.env;;New logger was registered: cgate.publisher.p2mq.
+2013-11-09 15:36:42.641;cgate.env;;Registered default p2 logger cgate.publisher.p2mq.
+2013-11-09 15:36:42.641;cgate.publisher.p2mq;;init: init publisher. @cee{name: , obj: 0x7F7A14051FB0, thread: 11254}
+2013-11-09 15:36:42.641;cgate.env;;New publisher was registered: certlistner_0x7f7a1404d7d0.
+2013-11-09 15:36:42.641;cgate.publisher.p2mq;;open: (null). @cee{name: certlistner_0x7f7a1404d7d0, obj: 0x7F7A14051FB0, thread: 11254}
+2013-11-09 15:36:42.641;cgate.publisher.p2mq;;State changed CLOSED -> OPENING @cee{name: certlistner_0x7f7a1404d7d0, obj: 0x7F7A14051FB0, thread: 11254}
+2013-11-09 15:36:42.641;cgate.publisher.p2mq;;open: settings scheme is noscheme. @cee{name: certlistner_0x7f7a1404d7d0, obj: 0x7F7A14051FB0, thread: 11254}
+2013-11-09 15:36:42.660;cgate.publisher.p2mq;;State changed OPENING -> ACTIVE @cee{name: certlistner_0x7f7a1404d7d0, obj: 0x7F7A14051FB0, thread: 11254}
+2013-11-09 15:36:42.660;cgate.listener.p2mqreply;;Open (null) @cee{name: noname3, obj: 0x7F7A14051C70, thread: 11254}
+2013-11-09 15:36:42.660;cgate.listener.p2mqreply;;open: (null). @cee{name: noname3, obj: 0x7F7A14051C70, thread: 11254}
+2013-11-09 15:36:42.660;cgate.publisher.p2mq;;addHandler: 0x0x7f7a14051d20. @cee{name: certlistner_0x7f7a1404d7d0, obj: 0x7F7A14051FB0, thread: 11254}
+2013-11-09 15:36:42.660;cgate.listener.p2mqreply;;State changed CLOSED -> ACTIVE @cee{name: noname3, obj: 0x7F7A14051C70, thread: 11254}
+2013-11-09 15:36:42.685;cgate.connection.p2;;Response from cert service was received. @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.685;cgate.connection.p2;;Connection was successfully verified: 127.0.0.1:4001 @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;Open  @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;open: . @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.connection.p2;;addStatusListener: added connection state listener 0x0x7f7a1404dea8. @cee{name: noname1, obj: 0x7F7A1404D7B0, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;P2Connection stateChanged to 40002. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;open: stream type + snapshot. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;open: stream type + online. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;open: blob is empty. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;open: state changed to MODE_ONLINE. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;cgate.listener.p2repl;;open: settings scheme is empty. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.686;P2ReplStorage;;Basic policy created;stream 0x0,policy 0x7F7A140516B0
+2013-11-09 15:36:42.708;p2repl-cli;;Stream opening started;stream 0x7F7A1404DFD0,type 1,name 'FORTS_FUTINFO_REPL',server_addr 'FINTER_FORTS3.inter_info'
+2013-11-09 15:36:42.708;cgate.listener.p2repl;;State changed CLOSED -> OPENING @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.756;p2repl-cli;;Stream opened;stream 0x7F7A1404DFD0;channel 0xBC5C919CAC6C
+2013-11-09 15:36:42.756;cgate.listener.p2repl;;ReplCallback: stream opened. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.756;p2repl-cli;;Using server schema;stream 0x7F7A1404DFD0
+2013-11-09 15:36:42.756;p2repl-cli;;Desired schema is not equal to prev schema (lifenum ignored);stream 0x7F7A1404DFD0
+2013-11-09 15:36:42.758;p2repl-cli;;Current life numbers;stream 0x7F7A1404DFD0;Name 'FORTS_FUTINFO_REPL';Client lifenumber 8075;Server lifenumber 8075
+2013-11-09 15:36:42.758;p2repl-cli;;Scheme setting started;stream 0x7F7A1404DFD0
+2013-11-09 15:36:42.936;p2repl-cli;;Current schema differs from previous schema;stream 0x7F7A1404DFD0
+2013-11-09 15:36:42.937;p2repl-cli;;Scheme is set;stream 0x7F7A1404DFD0;channel 0xBC5C919CAC6C
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'delivery_report' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_rejected_orders' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_intercl_info' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_bond_registry' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_bond_isin' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_bond_nkd' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_bond_nominal' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_ts_cons' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'usd_online' was successfully registered
+2013-11-09 15:36:42.937;p2repl-cli;;Statistics module for table 'fut_vcb' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'session' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'multileg_dict' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'trade_modes' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'fut_sess_contents' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'fut_instruments' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'diler' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'investr' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'fut_sess_settl' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'sys_messages' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'trf_accounts' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'money_transfers' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'trf_accounts_map' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'RF' was successfully registered
+2013-11-09 15:36:42.938;p2repl-cli;;Statistics module for table 'prohibition' was successfully registered
+2013-11-09 15:36:42.939;p2repl-cli;;Statistics module for table 'rates' was successfully registered
+2013-11-09 15:36:42.939;p2repl-cli;;Statistics module for table 'sys_events' was successfully registered
+2013-11-09 15:36:42.939;p2repl-cli;;Statistics was registered;stream name FORTS_FUTINFO_REPL
+2013-11-09 15:36:42.939;cgate.listener.p2repl;;ReplCallback: scheme is set. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.939;cgate.listener.p2repl;;initRevisionsMap: init revisions map. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.942;cgate.env;;Logger was unregistered: 0x7F7A1404DB70.
+2013-11-09 15:36:42.942;cgate.env;;Logger ref count after release: 0x3.
+2013-11-09 15:36:42.960;cgate.listener.p2repl;;State changed OPENING -> ACTIVE @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:42.960;P2ReplStorage;;Revs were inited; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 0; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 1; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 2; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 3; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 4; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 5; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 6; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 7; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 8; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 9; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 10; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 11; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 12; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 13; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 14; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 15; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 16; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 17; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 18; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 19; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 20; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 21; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 22; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 23; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 24; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 25; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;Send revs; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 0; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 1; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 2; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 3; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 4; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 5; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 6; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 7; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 8; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 9; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 10; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 11; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 12; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 13; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 14; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 15; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 16; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 17; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 18; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 19; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 20; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 21; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 22; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 23; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 24; cur_rev 0
+2013-11-09 15:36:42.960;P2ReplStorage;;	tbl_idx 25; cur_rev 0
+2013-11-09 15:36:42.960;p2repl-cli;;Data requested;stream 0x7F7A1404DFD0;channel 0xBC5C919CAC6C;session 0
+2013-11-09 15:36:42.986;p2repl-cli;;CLEAR_DELETED message received;stream 0x7F7A1404DFD0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 0; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 1; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 2; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 3; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 4; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 5; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 6; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 7; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 8; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 9; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 10; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 11; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 12; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 13; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 14; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 15; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 16; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 17; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 18; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 19; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 20; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 21; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.986;P2ReplStorage;;	tbl_idx 22; cur_rev 0
+2013-11-09 15:36:42.986;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.987;P2ReplStorage;;	tbl_idx 23; cur_rev 0
+2013-11-09 15:36:42.987;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.987;P2ReplStorage;;	tbl_idx 24; cur_rev 0
+2013-11-09 15:36:42.987;P2ReplStorage;;Revs adjustment due to CLEAR_DELETED; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:42.987;P2ReplStorage;;	tbl_idx 25; cur_rev 0
+2013-11-09 15:36:42.987;cgate.listener.p2repl;;ReplCallback: clear deleted. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}
+2013-11-09 15:36:43.499;p2repl-cli;;DATA message received;stream 0x7F7A1404DFD0
+2013-11-09 15:36:43.530;P2ReplStorage;;Changed revs at commit; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 1; rev range 0 - 46
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 2; rev range 0 - 133965
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 3; rev range 0 - 3914
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 4; rev range 0 - 5444
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 5; rev range 0 - 62144
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 6; rev range 0 - 4244
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 7; rev range 0 - 258
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 8; rev range 0 - 972059
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 9; rev range 0 - 2821369
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 10; rev range 0 - 301
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 11; rev range 0 - 47834
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 12; rev range 0 - 719
+2013-11-09 15:36:43.530;P2ReplStorage;;	tbl_idx 13; rev range 0 - 39278
+2013-11-09 15:36:43.545;p2repl-cli;;DATA message received;stream 0x7F7A1404DFD0
+2013-11-09 15:36:43.576;P2ReplStorage;;Changed revs at commit; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:43.576;P2ReplStorage;;	tbl_idx 13; rev range 39279 - 39518
+2013-11-09 15:36:43.576;P2ReplStorage;;	tbl_idx 14; rev range 0 - 13404
+2013-11-09 15:36:43.639;p2repl-cli;;DATA message received;stream 0x7F7A1404DFD0
+2013-11-09 15:36:43.652;P2ReplStorage;;Changed revs at commit; stream 0x7F7A1404DFD0; cnt 26
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 14; rev range 13405 - 13419
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 15; rev range 0 - 43450
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 16; rev range 0 - 1893176
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 17; rev range 0 - 4588
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 18; rev range 0 - 150
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 19; rev range 0 - 41819
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 20; rev range 0 - 78
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 22; rev range 0 - 14939
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 23; rev range 0 - 725019
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 24; rev range 0 - 480
+2013-11-09 15:36:43.652;P2ReplStorage;;	tbl_idx 25; rev range 0 - 337
+2013-11-09 15:36:43.653;p2repl-cli;;Stream is on-line;stream 0x7F7A1404DFD0
+2013-11-09 15:36:43.653;cgate.listener.p2repl;;ReplCallback: online. @cee{name: noname2, obj: 0x7F7A1404DD00, thread: 11254}

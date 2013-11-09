@@ -1,5 +1,6 @@
 package trading.app.adapter.plaza2;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Observable;
@@ -24,6 +25,14 @@ import trading.data.model.Instrument;
  * 
  */
 public class Plaza2Adapter implements ISubscriber {
+	private Plaza2Client plaza2Client;
+
+	/**
+	 * Ctor, creates plaza2 client inside
+	 */
+	public Plaza2Adapter(){
+		plaza2Client = new Plaza2Client(this);
+	}
 	
 	/**
 	 * Instrument info adapter
@@ -67,18 +76,40 @@ public class Plaza2Adapter implements ISubscriber {
 
 		return ErrorCode.OK;
 	}
-
+	/**
+	 * Connect to gate
+	 */
+	public void connect(){
+		this.plaza2Client.connect();
+	}
+	// Disconnect from gate
+	public void disconnect(){
+		this.plaza2Client.disconnect();
+	}
 	
 	/**
 	 * Main cycle for dev only
 	 * ToDo: remove later
 	 * @param args
 	 * @throws InterruptedException
+	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws CGateException,
-			InterruptedException {
-
-		new Plaza2Client().run();
+			InterruptedException, IOException {
+		// Create adapter
+		System.out.println("Creating adapter");
+		Plaza2Adapter adapter = new Plaza2Adapter();
+		// Connect to plaza2 gate
+		System.out.println("Connecting");
+		adapter.connect();
+		// Waiting user input to finish
+		System.out.println("Press any key to finish");
+		System.in.read();
+		// Disconnect from gate (async)
+		System.out.println("Disconnecting");
+		adapter.disconnect();
+		System.out.println("Complete");
+		//
 	}	
 
 }

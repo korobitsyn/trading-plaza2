@@ -13,16 +13,26 @@ public class Plaza2Client {
 
 	private Connection connection;
 	private Listener listener;
+	private Plaza2Adapter plaza2Adapter;
 
 	private static volatile boolean exitFlag = false;
 	private static volatile boolean cleanedUp = false;
 
 	/**
+	 * Ctor for plaza2 adapter
+	 * @param adapter
+	 */
+	public Plaza2Client(Plaza2Adapter adapter){
+		plaza2Adapter = adapter;
+	}
+	
+	
+	/**
 	 * Run cycle
 	 * @throws CGateException
 	 */
-	
-	public void run() throws CGateException {
+	public void run()  {
+		exitFlag = false;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				exitFlag = true;
@@ -37,7 +47,7 @@ public class Plaza2Client {
 			connection = new Connection(
 					"p2tcp://127.0.0.1:4001;app_name=plaza2_client");
 			 listener = new Listener(connection,
-			 "p2repl://FORTS_FUTINFO_REPL", new Plaza2Adapter());
+			 "p2repl://FORTS_FUTINFO_REPL", plaza2Adapter);
 			 
 			// listener = new Listener(connection,
 			// "p2repl://FORTS_FUTTRADE_REPL", new Subscriber());
@@ -91,6 +101,7 @@ public class Plaza2Client {
 		} catch (CGateException cgex) {
 			System.out.println("Exception: " + cgex);
 		} finally {
+			// Close listener
 			if (listener != null) {
 				try {
 					listener.close();
@@ -101,6 +112,7 @@ public class Plaza2Client {
 				} catch (CGateException cgex) {
 				}
 			}
+			// Close connection
 			if (connection != null) {
 				try {
 					connection.close();
@@ -111,11 +123,37 @@ public class Plaza2Client {
 				} catch (CGateException cgex) {
 				}
 			}
-			CGate.close();
+			// Close cgate
+			
+			try{
+				// Close plaza gate
+				CGate.close();
+			}catch(CGateException cgex){
+				
+			}
 			cleanedUp = true;
 		}
 	}
-
+	/**
+	 * Connect to plaza gate - start run cycle in another thread
+	 */
+	public void connect(){
+		final Plaza2Client this_ = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				this_.run();
+				
+			}
+		}).start();
+	}
+	/**
+	 * Disconnect from gate
+	 */
+	public void disconnect(){
+		exitFlag = true;
+		cleanedUp = false;
+	}
 
 
 }
