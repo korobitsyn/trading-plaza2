@@ -55,7 +55,7 @@ public class HistoryWriter {
 	protected void onInstrument(Instrument instrument){
 		// Write to database
 		Session session = hibernateSession;
-		session.beginTransaction();
+		//session.beginTransaction();
 		if(!session.getTransaction().isActive()){session.getTransaction().begin();}
 		session.merge(instrument);
 		session.getTransaction().commit();
@@ -66,12 +66,19 @@ public class HistoryWriter {
 	 * @param instrument
 	 */
 	protected void onLevel1(Level1 level1){
-		// Write to database
+		try{ 
+		//Write to database
 		Session session = hibernateSession;
-		session.beginTransaction();
+		//session.beginTransaction();
 		if(!session.getTransaction().isActive()){session.getTransaction().begin();}
+		Instrument instrument = (Instrument)session.get(Instrument.class, level1.getInstrument().getId());
+		level1.setInstrument(instrument);
 		session.merge(level1);
 		session.getTransaction().commit();
+		}catch(org.hibernate.ObjectNotFoundException ex){
+			// If not found => instrument does not exist
+			System.err.println(ex);
+		}
 
 	}	
 	

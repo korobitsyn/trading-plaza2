@@ -15,22 +15,36 @@ import trading.data.model.Level1;
 
 /**
  * Adapter for level1 data
+ * 
  * @author dima
- *
+ * 
  */
 public class Level1Adapter extends Observable implements SpecificAdapter {
-	public static final String MESSAGE_NAME="common";
-	
+	public static final String MESSAGE_NAME = "common";
+
 	/**
 	 * Convert plaza2 entity to level1 object
+	 * 
 	 * @param schemeEntity
 	 * @return
 	 */
-	public static Level1 convert(FutCommon.common schemeEntity){
+	public static Level1 convert(FutCommon.common schemeEntity) {
 		Level1 entity = new Level1();
 		// Get instrument
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		Instrument instrument = (Instrument) session.get(Instrument.class, schemeEntity.get_isin_id());
+/*		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		if(!session.getTransaction().isActive()) {session.getTransaction().begin();}
+		Instrument instrument = new Instrument();
+	
+		instrument.setId(schemeEntity.get_isin_id());
+		session.refresh(instrument);
+/*		Instrument instrument = (Instrument) session.get(Instrument.class,
+				schemeEntity.get_isin_id());*/
+
+
+		
+		Instrument instrument = new Instrument();
+		instrument.setId(schemeEntity.get_isin_id());
+		//instrument.setName(instrument.getId().toString());
 		// Set properties
 		entity.setInstrument(instrument);
 		// time
@@ -48,21 +62,22 @@ public class Level1Adapter extends Observable implements SpecificAdapter {
 		entity.setBid(schemeEntity.get_best_buy());
 		entity.setBidSize(schemeEntity.get_amount_buy());
 		return entity;
-		
+
 	}
+
 	/**
 	 * Message received
 	 */
 	public void onMessage(AbstractDataMessage message) {
 		FutCommon.common schemeEntity = new FutCommon.common(message.getData());
 		Level1 level1 = convert(schemeEntity);
-		
-		// Fire event
-		this.setChanged();
-		this.notifyObservers();
-		this.clearChanged();
-		
-	}
+		if (level1 != null) {
+			// Fire event
+			this.setChanged();
+			this.notifyObservers(level1);
+			this.clearChanged();
+		}
 
+	}
 
 }
