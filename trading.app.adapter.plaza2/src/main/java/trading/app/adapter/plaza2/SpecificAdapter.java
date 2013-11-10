@@ -1,5 +1,7 @@
 package trading.app.adapter.plaza2;
 
+import java.util.Observer;
+
 import ru.micexrts.cgate.messages.AbstractDataMessage;
 /**
  * Interface for Instrument, Level1 etc adapters
@@ -14,5 +16,15 @@ public interface SpecificAdapter {
 	 */
 
 	public void onMessage(AbstractDataMessage message);
-
+	
+	/**
+	 * Method from java.util.Observer
+	 * @param o
+	 */
+    void addObserver(Observer o);    
+    /**
+     * Method from java.util.Observer
+     * @param o
+     */
+    void deleteObserver(Observer o); 
 }

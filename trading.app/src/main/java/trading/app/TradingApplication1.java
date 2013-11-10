@@ -1,8 +1,15 @@
 package trading.app;
 
 import java.io.IOException;
+
+import trading.app.adapter.plaza2.Adapter;
 import trading.app.adapter.plaza2.Plaza2Adapter;
 
+/**
+ * Main application class for debugging under JavaSE
+ * @author dima
+ *
+ */
 public class TradingApplication1 {
 	
 	
@@ -17,7 +24,10 @@ public class TradingApplication1 {
 			InterruptedException, IOException {
 		// Create adapter
 		System.out.println("Creating adapter");
-		Plaza2Adapter adapter = new Plaza2Adapter();
+		Adapter adapter = new Plaza2Adapter();
+		HistoryWriter historyWriter = new HistoryWriter(adapter);
+
+		
 		// Connect to plaza2 gate
 		System.out.println("Connecting");
 		adapter.connect();

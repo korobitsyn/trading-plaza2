@@ -41,6 +41,10 @@ public class InstrumentAdapter extends Observable implements  SpecificAdapter {
 		FutInfo.fut_instruments schemeEntity = new FutInfo.fut_instruments(message.getData());
 		Instrument instrument = convert(schemeEntity);
 		System.out.println(instrument.getCode());
+		// Fire event
+		this.setChanged();
+		notifyObservers(instrument);
+		this.clearChanged();
 
 			
 	}	

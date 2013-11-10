@@ -47,7 +47,6 @@ public class Plaza2Client {
 			connection = new Connection(
 					"p2tcp://127.0.0.1:4001;app_name=plaza2_client");
 			 listener = new Listener(connection,
-
 			 "p2repl://FORTS_FUTINFO_REPL", plaza2Adapter);
 
 			while (!exitFlag) {
