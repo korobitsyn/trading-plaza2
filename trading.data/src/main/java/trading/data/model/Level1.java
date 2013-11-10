@@ -132,7 +132,8 @@ public class Level1 implements Serializable {
 
 
 	//bi-directional many-to-one association to Instrument
-	@ManyToOne
+	@ManyToOne()
+	@JoinColumn(name="instrument_id", nullable=false)
 	public Instrument getInstrument() {
 		return this.instrument;
 	}

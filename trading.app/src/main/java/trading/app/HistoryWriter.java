@@ -72,7 +72,13 @@ public class HistoryWriter {
 		//session.beginTransaction();
 		if(!session.getTransaction().isActive()){session.getTransaction().begin();}
 		Instrument instrument = (Instrument)session.get(Instrument.class, level1.getInstrument().getId());
-		level1.setInstrument(instrument);
+		
+		if(instrument == null){
+			session.save(level1.getInstrument());
+			//session.merge(level1.getInstrument());
+		} else{
+			level1.setInstrument(instrument);
+		}
 		session.merge(level1);
 		session.getTransaction().commit();
 		}catch(org.hibernate.ObjectNotFoundException ex){

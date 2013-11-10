@@ -24,7 +24,7 @@ public class Instrument implements Serializable {
 
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	/*@GeneratedValue(strategy=GenerationType.AUTO)*/
 	public Integer getId() {
 		return this.id;
 	}
