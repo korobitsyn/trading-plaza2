@@ -41,11 +41,12 @@ public class HistoryProvider {
 		
 		int year = start.getYear();
 		year = end.getYear();
-		
-		query.setTimestamp(trading.data.Constants.QueryParamName.START_TIME, start);
-		query.setTimestamp(trading.data.Constants.QueryParamName.END_TIME, end);
+
+		query.setParameter(trading.data.Constants.QueryParamName.START_TIME, start);
+		query.setParameter(trading.data.Constants.QueryParamName.END_TIME, end);
 		
 		List<Level1> data = query.list();
+		int size = data.size();
 		return data;
 	}
 }

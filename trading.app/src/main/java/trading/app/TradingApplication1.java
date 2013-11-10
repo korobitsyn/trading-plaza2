@@ -2,7 +2,9 @@ package trading.app;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import trading.app.adapter.plaza2.Adapter;
 import trading.app.adapter.plaza2.Plaza2Adapter;
@@ -32,10 +34,16 @@ public class TradingApplication1 {
 
 		// Test history provider
 		HistoryProvider historyProvider = new HistoryProvider();
-		Date startTime = new Timestamp(System.currentTimeMillis()){{setYear(2010);}};
-		startTime.setYear(2010);
-		Date endTime = new Timestamp(System.currentTimeMillis()){{setYear(2014);}};
-		endTime.setYear(2014);
+		Calendar startCal = GregorianCalendar.getInstance();
+		startCal.set(Calendar.YEAR, 2010);
+		
+		Calendar endCal = GregorianCalendar.getInstance();
+		endCal.set(Calendar.YEAR, 2014);
+	
+		
+		Date startTime = startCal.getTime();
+		Date endTime = endCal.getTime();
+
 		historyProvider.getLevel1Range(startTime, endTime);
 		
 		// Connect to plaza2 gate
