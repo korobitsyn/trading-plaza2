@@ -1,6 +1,7 @@
 package trading.app.adapter.plaza2;
 
-import java.util.Observable;
+import trading.data.model.Instrument;
+import trading.data.model.Level1;
 
 /**
  * Adapter interface
@@ -23,11 +24,11 @@ public interface Adapter  {
 	 * Get specific adapter for instrument, level1 etc
 	 * @return
 	 */
-	public abstract SpecificAdapter getInstrumentAdapter();
+	public abstract EntityAdapter<Instrument> getInstrumentAdapter();
 	/**
 	 * Get specific adapter for level1
 	 * @return
 	 */
-	public abstract SpecificAdapter getLevel1Adapter(); 	
+	public abstract EntityDataAdapter<Level1> getLevel1Adapter(); 	
 
 }

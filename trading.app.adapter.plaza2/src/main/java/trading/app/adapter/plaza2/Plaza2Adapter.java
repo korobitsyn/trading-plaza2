@@ -47,6 +47,8 @@ public class Plaza2Adapter implements ISubscriber, Adapter {
 
 	private Plaza2Client plaza2Client;
 
+
+	
 	/**
 	 * Instrument info adapter
 	 */
@@ -60,7 +62,7 @@ public class Plaza2Adapter implements ISubscriber, Adapter {
 	/**
 	 * Subadapters for different messages (Instrument, quote, level1 etc)
 	 */
-	private Map<String, SpecificAdapter> adaptersByMessage = new Hashtable<String, SpecificAdapter>() {
+	private Map<String, ISubscriber> adaptersByMessage = new Hashtable<String, ISubscriber>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put(InstrumentAdapter.MESSAGE_NAME, instrumentAdapter);
@@ -122,10 +124,10 @@ public class Plaza2Adapter implements ISubscriber, Adapter {
 
 			// Get adapter by message name
 			AbstractDataMessage msgData = (AbstractDataMessage) message;
-			SpecificAdapter specificAdapter = adaptersByMessage.get(msgData
+			ISubscriber specificAdapter = adaptersByMessage.get(msgData
 					.getMsgName());
 			if (specificAdapter != null) {
-				specificAdapter.onMessage(msgData);
+				specificAdapter.onMessage(conn, listener, msgData);
 			}
 			//System.out.println(message);
 			break;

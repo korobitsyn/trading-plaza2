@@ -2,14 +2,19 @@ package trading.app.adapter.plaza2;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.hibernate.Session;
-
+import ru.micexrts.cgate.Connection;
+import ru.micexrts.cgate.ErrorCode;
+import ru.micexrts.cgate.ISubscriber;
+import ru.micexrts.cgate.Listener;
 import ru.micexrts.cgate.messages.AbstractDataMessage;
+import ru.micexrts.cgate.messages.Message;
 import trading.app.adapter.plaza2.scheme.FutCommon;
-import trading.data.HibernateUtil;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
@@ -19,8 +24,9 @@ import trading.data.model.Level1;
  * @author dima
  * 
  */
-public class Level1Adapter extends Observable implements SpecificAdapter {
+public class Level1Adapter extends EntityDataAdapterBase<Level1> implements EntityDataAdapter<Level1>, ISubscriber {
 	public static final String MESSAGE_NAME = "common";
+	
 
 	/**
 	 * Convert plaza2 entity to level1 object
@@ -30,18 +36,8 @@ public class Level1Adapter extends Observable implements SpecificAdapter {
 	 */
 	public static Level1 convert(FutCommon.common schemeEntity) {
 		Level1 entity = new Level1();
-		// Get instrument
-/*		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		if(!session.getTransaction().isActive()) {session.getTransaction().begin();}
-		Instrument instrument = new Instrument();
-	
-		instrument.setId(schemeEntity.get_isin_id());
-		session.refresh(instrument);
-/*		Instrument instrument = (Instrument) session.get(Instrument.class,
-				schemeEntity.get_isin_id());*/
 
-
-		
+		// Set to new instrument with proper id. Will be processed in listeners
 		Instrument instrument = new Instrument();
 		instrument.setId(schemeEntity.get_isin_id());
 		//instrument.setName(instrument.getId().toString());
@@ -68,16 +64,19 @@ public class Level1Adapter extends Observable implements SpecificAdapter {
 	/**
 	 * Message received
 	 */
-	public void onMessage(AbstractDataMessage message) {
+	public int onMessage(Connection conn, Listener listener, Message message) {
+		//AbstractDataMessage dataMessage = (AbstractDataMessage) message;
 		FutCommon.common schemeEntity = new FutCommon.common(message.getData());
 		Level1 level1 = convert(schemeEntity);
 		if (level1 != null) {
-			// Fire event
-			this.setChanged();
-			this.notifyObservers(level1);
-			this.clearChanged();
+			fireMarketDataChangedEvent(level1.getInstrument().getId(), level1);
 		}
+		return ErrorCode.OK;
 
 	}
 
+/*	public int onMessage(Connection arg0, Listener arg1, Message arg2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}*/
 }
