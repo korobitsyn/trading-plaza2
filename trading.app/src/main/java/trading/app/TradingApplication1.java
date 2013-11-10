@@ -2,6 +2,7 @@ package trading.app;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import trading.app.adapter.plaza2.Adapter;
 import trading.app.adapter.plaza2.Plaza2Adapter;
@@ -31,14 +32,14 @@ public class TradingApplication1 {
 
 		// Test history provider
 		HistoryProvider historyProvider = new HistoryProvider();
-		Timestamp startTime = new Timestamp(System.currentTimeMillis()){{setYear(2010);}};
+		Date startTime = new Timestamp(System.currentTimeMillis()){{setYear(2010);}};
 		startTime.setYear(2010);
-		Timestamp endTime = new Timestamp(System.currentTimeMillis()){{setYear(2014);}};
-		endTime.setYear(2010);
+		Date endTime = new Timestamp(System.currentTimeMillis()){{setYear(2014);}};
+		endTime.setYear(2014);
 		historyProvider.getLevel1Range(startTime, endTime);
-		/*
+		
 		// Connect to plaza2 gate
-		System.out.println("Connecting");
+		/*System.out.println("Connecting");
 		adapter.connect();
 		// Waiting user input to finish
 		System.out.println("Press any key to finish");
@@ -46,8 +47,8 @@ public class TradingApplication1 {
 		// Disconnect from gate (async)
 		System.out.println("Disconnecting");
 		adapter.disconnect();
-		System.out.println("Complete");
-		*/
+		System.out.println("Complete");*/
+		
 		//
 	}	
 }

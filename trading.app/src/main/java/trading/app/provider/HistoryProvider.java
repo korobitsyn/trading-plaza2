@@ -1,7 +1,7 @@
 package trading.app.provider;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
+
 import java.util.List;
 
 import javax.persistence.TemporalType;
@@ -36,10 +36,14 @@ public class HistoryProvider {
 	 * @param end
 	 * @return
 	 */
-	public List<Level1> getLevel1Range(Timestamp start, Timestamp end){
+	public List<Level1> getLevel1Range(Date start, Date end){
 		Query query = hibernateSession.getNamedQuery(trading.data.Constants.QueryName.LEVEL1_FIND_RANGE);
-		query.setParameter(trading.data.Constants.QueryParamName.START_TIME, start);
-		query.setParameter(trading.data.Constants.QueryParamName.END_TIME, end);
+		
+		int year = start.getYear();
+		year = end.getYear();
+		
+		query.setTimestamp(trading.data.Constants.QueryParamName.START_TIME, start);
+		query.setTimestamp(trading.data.Constants.QueryParamName.END_TIME, end);
 		
 		List<Level1> data = query.list();
 		return data;

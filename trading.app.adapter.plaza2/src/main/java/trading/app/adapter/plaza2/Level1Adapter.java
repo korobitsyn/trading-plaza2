@@ -1,7 +1,7 @@
 package trading.app.adapter.plaza2;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.util.Date;
+
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +44,11 @@ public class Level1Adapter extends EntityDataAdapterBase<Level1> implements Enti
 		// Set properties
 		entity.setInstrument(instrument);
 		// time
-		Timestamp date = new Timestamp(schemeEntity.get_deal_time().getTime());
-		entity.setDate(date);
-		Time lastTime = new Time(date.getTime());
-		entity.setLastTime(lastTime);
+		//Timestamp date = new Timestamp(schemeEntity.get_deal_time().getTime());
+
+		entity.setDate(schemeEntity.get_deal_time());
+		//Time lastTime = new Time(date.getTime());
+		entity.setLastTime(schemeEntity.get_deal_time());
 		// Price
 		entity.setLastPrice(schemeEntity.get_price());
 		entity.setLastPriceDelta(schemeEntity.get_trend());

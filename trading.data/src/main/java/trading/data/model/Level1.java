@@ -7,8 +7,7 @@ import javax.persistence.*;
 
 import trading.data.Constants;
 
-import java.sql.Timestamp;
-import java.sql.Time;
+import java.util.Date;
 
 
 /**
@@ -17,7 +16,8 @@ import java.sql.Time;
  */
 @Entity
 //@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l where l.lastTime >=:"+trading.data.Constants.QueryParamName.START_TIME)
-@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE l.date BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME)
+@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE  l.date  BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME)
+//@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE  l.date>= :" + trading.data.Constants.QueryParamName.START_TIME + " AND l.date < :" + trading.data.Constants.QueryParamName.END_TIME)
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -25,11 +25,11 @@ public class Level1 implements Serializable {
 	private Integer askSize;
 	private BigDecimal bid;
 	private Integer bidSize;
-	private Timestamp date;
+	private Date date;
 	private BigDecimal lastPrice;
 	private BigDecimal lastPriceDelta;
 	private Integer lastSize;
-	private Time lastTime;
+	private Date lastTime;
 	private Instrument instrument;
 
 	public Level1() {
@@ -84,12 +84,12 @@ public class Level1 implements Serializable {
 		this.bidSize = bidSize;
 	}
 
-
-	public Timestamp getDate() {
-		return this.date;
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDate() {
+		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -125,11 +125,12 @@ public class Level1 implements Serializable {
 
 
 	@Column(name="last_time")
-	public Time getLastTime() {
+	@Temporal(TemporalType.TIME)	
+	public Date getLastTime() {
 		return this.lastTime;
 	}
 
-	public void setLastTime(Time lastTime) {
+	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
 
