@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.*;
 
+import trading.data.Constants;
+
 import java.sql.Timestamp;
 import java.sql.Time;
 
@@ -14,7 +16,7 @@ import java.sql.Time;
  * 
  */
 @Entity
-//@NamedQuery(name="Level1.findAll", query="SELECT l FROM Level1 l")
+@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_ALL, query="SELECT l FROM Level1 l")
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;

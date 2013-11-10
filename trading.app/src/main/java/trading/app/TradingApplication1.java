@@ -1,9 +1,11 @@
 package trading.app;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import trading.app.adapter.plaza2.Adapter;
 import trading.app.adapter.plaza2.Plaza2Adapter;
+import trading.app.provider.HistoryProvider;
 
 /**
  * Main application class for debugging under JavaSE
@@ -11,8 +13,7 @@ import trading.app.adapter.plaza2.Plaza2Adapter;
  *
  */
 public class TradingApplication1 {
-	
-	
+
 	/**
 	 * Main cycle for dev only
 	 * ToDo: remove later
@@ -25,9 +26,11 @@ public class TradingApplication1 {
 		// Create adapter
 		System.out.println("Creating adapter");
 		Adapter adapter = new Plaza2Adapter();
-		HistoryWriter historyWriter = new HistoryWriter(adapter);
+		//HistoryWriter historyWriter = new HistoryWriter(adapter);
+		HistoryProvider historyProvider = new HistoryProvider();
 
-		
+		historyProvider.getLevel1Range(new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+		/*
 		// Connect to plaza2 gate
 		System.out.println("Connecting");
 		adapter.connect();
@@ -38,7 +41,7 @@ public class TradingApplication1 {
 		System.out.println("Disconnecting");
 		adapter.disconnect();
 		System.out.println("Complete");
+		*/
 		//
 	}	
-
 }

@@ -16,12 +16,10 @@ import trading.data.model.Level1;
  */
 public class HistoryWriter {
 
-	/**
-	 * Adapter to get data from
-	 */
 	private Adapter adapter = null;
-
 	private Session hibernateSession = null;
+	// Hardcode futures instrument id
+	// ToDo: add instrument id setter
 	private int instrumentId = 193886;
 
 	/**
@@ -51,10 +49,8 @@ public class HistoryWriter {
 					@Override
 					public void OnMarketDataChanged(Level1 entity) {
 						onLevel1(entity);
-
 					}
 				});
-
 	}
 
 	/**
@@ -71,7 +67,6 @@ public class HistoryWriter {
 		}
 		session.merge(instrument);
 		session.getTransaction().commit();
-
 	}
 
 	/**
@@ -89,20 +84,21 @@ public class HistoryWriter {
 			}
 			Instrument instrument = (Instrument) session.get(Instrument.class,
 					level1.getInstrument().getId());
-
+			// If instrument does not exist, save it to be updated later from instrument adapter
 			if (instrument == null) {
 				session.save(level1.getInstrument());
 				// session.merge(level1.getInstrument());
 			} else {
 				level1.setInstrument(instrument);
 			}
+			// Save level1
 			session.merge(level1);
+			// Commit
 			session.getTransaction().commit();
 		} catch (org.hibernate.ObjectNotFoundException ex) {
 			// If not found => instrument does not exist
 			System.err.println(ex);
 		}
-
 	}
 
 	/**
@@ -113,5 +109,4 @@ public class HistoryWriter {
 			hibernateSession.close();
 		}
 	}
-
 }
