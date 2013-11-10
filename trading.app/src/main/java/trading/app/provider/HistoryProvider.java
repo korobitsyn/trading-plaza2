@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.TemporalType;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -24,7 +26,6 @@ public class HistoryProvider {
 	 * @param adapter
 	 */
 	public HistoryProvider() {
-
 		// Init hibernate session
 		hibernateSession = HibernateUtil.getSessionFactory().openSession();
 	}
@@ -36,9 +37,11 @@ public class HistoryProvider {
 	 * @return
 	 */
 	public List<Level1> getLevel1Range(Timestamp start, Timestamp end){
-		Query query = hibernateSession.getNamedQuery(trading.data.Constants.QueryName.LEVEL1_FIND_ALL);
+		Query query = hibernateSession.getNamedQuery(trading.data.Constants.QueryName.LEVEL1_FIND_RANGE);
+		query.setParameter(trading.data.Constants.QueryParamName.START_TIME, start);
+		query.setParameter(trading.data.Constants.QueryParamName.END_TIME, end);
+		
 		List<Level1> data = query.list();
 		return data;
-		
 	}
 }

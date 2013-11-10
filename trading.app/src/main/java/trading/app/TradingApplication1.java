@@ -26,10 +26,16 @@ public class TradingApplication1 {
 		// Create adapter
 		System.out.println("Creating adapter");
 		Adapter adapter = new Plaza2Adapter();
+		// test history writer
 		//HistoryWriter historyWriter = new HistoryWriter(adapter);
-		HistoryProvider historyProvider = new HistoryProvider();
 
-		historyProvider.getLevel1Range(new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+		// Test history provider
+		HistoryProvider historyProvider = new HistoryProvider();
+		Timestamp startTime = new Timestamp(System.currentTimeMillis()){{setYear(2010);}};
+		startTime.setYear(2010);
+		Timestamp endTime = new Timestamp(System.currentTimeMillis()){{setYear(2014);}};
+		endTime.setYear(2010);
+		historyProvider.getLevel1Range(startTime, endTime);
 		/*
 		// Connect to plaza2 gate
 		System.out.println("Connecting");

@@ -16,7 +16,8 @@ import java.sql.Time;
  * 
  */
 @Entity
-@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_ALL, query="SELECT l FROM Level1 l")
+//@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l where l.lastTime >=:"+trading.data.Constants.QueryParamName.START_TIME)
+@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE l.date BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME)
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
