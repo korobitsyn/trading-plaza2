@@ -25,7 +25,7 @@ public class TradingApplication1 {
 		// Create adapter
 		System.out.println("Creating adapter");
 		Adapter adapter = new Plaza2Adapter();
-		HistoryWriter historyWriter = new HistoryWriter(adapter);
+		//HistoryWriter historyWriter = new HistoryWriter(adapter);
 
 		
 		// Connect to plaza2 gate

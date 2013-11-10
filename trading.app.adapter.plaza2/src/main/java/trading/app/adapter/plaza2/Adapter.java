@@ -24,5 +24,10 @@ public interface Adapter  {
 	 * @return
 	 */
 	public abstract SpecificAdapter getInstrumentAdapter();
+	/**
+	 * Get specific adapter for level1
+	 * @return
+	 */
+	public abstract SpecificAdapter getLevel1Adapter(); 	
 
 }

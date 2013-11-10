@@ -1,7 +1,10 @@
 package trading.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 import java.sql.Time;
 
@@ -15,13 +18,13 @@ import java.sql.Time;
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Integer ask;
+	private BigDecimal ask;
 	private Integer askSize;
-	private double bid;
+	private BigDecimal bid;
 	private Integer bidSize;
 	private Timestamp date;
-	private double lastPrice;
-	private float lastPriceDelta;
+	private BigDecimal lastPrice;
+	private BigDecimal lastPriceDelta;
 	private Integer lastSize;
 	private Time lastTime;
 	private Instrument instrument;
@@ -41,11 +44,11 @@ public class Level1 implements Serializable {
 	}
 
 
-	public Integer getAsk() {
+	public BigDecimal getAsk() {
 		return this.ask;
 	}
 
-	public void setAsk(Integer ask) {
+	public void setAsk(BigDecimal ask) {
 		this.ask = ask;
 	}
 
@@ -60,11 +63,11 @@ public class Level1 implements Serializable {
 	}
 
 
-	public double getBid() {
+	public BigDecimal getBid() {
 		return this.bid;
 	}
 
-	public void setBid(double bid) {
+	public void setBid(BigDecimal bid) {
 		this.bid = bid;
 	}
 
@@ -89,21 +92,21 @@ public class Level1 implements Serializable {
 
 
 	@Column(name="last_price")
-	public double getLastPrice() {
+	public BigDecimal getLastPrice() {
 		return this.lastPrice;
 	}
 
-	public void setLastPrice(double lastPrice) {
+	public void setLastPrice(BigDecimal lastPrice) {
 		this.lastPrice = lastPrice;
 	}
 
 
 	@Column(name="last_price_delta")
-	public float getLastPriceDelta() {
+	public BigDecimal getLastPriceDelta() {
 		return this.lastPriceDelta;
 	}
 
-	public void setLastPriceDelta(float lastPriceDelta) {
+	public void setLastPriceDelta(BigDecimal lastPriceDelta) {
 		this.lastPriceDelta = lastPriceDelta;
 	}
 

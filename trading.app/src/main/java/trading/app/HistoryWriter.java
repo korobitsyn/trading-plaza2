@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import trading.app.adapter.plaza2.Adapter;
 import trading.data.HibernateUtil;
 import trading.data.model.Instrument;
+import trading.data.model.Level1;
 
 /**
  * Receives data from adapter, writes to history
@@ -37,6 +38,12 @@ public class HistoryWriter {
 			public void update(Observable o, Object arg) {
 				onInstrument((Instrument)arg);
 			}});
+		adapter.getLevel1Adapter().addObserver(new Observer(){
+			@Override
+			public void update(Observable o, Object arg) {
+				onLevel1((Level1)arg);
+			}});		
+		
 		hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
 	}
@@ -54,6 +61,20 @@ public class HistoryWriter {
 		session.getTransaction().commit();
 
 	}
+	/**
+	 * Instrument listener method
+	 * @param instrument
+	 */
+	protected void onLevel1(Level1 level1){
+		// Write to database
+		Session session = hibernateSession;
+		session.beginTransaction();
+		if(!session.getTransaction().isActive()){session.getTransaction().begin();}
+		session.merge(level1);
+		session.getTransaction().commit();
+
+	}	
+	
 	/**
 	 * Close session when being finalized
 	 */

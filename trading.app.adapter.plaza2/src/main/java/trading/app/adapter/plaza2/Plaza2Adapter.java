@@ -21,11 +21,11 @@ import ru.micexrts.cgate.messages.Message;
  */
 public class Plaza2Adapter implements ISubscriber, Adapter {
 	/**
-	 * Main cycle for dev only
-	 * ToDo: remove later
+	 * Main cycle for dev only ToDo: remove later
+	 * 
 	 * @param args
 	 * @throws InterruptedException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void main(String[] args) throws CGateException,
 			InterruptedException, IOException {
@@ -46,83 +46,101 @@ public class Plaza2Adapter implements ISubscriber, Adapter {
 	}
 
 	private Plaza2Client plaza2Client;
-	
+
 	/**
 	 * Instrument info adapter
 	 */
 	private InstrumentAdapter instrumentAdapter = new InstrumentAdapter();
+	
+	/**
+	 * Adapter for level1 data(price, bid, ask and volumes)
+	 */
+	private Level1Adapter level1Adapter = new Level1Adapter();
 
 	/**
 	 * Subadapters for different messages (Instrument, quote, level1 etc)
 	 */
-	private Map<String,SpecificAdapter> adaptersByMessage = new Hashtable<String, SpecificAdapter>(){/**
-		 * 
-		 */
+	private Map<String, SpecificAdapter> adaptersByMessage = new Hashtable<String, SpecificAdapter>() {
 		private static final long serialVersionUID = 1L;
-
-	{ 
-		put(InstrumentAdapter.MESSAGE_NAME,instrumentAdapter);	
-		}};
+		{
+			put(InstrumentAdapter.MESSAGE_NAME, instrumentAdapter);
+			put(Level1Adapter.MESSAGE_NAME, level1Adapter);
+		}
+	};
 
 	/**
 	 * Ctor, creates plaza2 client inside
 	 */
-	public Plaza2Adapter(){
+	public Plaza2Adapter() {
 		plaza2Client = new Plaza2Client(this);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see trading.app.adapter.plaza2.Adapter#connect()
 	 */
 
-	public void connect(){
+	public void connect() {
 		this.plaza2Client.connect();
 	}
+
 	// Disconnect from gate
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see trading.app.adapter.plaza2.Adapter#disconnect()
 	 */
 
-	public void disconnect(){
+	public void disconnect() {
 		this.plaza2Client.disconnect();
 	}
-	/* (non-Javadoc)
-	 * @see trading.app.adapter.plaza2.Adapter#getInstrumentAdapter()
-	 */
 
+	/**
+	 * Instrument adapter
+	 */
 	public InstrumentAdapter getInstrumentAdapter() {
 		return instrumentAdapter;
 	}
-	
+	/**
+	 * Level1 adapter
+	 */
+	public Level1Adapter getLevel1Adapter() {
+		return level1Adapter;
+	}
+
 	/**
 	 * Process new message
 	 */
 	public int onMessage(Connection conn, Listener listener, Message message) {
-		
+
 		// Process by message type
 		switch (message.getType()) {
 		// Data messages
 		case MessageType.MSG_DATA:
 		case MessageType.MSG_STREAM_DATA:
+
 			// Get adapter by message name
 			AbstractDataMessage msgData = (AbstractDataMessage) message;
-			SpecificAdapter specificAdapter = adaptersByMessage.get(msgData.getMsgName());
-			if(specificAdapter != null){
+			SpecificAdapter specificAdapter = adaptersByMessage.get(msgData
+					.getMsgName());
+			if (specificAdapter != null) {
 				specificAdapter.onMessage(msgData);
 			}
+			//System.out.println(message);
 			break;
 		// Timeout
 		case MessageType.MSG_P2MQ_TIMEOUT:
 			System.out.println("Timeout message");
 			break;
-		// Default	
+		// Default
 		default:
 			System.out.println(message);
-			System.out.println(String.format("Message type: %d", message.getType()));
+			System.out.println(String.format("Message type: %d",
+					message.getType()));
 		}
 
 		return ErrorCode.OK;
-	}	
+	}
 
 }
