@@ -15,6 +15,7 @@ public class Instrument implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String code;
+	private String shortCode;
 	private String name;
 	private List<Level1> level1s;
 
@@ -23,13 +24,23 @@ public class Instrument implements Serializable {
 
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	/*@GeneratedValue(strategy=GenerationType.AUTO)*/
 	public Integer getId() {
 		return this.id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+
+
+	public String getShortCode() {
+		return shortCode;
+	}
+	@Column(name="short_code")
+	public void setShortCode(String shortCode) {
+		this.shortCode = shortCode;
 	}
 
 

@@ -1,9 +1,13 @@
 package trading.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.sql.Time;
+
+import trading.data.Constants;
+
+import java.util.Date;
 
 
 /**
@@ -11,19 +15,21 @@ import java.sql.Time;
  * 
  */
 @Entity
-//@NamedQuery(name="Level1.findAll", query="SELECT l FROM Level1 l")
+//@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l where l.lastTime >=:"+trading.data.Constants.QueryParamName.START_TIME)
+@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE  l.date  BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME)
+//@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE  l.date>= :" + trading.data.Constants.QueryParamName.START_TIME + " AND l.date < :" + trading.data.Constants.QueryParamName.END_TIME)
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Integer ask;
+	private BigDecimal ask;
 	private Integer askSize;
-	private double bid;
+	private BigDecimal bid;
 	private Integer bidSize;
-	private Timestamp date;
-	private double lastPrice;
-	private float lastPriceDelta;
+	private Date date;
+	private BigDecimal lastPrice;
+	private BigDecimal lastPriceDelta;
 	private Integer lastSize;
-	private Time lastTime;
+	private Date lastTime;
 	private Instrument instrument;
 
 	public Level1() {
@@ -41,11 +47,11 @@ public class Level1 implements Serializable {
 	}
 
 
-	public Integer getAsk() {
+	public BigDecimal getAsk() {
 		return this.ask;
 	}
 
-	public void setAsk(Integer ask) {
+	public void setAsk(BigDecimal ask) {
 		this.ask = ask;
 	}
 
@@ -60,11 +66,11 @@ public class Level1 implements Serializable {
 	}
 
 
-	public double getBid() {
+	public BigDecimal getBid() {
 		return this.bid;
 	}
 
-	public void setBid(double bid) {
+	public void setBid(BigDecimal bid) {
 		this.bid = bid;
 	}
 
@@ -78,32 +84,32 @@ public class Level1 implements Serializable {
 		this.bidSize = bidSize;
 	}
 
-
-	public Timestamp getDate() {
-		return this.date;
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getDate() {
+		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
 
 	@Column(name="last_price")
-	public double getLastPrice() {
+	public BigDecimal getLastPrice() {
 		return this.lastPrice;
 	}
 
-	public void setLastPrice(double lastPrice) {
+	public void setLastPrice(BigDecimal lastPrice) {
 		this.lastPrice = lastPrice;
 	}
 
 
 	@Column(name="last_price_delta")
-	public float getLastPriceDelta() {
+	public BigDecimal getLastPriceDelta() {
 		return this.lastPriceDelta;
 	}
 
-	public void setLastPriceDelta(float lastPriceDelta) {
+	public void setLastPriceDelta(BigDecimal lastPriceDelta) {
 		this.lastPriceDelta = lastPriceDelta;
 	}
 
@@ -119,17 +125,19 @@ public class Level1 implements Serializable {
 
 
 	@Column(name="last_time")
-	public Time getLastTime() {
+	@Temporal(TemporalType.TIME)	
+	public Date getLastTime() {
 		return this.lastTime;
 	}
 
-	public void setLastTime(Time lastTime) {
+	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
 
 
 	//bi-directional many-to-one association to Instrument
-	@ManyToOne
+	@ManyToOne()
+	@JoinColumn(name="instrument_id", nullable=false)
 	public Instrument getInstrument() {
 		return this.instrument;
 	}

@@ -14,7 +14,7 @@ public class App
 {
     public static void main( String[] args )
     {
-    	
+   
     	Session session = HibernateUtil.getSessionFactory().openSession();
     	
     	Instrument i = (Instrument)session.get(Instrument.class, 1);
