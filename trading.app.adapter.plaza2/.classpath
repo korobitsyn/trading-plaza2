@@ -23,7 +23,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry exported="true" kind="lib" path="lib/cgate.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.data"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.common"/>
+	<classpathentry kind="lib" path="lib/cgate.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

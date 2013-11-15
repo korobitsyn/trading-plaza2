@@ -9,9 +9,10 @@ import java.util.List;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import trading.app.adapter.plaza2.Adapter;
-import trading.app.provider.HibernateHistoryProvider;
-import trading.app.provider.HistoryProvider;
+import trading.app.adapter.Adapter;
+import trading.app.history.HistoryProvider;
+import trading.app.history.HistoryWriter;
+import trading.app.realtime.RealTimeProvider;
 import trading.data.model.Level1;
 
 /**
@@ -24,8 +25,38 @@ public class TradingApplication1 {
 	static GenericXmlApplicationContext ctx;
 	
 	private Adapter adapter;
+	private RealTimeProvider realTimeProvider;
 	private HistoryProvider historyProvider;
+	private HistoryWriter historyWriter;
 	
+
+	/**
+	 * @return the realTimeProvider
+	 */
+	public RealTimeProvider getRealTimeProvider() {
+		return realTimeProvider;
+	}
+
+	/**
+	 * @param realTimeProvider the realTimeProvider to set
+	 */
+	public void setRealTimeProvider(RealTimeProvider realTimeProvider) {
+		this.realTimeProvider = realTimeProvider;
+	}
+
+	/**
+	 * @return the historyWriter
+	 */
+	public HistoryWriter getHistoryWriter() {
+		return historyWriter;
+	}
+
+	/**
+	 * @param historyWriter the historyWriter to set
+	 */
+	public void setHistoryWriter(HistoryWriter historyWriter) {
+		this.historyWriter = historyWriter;
+	}
 
 	/**
 	 * @return market adapter
@@ -82,8 +113,7 @@ public class TradingApplication1 {
 	 * @param adapter
 	 * @throws IOException 
 	 */
-	protected void writeHistory(Adapter adapter) throws IOException{
-		HistoryWriter historyWriter = new HistoryWriter(adapter);
+	protected void writeHistory() throws IOException{
 		adapter.connect();
 		System.out.println("Press any key to finish");
 		System.in.read();		
@@ -116,6 +146,7 @@ public class TradingApplication1 {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-		readHistory();
+		//readHistory();
+		writeHistory();
 	}
 }

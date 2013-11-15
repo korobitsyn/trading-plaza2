@@ -7,6 +7,8 @@ import ru.micexrts.cgate.Listener;
 import ru.micexrts.cgate.messages.Message;
 import trading.app.adapter.plaza2.scheme.FutInfo;
 import trading.data.model.Instrument;
+import trading.app.adapter.*;
+
 
 /**
  * Instrument info adapter

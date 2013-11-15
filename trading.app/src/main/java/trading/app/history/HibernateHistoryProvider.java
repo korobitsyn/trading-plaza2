@@ -1,7 +1,6 @@
-package trading.app.provider;
+package trading.app.history;
 
 import java.util.Date;
-
 import java.util.List;
 
 import javax.persistence.TemporalType;
@@ -9,7 +8,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import trading.app.adapter.plaza2.Adapter;
+import trading.app.adapter.Adapter;
+import trading.app.history.HistoryProvider;
 import trading.data.HibernateUtil;
 import trading.data.model.Level1;
 

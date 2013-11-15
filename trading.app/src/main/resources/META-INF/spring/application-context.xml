@@ -6,13 +6,20 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<context:annotation-config />
-	<context:component-scan base-package="springApplication1"></context:component-scan>
+	<context:component-scan base-package="trading.app"></context:component-scan>
 
 	<bean id="application" class="trading.app.TradingApplication1">
-		<property name="adapter" ref="adapter"></property>
-		<property name="historyProvider" ref="historyProvider"></property>
+		<property name="adapter" ref="adapter" />
+		<property name="realTimeProvider" ref="realTimeProvider"/>
+		<property name="historyProvider" ref="historyProvider" />
+		<property name="historyWriter" ref="historyWriter" />
 	</bean>
+	
 	<bean id="adapter" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
-	<bean id="historyProvider" class="trading.app.provider.HibernateHistoryProvider"/>
+	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
+	<bean id="realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter" />
+	<bean id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
+		<property name="realTimeProvider" ref="realTimeProvider"></property>
+	</bean>
 
 </beans>

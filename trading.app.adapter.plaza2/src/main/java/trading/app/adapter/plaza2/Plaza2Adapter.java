@@ -12,6 +12,11 @@ import ru.micexrts.cgate.Listener;
 import ru.micexrts.cgate.MessageType;
 import ru.micexrts.cgate.messages.AbstractDataMessage;
 import ru.micexrts.cgate.messages.Message;
+import trading.app.adapter.Adapter;
+import trading.app.realtime.MarketListener;
+import trading.app.realtime.RealTimeProvider;
+import trading.data.model.Instrument;
+import trading.data.model.Level1;
 
 /**
  * Processes plaza2 messages
@@ -19,7 +24,7 @@ import ru.micexrts.cgate.messages.Message;
  * @author dima
  * 
  */
-public class Plaza2Adapter implements ISubscriber, Adapter {
+public class Plaza2Adapter implements ISubscriber, Adapter, RealTimeProvider {
 	/**
 	 * Main cycle for dev only ToDo: remove later
 	 * 
@@ -98,18 +103,7 @@ public class Plaza2Adapter implements ISubscriber, Adapter {
 		this.plaza2Client.disconnect();
 	}
 
-	/**
-	 * Instrument adapter
-	 */
-	public InstrumentAdapter getInstrumentAdapter() {
-		return instrumentAdapter;
-	}
-	/**
-	 * Level1 adapter
-	 */
-	public Level1Adapter getLevel1Adapter() {
-		return level1Adapter;
-	}
+
 
 	/**
 	 * Process new message
@@ -143,6 +137,36 @@ public class Plaza2Adapter implements ISubscriber, Adapter {
 		}
 
 		return ErrorCode.OK;
+	}
+	/**
+	 * @see trading.app.realtime.RealTimeProvider#addLevel1Listener(int, MarketListener)
+	 */
+	public void addLevel1Listener(int instrumentId,
+			MarketListener<Level1> listener) {
+		level1Adapter.addMarketListener(instrumentId, listener);
+		
+	}
+	/**
+	 * @see trading.app.realtime.RealTimeProvider#removeLevel1Listener(int, MarketListener)
+	 */
+	public void removeLevel1Listener(int instrumentId,
+			MarketListener<Level1> listener) {
+		level1Adapter.removeMarketListener(instrumentId, listener);
+		
+	}
+	/**
+	 * @see trading.app.realtime.RealTimeProvider#addInstrumentListener(int, MarketListener)
+	 */
+	public void addInstrumentListener(MarketListener<Instrument> listener) {
+		instrumentAdapter.addMarketListener(listener);
+		
+	}
+	/**
+	 * @see trading.app.realtime.RealTimeProvider#removeInstrumentListener(int, MarketListener)
+	 */
+	public void removeInstrumentListener(MarketListener<Instrument> listener) {
+		instrumentAdapter.removeMarketListener(listener);
+		
 	}
 
 }

@@ -1,9 +1,10 @@
-package trading.app;
+package trading.app.history;
 
 import org.hibernate.Session;
 
-import trading.app.adapter.plaza2.Adapter;
-import trading.app.adapter.plaza2.MarketListener;
+import trading.app.history.HistoryWriter;
+import trading.app.realtime.MarketListener;
+import trading.app.realtime.RealTimeProvider;
 import trading.data.HibernateUtil;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
@@ -14,28 +15,50 @@ import trading.data.model.Level1;
  * @author dima
  * 
  */
-public class HistoryWriter {
+public class HibernateHistoryWriter implements HistoryWriter {
 
-	private Adapter adapter = null;
+	private  RealTimeProvider realTimeProvider = null;
 	private Session hibernateSession = null;
 	// Hardcode futures instrument id
 	// ToDo: add instrument id setter
 	private int instrumentId = 193886;
 
-	/**
-	 * Ctor
-	 * 
-	 * @param adapter
+	
+	
+	/* (non-Javadoc)
+	 * @see trading.app.HistoryWriter#getProvider()
 	 */
-	public HistoryWriter(Adapter adapter) {
-		// Store plaza adapter
-		this.adapter = adapter;
+	@Override
+	public RealTimeProvider getRealTimeProvider() {
+		return realTimeProvider;
+	}
+
+
+
+
+	/* (non-Javadoc)
+	 * @see trading.app.HistoryWriter#setProvider(trading.app.provider.DynamicProvider)
+	 */
+	@Override
+	public void setRealTimeProvider(RealTimeProvider provider) {
+		this.realTimeProvider = provider;
+	}
+
+
+
+
+	/* (non-Javadoc)
+	 * @see trading.app.HistoryWriter#init(trading.app.provider.DynamicProvider)
+	 */
+	@Override
+	public void init() {
+
 
 		// Init hibernate session
 		hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
 		// Add instrument listener
-		adapter.getInstrumentAdapter().addMarketListener(
+		realTimeProvider.addInstrumentListener(
 				new MarketListener<Instrument>() {
 					@Override
 					public void OnMarketDataChanged(Instrument entity) {
@@ -44,7 +67,7 @@ public class HistoryWriter {
 					}
 				});
 		// Add level1 listener
-		adapter.getLevel1Adapter().addMarketListener(instrumentId,
+		realTimeProvider.addLevel1Listener(instrumentId,
 				new MarketListener<Level1>() {
 					@Override
 					public void OnMarketDataChanged(Level1 entity) {
@@ -52,6 +75,9 @@ public class HistoryWriter {
 					}
 				});
 	}
+	
+
+	
 
 	/**
 	 * Instrument update received

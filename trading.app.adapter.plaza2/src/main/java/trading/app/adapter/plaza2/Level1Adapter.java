@@ -1,19 +1,12 @@
 package trading.app.adapter.plaza2;
 
-import java.util.Date;
-
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-
 import ru.micexrts.cgate.Connection;
 import ru.micexrts.cgate.ErrorCode;
 import ru.micexrts.cgate.ISubscriber;
 import ru.micexrts.cgate.Listener;
-import ru.micexrts.cgate.messages.AbstractDataMessage;
 import ru.micexrts.cgate.messages.Message;
+import trading.app.adapter.EntityDataAdapter;
+import trading.app.adapter.EntityDataAdapterBase;
 import trading.app.adapter.plaza2.scheme.FutCommon;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
