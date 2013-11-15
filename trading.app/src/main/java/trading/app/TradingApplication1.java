@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import trading.app.adapter.plaza2.Adapter;
+import trading.app.provider.HibernateHistoryProvider;
 import trading.app.provider.HistoryProvider;
 import trading.data.model.Level1;
 
@@ -23,21 +24,45 @@ public class TradingApplication1 {
 	static GenericXmlApplicationContext ctx;
 	
 	private Adapter adapter;
+	private HistoryProvider historyProvider;
 	
+
+	/**
+	 * @return market adapter
+	 */
 	public Adapter getAdapter() {
 		return adapter;
 	}
 
+	/**
+	 * @param adapter the adapter to set
+	 */
 	public void setAdapter(Adapter adapter) {
 		this.adapter = adapter;
 	}
 
 	/**
+	 * @return the historyProvider
+	 */
+	public HistoryProvider getHistoryProvider() {
+		return historyProvider;
+	}
+
+	/**
+	 * @param historyProvider the historyProvider to set
+	 */
+	public void setHistoryProvider(HistoryProvider historyProvider) {
+		this.historyProvider = historyProvider;
+	}
+
+
+
+	/**
 	 * Get history from plaza 2
 	 * @param adapter
 	 */
-	protected void readHistory(Adapter adapter){
-		HistoryProvider historyProvider = new HistoryProvider();
+	protected void readHistory(){
+		//HistoryProvider historyProvider = new HibernateHistoryProvider();
 		Calendar startCal = GregorianCalendar.getInstance();
 		startCal.set(Calendar.YEAR, 2010);
 		
@@ -91,8 +116,6 @@ public class TradingApplication1 {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-	
-		
-		readHistory(adapter);
+		readHistory();
 	}
 }

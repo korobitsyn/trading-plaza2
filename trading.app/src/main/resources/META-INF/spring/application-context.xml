@@ -10,7 +10,9 @@
 
 	<bean id="application" class="trading.app.TradingApplication1">
 		<property name="adapter" ref="adapter"></property>
+		<property name="historyProvider" ref="historyProvider"></property>
 	</bean>
 	<bean id="adapter" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
+	<bean id="historyProvider" class="trading.app.provider.HibernateHistoryProvider"/>
 
 </beans>
