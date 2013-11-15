@@ -15,12 +15,13 @@ import java.util.Date;
  * 
  */
 @Entity
-//@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l where l.lastTime >=:"+trading.data.Constants.QueryParamName.START_TIME)
 @NamedQueries(value = { 
 		@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE l.instrument.id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " AND l.date  BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME + " ORDER BY l.date")
-		,@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query="SELECT l FROM Level1 l  WHERE l.instrument.id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " ORDER BY l.date DESC")//:"+trading.data.Constants.QueryParamName.COUNT)
- 
 })
+@NamedNativeQueries(value={
+		@NamedNativeQuery(resultClass=Level1.class, name=trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query="SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " ORDER BY date DESC LIMIT :" + trading.data.Constants.QueryParamName.COUNT + ") AS level1 ORDER BY level1.date ASC")
+})
+
 
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;

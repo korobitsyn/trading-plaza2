@@ -48,11 +48,15 @@ public class HibernateHistoryProvider implements HistoryProvider {
 		Query query = hibernateSession.getNamedQuery(trading.data.Constants.QueryName.LEVEL1_FIND_LAST);
 		//query.setParameter(trading.data.Constants.QueryParamName.COUNT, lastCount);
 		query.setParameter(trading.data.Constants.QueryParamName.INSTRUMENT_ID, instrumentId);		
-		query.setFirstResult(0);
-		query.setMaxResults(lastCount);
+		query.setParameter(trading.data.Constants.QueryParamName.COUNT, lastCount);
+		
+		//		query.setFirstResult(0);
+		//query.setMaxResults(lastCount);
+
 		
 
 		List<Level1> data = query.list();
+		Level1 level1 = data.get(0);
 		return data;
 	}
 
