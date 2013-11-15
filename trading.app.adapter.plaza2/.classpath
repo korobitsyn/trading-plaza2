@@ -26,6 +26,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.data"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.common"/>
 	<classpathentry kind="lib" path="lib/cgate.jar"/>
-	<classpathentry kind="lib" path="winLib/cgate.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -131,10 +131,12 @@ public class TradingApplication1 {
 	 */
 	public static void main(String[] args) throws
 			InterruptedException, IOException {
+		// Spring initialization
 		ctx = new GenericXmlApplicationContext();
 		ctx.load("classpath:META-INF/spring/application-context.xml");
 		ctx.registerShutdownHook();
 		ctx.refresh();
+		// Run application
 		TradingApplication1 app = ctx.getBean(TradingApplication1.class);
 		app.run();	
 

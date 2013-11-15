@@ -56,8 +56,8 @@ public class Plaza2Client {
 			// Create listeners
 			listeners.add(new Listener(connection,
 					"p2repl://FORTS_FUTINFO_REPL", plaza2Adapter));
-			listeners.add(new Listener(connection,
-					"p2repl://FORTS_FUTCOMMON_REPL", plaza2Adapter));
+			/*listeners.add(new Listener(connection,
+					"p2repl://FORTS_FUTCOMMON_REPL", plaza2Adapter));*/
 
 			while (!exitFlag) {
 

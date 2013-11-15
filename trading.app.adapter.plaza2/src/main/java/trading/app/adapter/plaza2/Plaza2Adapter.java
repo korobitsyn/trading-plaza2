@@ -118,8 +118,8 @@ public class Plaza2Adapter implements ISubscriber, Adapter, RealTimeProvider {
 
 			// Get adapter by message name
 			AbstractDataMessage msgData = (AbstractDataMessage) message;
-			ISubscriber specificAdapter = adaptersByMessage.get(msgData
-					.getMsgName());
+			String messageName = msgData.getMsgName();
+			ISubscriber specificAdapter = adaptersByMessage.get(messageName);
 			if (specificAdapter != null) {
 				specificAdapter.onMessage(conn, listener, msgData);
 			}
