@@ -21,6 +21,7 @@ import trading.data.model.Level1;
  *
  */
 public class TradingApplication1 {
+	private int instrumentId = 193886;	
 	// Spring application context
 	static GenericXmlApplicationContext ctx;
 	
@@ -104,7 +105,9 @@ public class TradingApplication1 {
 		Date startTime = startCal.getTime();
 		Date endTime = endCal.getTime();
 
-		List<Level1> range = historyProvider.getLevel1Range(startTime, endTime);		
+		List<Level1> range = historyProvider.findLevel1Range(instrumentId,startTime, endTime);
+		
+		range=historyProvider.findLevel1Last(instrumentId,10);
 		System.out.println(String.format("Found %d items", range.size()) );
 	}
 	
@@ -148,7 +151,7 @@ public class TradingApplication1 {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-		//readHistory();
-		writeHistory();
+		readHistory();
+		//writeHistory();
 	}
 }

@@ -1,4 +1,4 @@
-package trading.data.model;
+	package trading.data.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,8 +16,12 @@ import java.util.Date;
  */
 @Entity
 //@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l where l.lastTime >=:"+trading.data.Constants.QueryParamName.START_TIME)
-@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE  l.date  BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME)
-//@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE  l.date>= :" + trading.data.Constants.QueryParamName.START_TIME + " AND l.date < :" + trading.data.Constants.QueryParamName.END_TIME)
+@NamedQueries(value = { 
+		@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_RANGE, query="SELECT l FROM Level1 l WHERE l.instrument.id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " AND l.date  BETWEEN :" + trading.data.Constants.QueryParamName.START_TIME + " AND :" + trading.data.Constants.QueryParamName.END_TIME + " ORDER BY l.date")
+		,@NamedQuery(name=trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query="SELECT l FROM Level1 l  WHERE l.instrument.id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " ORDER BY l.date DESC")//:"+trading.data.Constants.QueryParamName.COUNT)
+ 
+})
+
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
