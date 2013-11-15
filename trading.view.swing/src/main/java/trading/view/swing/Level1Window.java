@@ -43,6 +43,22 @@ public class Level1Window {
 	}
 
 	/**
+	 * Launch the application.
+	 */
+	public void show() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Level1Window window = new Level1Window();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	/**
 	 * Create the application.
 	 */
 	public Level1Window() {
