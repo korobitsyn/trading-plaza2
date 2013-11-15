@@ -18,8 +18,9 @@
 	<bean id="adapter" name="adapter, realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
 	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
 
-	<bean id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
+	<bean  id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
 		<property name="realTimeProvider" ref="realTimeProvider"></property>
 	</bean>
+
 
 </beans>

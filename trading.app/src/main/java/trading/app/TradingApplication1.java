@@ -1,5 +1,6 @@
 package trading.app;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -14,6 +15,7 @@ import trading.app.history.HistoryProvider;
 import trading.app.history.HistoryWriter;
 import trading.app.realtime.RealTimeProvider;
 import trading.data.model.Level1;
+import trading.view.swing.Level1ApplicationWindow;
 
 /**
  * Main application class for debugging under JavaSE
@@ -139,6 +141,8 @@ public class TradingApplication1  {
 		ctx.load("classpath:META-INF/spring/application-context.xml");
 		ctx.registerShutdownHook();
 		ctx.refresh();
+		
+
 		// Run application
 		TradingApplication1 app = ctx.getBean(TradingApplication1.class);
 		app.run();	
@@ -151,6 +155,9 @@ public class TradingApplication1  {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
+		Level1ApplicationWindow.run(realTimeProvider, historyProvider);
+		
+		
 		//readHistory();
 		//writeHistory();
 	}
