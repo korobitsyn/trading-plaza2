@@ -29,6 +29,6 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.adapter.plaza2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.data"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/trading.common"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
