@@ -20,7 +20,7 @@ import trading.data.model.Level1;
  * @author dima
  *
  */
-public class TradingApplication1 {
+public class TradingApplication1  {
 	private int instrumentId = 193886;	
 	// Spring application context
 	static GenericXmlApplicationContext ctx;
@@ -31,57 +31,57 @@ public class TradingApplication1 {
 	private HistoryWriter historyWriter;
 	
 
-	/**
-	 * @return the realTimeProvider
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#getRealTimeProvider()
 	 */
 	public RealTimeProvider getRealTimeProvider() {
 		return realTimeProvider;
 	}
 
-	/**
-	 * @param realTimeProvider the realTimeProvider to set
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#setRealTimeProvider(trading.app.realtime.RealTimeProvider)
 	 */
 	public void setRealTimeProvider(RealTimeProvider realTimeProvider) {
 		this.realTimeProvider = realTimeProvider;
 	}
 
-	/**
-	 * @return the historyWriter
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#getHistoryWriter()
 	 */
 	public HistoryWriter getHistoryWriter() {
 		return historyWriter;
 	}
 
-	/**
-	 * @param historyWriter the historyWriter to set
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#setHistoryWriter(trading.app.history.HistoryWriter)
 	 */
 	public void setHistoryWriter(HistoryWriter historyWriter) {
 		this.historyWriter = historyWriter;
 	}
 
-	/**
-	 * @return market adapter
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#getAdapter()
 	 */
 	public Adapter getAdapter() {
 		return adapter;
 	}
 
-	/**
-	 * @param adapter the adapter to set
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#setAdapter(trading.app.adapter.Adapter)
 	 */
 	public void setAdapter(Adapter adapter) {
 		this.adapter = adapter;
 	}
 
-	/**
-	 * @return the historyProvider
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#getHistoryProvider()
 	 */
 	public HistoryProvider getHistoryProvider() {
 		return historyProvider;
 	}
 
-	/**
-	 * @param historyProvider the historyProvider to set
+	/* (non-Javadoc)
+	 * @see trading.app.TradingApplication#setHistoryProvider(trading.app.history.HistoryProvider)
 	 */
 	public void setHistoryProvider(HistoryProvider historyProvider) {
 		this.historyProvider = historyProvider;
@@ -151,7 +151,7 @@ public class TradingApplication1 {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-		readHistory();
+		//readHistory();
 		//writeHistory();
 	}
 }
