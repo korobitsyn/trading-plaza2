@@ -48,8 +48,8 @@ public class Plaza2Client {
 		});
 
 		try {
-			// CGate.open("key=11111111");
-			CGate.open("ini=ini/jsend.ini;key=11111111");
+			 CGate.open("key=11111111");
+			//CGate.open("ini=ini/jsend.ini;key=11111111");
 			connection = new Connection(
 					"p2tcp://127.0.0.1:4001;app_name=plaza2_client");
 
