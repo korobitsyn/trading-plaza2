@@ -22,6 +22,7 @@ import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.GridLayout;
+import javax.swing.JSplitPane;
 
 public class Level1Chart extends JPanel {
 	String title;
@@ -88,20 +89,25 @@ public class Level1Chart extends JPanel {
 		final XYDataset priceDataSet = createPriceDataSet();
 		priceChart = createPriceChart(priceDataSet);
 		setLayout(new GridLayout(0, 1, 0, 0));
-		final ChartPanel priceChartPanel = new ChartPanel(priceChart);
-		FlowLayout flowLayout_1 = (FlowLayout) priceChartPanel.getLayout();
-		flowLayout_1.setAlignOnBaseline(true);
-		priceChartPanel.setPreferredSize(new java.awt.Dimension(500, 370));
-		add(priceChartPanel);
 
 		final XYDataset volumeDataSet = createVolumeDataSet();
 		volumeChart = createVolumeChart(volumeDataSet);
 		setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setResizeWeight(0.7);
+		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		add(splitPane);
+		final ChartPanel priceChartPanel = new ChartPanel(priceChart);
+		splitPane.setLeftComponent(priceChartPanel);
+		FlowLayout flowLayout_1 = (FlowLayout) priceChartPanel.getLayout();
+		flowLayout_1.setAlignOnBaseline(true);
+		priceChartPanel.setPreferredSize(new java.awt.Dimension(500, 370));
 		final ChartPanel volumeChartPanel = new ChartPanel(volumeChart);
+		splitPane.setRightComponent(volumeChartPanel);
 		FlowLayout flowLayout_2 = (FlowLayout) volumeChartPanel.getLayout();
 		flowLayout_2.setAlignOnBaseline(true);
 		volumeChartPanel.setPreferredSize(new java.awt.Dimension(500, 100));
-		add(volumeChartPanel);
 
 	}
 
