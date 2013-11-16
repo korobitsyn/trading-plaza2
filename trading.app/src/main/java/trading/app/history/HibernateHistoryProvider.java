@@ -54,10 +54,8 @@ public class HibernateHistoryProvider implements HistoryProvider {
 		//		query.setFirstResult(0);
 		//query.setMaxResults(lastCount);
 
-		
-
 		List<Level1> data = query.list();
-		Level1 level1 = data.get(0);
+
 		return data;
 	}
 

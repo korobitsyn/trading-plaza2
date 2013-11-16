@@ -50,19 +50,13 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	private RealTimeProvider realTimeProvider;
 	private JComboBox<Instrument> instrumentComboBox;
 	private final Action connectAction = new ConnectAction();
-	private final Action captureAction = new CaptureAction();
+	private final Action listenAction = new CaptureAction();
 	private final Action historyAction = new HistoryAction();
 	private Level1ApplicationWindow windowInstance = this;
 	private Level1Chart level1Chart;
 
 	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { Level1ApplicationWindow window =
-	 * new Level1ApplicationWindow(); window.frame.setVisible(true); } catch
-	 * (Exception e) { e.printStackTrace(); } } }); }
+	 * Launch the application. For test only
 	 */
 	public static void run(final Adapter a, final RealTimeProvider rp,
 			final HistoryProvider hp) {
@@ -80,12 +74,8 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	}
 
 	/**
-	 * Create the application.
+	 * Ctor
 	 */
-	/*
-	 * public Level1ApplicationWindow() { initialize(); }
-	 */
-
 	public Level1ApplicationWindow(Adapter a, RealTimeProvider rp,
 			HistoryProvider hp) {
 		adapter = a;
@@ -114,6 +104,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 				ComboBoxModel<Instrument> model = new DefaultComboBoxModel(
 						instruments.toArray());
 				instrumentComboBox.setModel(model);
+				level1Chart.setTitle(instrumentComboBox.getSelectedItem().toString());
 			}
 		});
 		frame.setTitle("Level1"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -121,6 +112,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		level1Chart = new Level1Chart("No instrument selected");
+		level1Chart.setTitle("");
 		frame.getContentPane().add(level1Chart, BorderLayout.CENTER);
 
 		JPanel controlPanel = new JPanel();
@@ -136,23 +128,24 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		JButton historyButton = new JButton("History");
 		historyButton.setAction(historyAction);
 
-		JToggleButton captureButon = new JToggleButton("Capture");
-		captureButon.setAction(captureAction);
+		JToggleButton listenButon = new JToggleButton("Listen");
+		listenButon.setAction(listenAction);
 		controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		controlPanel.add(connectButton);
 		controlPanel.add(instrumentComboBox);
 		controlPanel.add(historyButton);
-		controlPanel.add(captureButon);
+		controlPanel.add(listenButon);
 		instrumentComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set caption to selected instrument
 				JComboBox<Instrument> source = (JComboBox<Instrument>) e
 						.getSource();
 				Instrument instrument = (Instrument) source.getSelectedItem();
-				level1Chart.title = instrument.toString();
+				level1Chart.setTitle(instrument.toString());
 			}
 		});
 	}
+
 
 	/**
 	 * Returns current instrument
@@ -165,9 +158,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	}
 	/**
 	 * Connect to data provider
-	 * 
-	 * @author dima
-	 * 
+	 * @author dimaString title
 	 */
 	private class ConnectAction extends AbstractAction {
 		public ConnectAction() {
@@ -187,18 +178,24 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		}
 	}
 
+	/**
+	 * Capture real time data action
+	 */
 	private class CaptureAction extends AbstractAction {
 		public CaptureAction() {
-			putValue(NAME, "Capture");
-			putValue(SHORT_DESCRIPTION, "Capture data");
+			putValue(NAME, "Listen");
+			putValue(SHORT_DESCRIPTION, "Listen market data");
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton source = (AbstractButton) e.getSource();
 			if (source.isSelected()) {
 				putValue(NAME, "Capturing");
+				historyAction.setEnabled(false);
 				Instrument selectedInstrument = getInstrument();
 				instrumentComboBox.setEnabled(false);
+				level1Chart.clear();
+				
 				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),
 						windowInstance);
 
@@ -209,11 +206,12 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 				realTimeProvider.removeLevel1Listener(
 						selectedInstrument.getId(), windowInstance);
 				instrumentComboBox.setEnabled(true);
+				historyAction.setEnabled(true);
 			}
 		}
 	}
 	/**
-	 * Connect to data provider
+	 * Load history from data provider
 	 * 
 	 * @author dima
 	 * 
@@ -233,7 +231,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	}	
 
 	/**
-	 * Level1 changed
+	 * Level1 changed event
 	 */
 	@Override
 	public void OnMarketDataChanged(Level1 level1) {
