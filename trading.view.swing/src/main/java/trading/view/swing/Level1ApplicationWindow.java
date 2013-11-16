@@ -9,6 +9,7 @@ import trading.app.history.HistoryProvider;
 import trading.app.realtime.MarketListener;
 import trading.app.realtime.RealTimeProvider;
 import trading.data.model.Instrument;
+import trading.data.model.Level1;
 
 import java.util.List;
 import java.util.ResourceBundle;
@@ -36,7 +37,7 @@ import javax.swing.Action;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Level1ApplicationWindow {
+public class Level1ApplicationWindow implements MarketListener<Level1>{
 
 	private JFrame frame;
 	private Adapter adapter;
@@ -45,6 +46,7 @@ public class Level1ApplicationWindow {
 	private JComboBox<Instrument> instrumentComboBox;	
 	private final Action connectAction = new ConnectAction();
 	private final Action captureAction = new CaptureAction();
+	private Level1ApplicationWindow windowInstance = this;
 
 	/**
 	 * Launch the application.
@@ -159,10 +161,25 @@ public class Level1ApplicationWindow {
 			AbstractButton source = (AbstractButton) e.getSource();
 			if(source.isSelected()){
 				putValue(NAME, "Capturing");
+				Instrument selectedInstrument = (Instrument)instrumentComboBox.getSelectedItem();
+				instrumentComboBox.setEnabled(false);
+				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),windowInstance);
+				
 			} else{
 				putValue(NAME, "Capture");
+				Instrument selectedInstrument = (Instrument)instrumentComboBox.getSelectedItem();
+				realTimeProvider.removeLevel1Listener(selectedInstrument.getId(),windowInstance);
+				instrumentComboBox.setEnabled(true);
 			}				
 		}
+	}
+	/**
+	 * Level1 changed
+	 */
+	@Override
+	public void OnMarketDataChanged(Level1 entity) {
+		System.out.println(entity);
+		
 	}
 
 }

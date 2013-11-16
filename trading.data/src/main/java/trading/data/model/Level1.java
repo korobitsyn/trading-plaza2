@@ -150,5 +150,10 @@ public class Level1 implements Serializable {
 	public void setInstrument(Instrument instrument) {
 		this.instrument = instrument;
 	}
+	
+	@Override
+	public String toString(){
+		return String.format("Level1 data: date=%s, price=%s, volume=%s...", date, lastPrice, lastSize);
+	}
 
 }
