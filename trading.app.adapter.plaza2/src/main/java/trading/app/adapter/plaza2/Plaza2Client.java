@@ -39,11 +39,11 @@ public class Plaza2Client {
 	 */
 	public void run() {
 		exitFlag = false;
+		cleanedUp=false;
+		connectionAttempts = 0;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				exitFlag = true;
-				while (!cleanedUp)
-					;
+				disconnect();
 			}
 		});
 
@@ -170,7 +170,8 @@ public class Plaza2Client {
 	 */
 	public void disconnect() {
 		exitFlag = true;
-		cleanedUp = false;
+		while (!cleanedUp)
+			;		
 	}
 
 }
