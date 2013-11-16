@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import trading.app.adapter.Adapter;
 import trading.app.history.HistoryProvider;
+import trading.app.history.HistoryWriter;
 import trading.app.realtime.MarketListener;
 import trading.app.realtime.RealTimeProvider;
 import trading.data.model.Instrument;
@@ -36,17 +37,22 @@ import javax.swing.Action;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JPanel;
+
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JCheckBox;
 
 public class Level1ApplicationWindow implements MarketListener<Level1> {
 
 	private JFrame frame;
 	private Adapter adapter;
 	private HistoryProvider historyProvider;
+	private HistoryWriter historyWriter;
 	private RealTimeProvider realTimeProvider;
 	private JComboBox<Instrument> instrumentComboBox;
 	private final Action connectAction = new ConnectAction();
@@ -54,17 +60,18 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	private final Action historyAction = new HistoryAction();
 	private Level1ApplicationWindow windowInstance = this;
 	private Level1Chart level1Chart;
+	private boolean isWriteEnabled = true;
 
 	/**
 	 * Launch the application. For test only
 	 */
 	public static void run(final Adapter a, final RealTimeProvider rp,
-			final HistoryProvider hp) {
+			final HistoryProvider hp, final HistoryWriter w) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Level1ApplicationWindow window = new Level1ApplicationWindow(
-							a, rp, hp);
+							a, rp, hp, w);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -77,9 +84,10 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	 * Ctor
 	 */
 	public Level1ApplicationWindow(Adapter a, RealTimeProvider rp,
-			HistoryProvider hp) {
+			HistoryProvider hp, HistoryWriter w) {
 		adapter = a;
 		historyProvider = hp;
+		historyWriter = w;
 		realTimeProvider = rp;
 		realTimeProvider
 				.addInstrumentListener(new MarketListener<Instrument>() {
@@ -135,6 +143,20 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		controlPanel.add(instrumentComboBox);
 		controlPanel.add(historyButton);
 		controlPanel.add(listenButon);
+		
+		// History writer configuration
+		JCheckBox writeHistoryCheckBox = new JCheckBox("Write history");
+		writeHistoryCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JCheckBox source = (JCheckBox) e.getSource();
+				isWriteEnabled = source.isSelected();
+				historyWriter.setEnabled(isWriteEnabled);
+				
+			}
+		});
+		writeHistoryCheckBox.setToolTipText("Write captured data to database");
+		writeHistoryCheckBox.setSelected(true);
+		controlPanel.add(writeHistoryCheckBox);
 		instrumentComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set caption to selected instrument
@@ -142,6 +164,9 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 						.getSource();
 				Instrument instrument = (Instrument) source.getSelectedItem();
 				level1Chart.setTitle(instrument.toString());
+				// Add to history writer
+				historyWriter.getInstrumentIds().clear();
+				historyWriter.getInstrumentIds().add(new Integer(instrument.getId()));
 			}
 		});
 	}
@@ -231,6 +256,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	 */
 	@Override
 	public void OnMarketDataChanged(Level1 level1) {
+		
 		level1Chart.addLevel1(level1);
 
 	}

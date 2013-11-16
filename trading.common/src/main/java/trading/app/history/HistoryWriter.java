@@ -1,5 +1,7 @@
 package trading.app.history;
 
+import java.util.List;
+
 import trading.app.realtime.RealTimeProvider;
 
 /**
@@ -25,5 +27,22 @@ public interface HistoryWriter {
 	 * @param adapter
 	 */
 	public abstract void init();
+
+	/**
+	 * Whether data persisting allowed
+	 * @return
+	 */
+	public abstract boolean isEnabled();
+	
+	/**
+	 * Allow or deny data persisting
+	 */
+	public abstract void setEnabled(boolean isEnabled);
+
+	/**
+	 * List of instrument id to persist data for
+	 * @return
+	 */
+	public abstract List<Integer> getInstrumentIds();
 
 }

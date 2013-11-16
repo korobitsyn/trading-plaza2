@@ -155,7 +155,7 @@ public class TradingApplication1  {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-		Level1ApplicationWindow.run(adapter, realTimeProvider, historyProvider);
+		Level1ApplicationWindow.run(adapter, realTimeProvider, historyProvider, historyWriter);
 		
 		
 		//readHistory();
