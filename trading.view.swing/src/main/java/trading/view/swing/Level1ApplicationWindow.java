@@ -127,16 +127,20 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
 		// Connect button
 		JToggleButton connectButton = new JToggleButton("Connect");
+		connectButton.setToolTipText("Connect to data provider");
 		connectButton.setHorizontalAlignment(SwingConstants.LEFT);
 		connectButton.setAction(connectAction);
 
 		// Instrument selector combo
 		instrumentComboBox = new JComboBox<Instrument>();
+		instrumentComboBox.setToolTipText("Select instrument to work with");
 
 		JButton historyButton = new JButton("History");
+		historyButton.setToolTipText("Load history from database");
 		historyButton.setAction(historyAction);
 
 		JToggleButton listenButon = new JToggleButton("Listen");
+		listenButon.setToolTipText("Capture real time data from market");
 		listenButon.setAction(listenAction);
 		controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		controlPanel.add(connectButton);
@@ -154,7 +158,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 				
 			}
 		});
-		writeHistoryCheckBox.setToolTipText("Write captured data to database");
+		writeHistoryCheckBox.setToolTipText("Write to database when listening");
 		writeHistoryCheckBox.setSelected(true);
 		controlPanel.add(writeHistoryCheckBox);
 		instrumentComboBox.addActionListener(new ActionListener() {
