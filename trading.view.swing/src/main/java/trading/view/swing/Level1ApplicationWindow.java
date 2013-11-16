@@ -36,6 +36,7 @@ import javax.swing.Action;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JPanel;
 
 public class Level1ApplicationWindow implements MarketListener<Level1>{
 
@@ -47,7 +48,8 @@ public class Level1ApplicationWindow implements MarketListener<Level1>{
 	private final Action connectAction = new ConnectAction();
 	private final Action captureAction = new CaptureAction();
 	private Level1ApplicationWindow windowInstance = this;
-
+	private PriceChart priceChart;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -109,7 +111,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1>{
 			}
 		});
 		frame.setTitle("Level1"); //$NON-NLS-1$ //$NON-NLS-2$
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JToolBar toolBar = new JToolBar();
@@ -121,14 +123,26 @@ public class Level1ApplicationWindow implements MarketListener<Level1>{
 		
 		JSeparator separator = new JSeparator();
 		toolBar.add(separator);
-		
+
+		//Instrument selector combo
 		instrumentComboBox = new JComboBox<Instrument>();
+		instrumentComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Set caption to selected instrument
+				JComboBox<Instrument> source = (JComboBox<Instrument>)e.getSource();
+				Instrument instrument = (Instrument)source.getSelectedItem();
+				priceChart.title = instrument.toString();
+			}
+		});
 		toolBar.add(instrumentComboBox);
 		
 		JToggleButton captureButon = new JToggleButton("Capture"); //$NON-NLS-1$ //$NON-NLS-2$
 		captureButon.setAction(captureAction);
 
 		toolBar.add(captureButon);
+		
+		priceChart= new PriceChart("No instrument selected");
+		frame.getContentPane().add(priceChart, BorderLayout.CENTER);
 	}
 	
 	/**
@@ -173,12 +187,13 @@ public class Level1ApplicationWindow implements MarketListener<Level1>{
 			}				
 		}
 	}
+	
 	/**
 	 * Level1 changed
 	 */
 	@Override
-	public void OnMarketDataChanged(Level1 entity) {
-		System.out.println(entity);
+	public void OnMarketDataChanged(Level1 level1) {
+		priceChart.addLevel1(level1);
 		
 	}
 
