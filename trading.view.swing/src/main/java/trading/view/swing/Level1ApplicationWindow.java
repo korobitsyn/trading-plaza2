@@ -169,10 +169,8 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton source = (AbstractButton) e.getSource();
 			if (source.isSelected()) {
-				putValue(NAME, "Connected");
 				adapter.connect();
 			} else {
-				putValue(NAME, "Connect");
 				adapter.disconnect();
 			}
 		}
@@ -190,7 +188,6 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton source = (AbstractButton) e.getSource();
 			if (source.isSelected()) {
-				putValue(NAME, "Capturing");
 				historyAction.setEnabled(false);
 				Instrument selectedInstrument = getInstrument();
 				instrumentComboBox.setEnabled(false);
@@ -200,7 +197,6 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 						windowInstance);
 
 			} else {
-				putValue(NAME, "Capture");
 				Instrument selectedInstrument = (Instrument) instrumentComboBox
 						.getSelectedItem();
 				realTimeProvider.removeLevel1Listener(
