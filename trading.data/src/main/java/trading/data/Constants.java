@@ -11,6 +11,7 @@ public class Constants {
 	 * @author dima
 	 */
 	public static class QueryName{
+		public final static String INSTRUMENT_FIND_ALL = "INSTRUMENT_FIND_ALL";
 		public final static String LEVEL1_FIND_RANGE = "LEVEL1_FIND_RANGE";
 		public final static String LEVEL1_FIND_LAST = "LEVEL1_FIND_LAST";
 		public final static String LEVEL1_FIND_COUNT = "LEVEL1_FIND_COUNT"; 

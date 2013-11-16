@@ -3,6 +3,7 @@ package trading.app.history;
 import java.util.Date;
 import java.util.List;
 
+import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
 /**
@@ -12,6 +13,11 @@ import trading.data.model.Level1;
  */
 public interface HistoryProvider {
 
+	/**
+	 * Get all instrument from database
+	 * @return
+	 */
+	public abstract List<Instrument> findInstrumentAll();
 	
 	/**
 	 * Get last n level1 items

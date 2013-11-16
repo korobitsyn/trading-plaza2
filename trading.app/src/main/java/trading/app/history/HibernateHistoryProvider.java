@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import trading.data.HibernateUtil;
+import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
 /**
@@ -58,6 +59,13 @@ public class HibernateHistoryProvider implements HistoryProvider {
 		List<Level1> data = query.list();
 		Level1 level1 = data.get(0);
 		return data;
+	}
+
+	@Override
+	public List<Instrument> findInstrumentAll() {
+		Query query = hibernateSession.getNamedQuery(trading.data.Constants.QueryName.INSTRUMENT_FIND_ALL);
+		List<Instrument> instruments = query.list();
+		return instruments;
 	}
 
 }
