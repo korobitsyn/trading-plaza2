@@ -14,6 +14,7 @@ import org.jfree.data.xy.XYDataset;
 import trading.data.model.Level1;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -23,25 +24,45 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.GridLayout;
 
-public class PriceChart extends JPanel  {
+public class Level1Chart extends JPanel  {
 	String title;
 	// Data for price chart
 	TimeSeries priceSeries;
+	TimeSeries bidSeries;
+	TimeSeries askSeries;
 	// Data for volume chart
 	TimeSeries volumeSeries;
 	
-	static int volumeSeriesIndex = 0;
-	static int priceSeriesIndex = 0;
-	static Color priceSeriesColor = Color.blue;
-	static Color volumeSeriesColor = Color.red;
+	final static int VOLUME_SERIES_INDEX = 0;
+	final static int PRICE_SERIES_INDEX = 0;
+	final static int BID_SERIES_INDEX = 1;
+	final static int ASK_SERIES_INDEX = 2;
+	final static Color PRICE_SERIES_COLOR = Color.blue;
+	final static Color BID_SERIES_COLOR = Color.cyan;
+	final static Color ASK_SERIES_COLOR = Color.cyan;
+	final static Color VOLUME_SERIES_COLOR = Color.red;
 	// Max items in charts
-	int maxItemCount = 10;
+	int maxItemCount = 100;
+
+	/**
+	 * @return the maxItemCount
+	 */
+	public int getMaxItemCount() {
+		return maxItemCount;
+	}
+
+	/**
+	 * @param maxItemCount the maxItemCount to set
+	 */
+	public void setMaxItemCount(int maxItemCount) {
+		this.maxItemCount = maxItemCount;
+	}
 
 	/**
 	 * Ctor, jfreechart init
 	 * @param title
 	 */
-    public PriceChart(String title) {
+    public Level1Chart(String title) {
     	this.title = title;
     	setBackground(SystemColor.control);
         final XYDataset priceDataSet = createPriceDataSet();
@@ -71,8 +92,26 @@ public class PriceChart extends JPanel  {
     public void addLevel1(Level1 level1){
     	FixedMillisecond fm = new FixedMillisecond(level1.getDate());
     	priceSeries.addOrUpdate(fm,level1.getLastPrice());
+    	bidSeries.addOrUpdate(fm, level1.getBid());
+    	askSeries.addOrUpdate(fm, level1.getAsk());
     	volumeSeries.addOrUpdate(fm, level1.getLastSize());
-    	
+    }
+    
+    /**
+     * Add set of level1 data
+     * @param level1Data
+     */
+    public void addLevel1(List<Level1> level1Data){
+    	for(Level1 level1 : level1Data){
+    		addLevel1(level1);
+    	}
+    }
+    /**
+     * Clear chart data
+     */
+    public void clear(){
+    	priceSeries.clear();
+    	volumeSeries.clear();
     }
 
     /**
@@ -84,9 +123,16 @@ public class PriceChart extends JPanel  {
     	// Create price series
     	priceSeries = new TimeSeries("Last price");
     	priceSeries.setMaximumItemCount(this.maxItemCount);
+    	bidSeries = new TimeSeries("Bid");
+    	bidSeries.setMaximumItemCount(this.maxItemCount);
+    	askSeries = new TimeSeries("Ask");
+    	askSeries.setMaximumItemCount(this.maxItemCount);
+    	
     	// Create and return DataSet with all time series
     	TimeSeriesCollection dataSet = new TimeSeriesCollection();
     	dataSet.addSeries(priceSeries);
+    	dataSet.addSeries(bidSeries);
+    	dataSet.addSeries(askSeries);
     	return dataSet;
     }
     /**
@@ -124,9 +170,18 @@ public class PriceChart extends JPanel  {
         final XYPlot plot = chart.getXYPlot();
         
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesPaint(priceSeriesIndex, priceSeriesColor);
-        renderer.setSeriesLinesVisible(priceSeriesIndex, true);
-        renderer.setSeriesShapesVisible(priceSeriesIndex, false);
+        // Price series
+        renderer.setSeriesPaint(PRICE_SERIES_INDEX, PRICE_SERIES_COLOR);
+        renderer.setSeriesLinesVisible(PRICE_SERIES_INDEX, true);
+        renderer.setSeriesShapesVisible(PRICE_SERIES_INDEX, false);
+        // Bid series
+        renderer.setSeriesPaint(BID_SERIES_INDEX, BID_SERIES_COLOR);
+        renderer.setSeriesLinesVisible(BID_SERIES_INDEX, true);
+        renderer.setSeriesShapesVisible(BID_SERIES_INDEX, false);
+        // Price series
+        renderer.setSeriesPaint(ASK_SERIES_INDEX, ASK_SERIES_COLOR);
+        renderer.setSeriesLinesVisible(ASK_SERIES_INDEX, true);
+        renderer.setSeriesShapesVisible(ASK_SERIES_INDEX, false);
 
         plot.setRenderer(renderer);
                 
@@ -167,7 +222,7 @@ public class PriceChart extends JPanel  {
         // get a reference to the plot for further customisation...
         final XYPlot plot = chart.getXYPlot();
         final ClusteredXYBarRenderer renderer = new ClusteredXYBarRenderer();
-        renderer.setSeriesPaint(volumeSeriesIndex, volumeSeriesColor);
+        renderer.setSeriesPaint(VOLUME_SERIES_INDEX, VOLUME_SERIES_COLOR);
         renderer.setShadowVisible(false);
         plot.setRenderer(renderer);
         return chart;

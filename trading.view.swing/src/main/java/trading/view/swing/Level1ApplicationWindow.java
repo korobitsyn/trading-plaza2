@@ -37,63 +37,67 @@ import javax.swing.Action;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JPanel;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
-public class Level1ApplicationWindow implements MarketListener<Level1>{
+public class Level1ApplicationWindow implements MarketListener<Level1> {
 
 	private JFrame frame;
 	private Adapter adapter;
 	private HistoryProvider historyProvider;
 	private RealTimeProvider realTimeProvider;
-	private JComboBox<Instrument> instrumentComboBox;	
+	private JComboBox<Instrument> instrumentComboBox;
 	private final Action connectAction = new ConnectAction();
 	private final Action captureAction = new CaptureAction();
+	private final Action historyAction = new HistoryAction();
 	private Level1ApplicationWindow windowInstance = this;
-	private PriceChart priceChart;
-	
+	private Level1Chart level1Chart;
+
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { Level1ApplicationWindow window =
+	 * new Level1ApplicationWindow(); window.frame.setVisible(true); } catch
+	 * (Exception e) { e.printStackTrace(); } } }); }
+	 */
+	public static void run(final Adapter a, final RealTimeProvider rp,
+			final HistoryProvider hp) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Level1ApplicationWindow window = new Level1ApplicationWindow();
+					Level1ApplicationWindow window = new Level1ApplicationWindow(
+							a, rp, hp);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}*/
-	public static void run(final Adapter a, final RealTimeProvider rp, final HistoryProvider hp){
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Level1ApplicationWindow window = new Level1ApplicationWindow(a, rp, hp);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});		
 	}
-	
+
 	/**
 	 * Create the application.
 	 */
-	/*public Level1ApplicationWindow() {
-		initialize();
-	}*/
-	
-	public Level1ApplicationWindow(Adapter a, RealTimeProvider rp, HistoryProvider hp){
+	/*
+	 * public Level1ApplicationWindow() { initialize(); }
+	 */
+
+	public Level1ApplicationWindow(Adapter a, RealTimeProvider rp,
+			HistoryProvider hp) {
 		adapter = a;
 		historyProvider = hp;
 		realTimeProvider = rp;
-		realTimeProvider.addInstrumentListener(new MarketListener<Instrument>(){
-			@Override
-			public void OnMarketDataChanged(Instrument entity) {
-				instrumentComboBox.addItem(entity);
-			}});
+		realTimeProvider
+				.addInstrumentListener(new MarketListener<Instrument>() {
+					@Override
+					public void OnMarketDataChanged(Instrument entity) {
+						instrumentComboBox.addItem(entity);
+					}
+				});
 		initialize();
 	}
 
@@ -105,96 +109,136 @@ public class Level1ApplicationWindow implements MarketListener<Level1>{
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
-				List<Instrument> instruments = historyProvider.findInstrumentAll();
-				ComboBoxModel<Instrument> model = new DefaultComboBoxModel(instruments.toArray());
+				List<Instrument> instruments = historyProvider
+						.findInstrumentAll();
+				ComboBoxModel<Instrument> model = new DefaultComboBoxModel(
+						instruments.toArray());
 				instrumentComboBox.setModel(model);
 			}
 		});
 		frame.setTitle("Level1"); //$NON-NLS-1$ //$NON-NLS-2$
 		frame.setBounds(100, 100, 1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JToolBar toolBar = new JToolBar();
-		frame.getContentPane().add(toolBar, BorderLayout.NORTH);
-		// Connect button
-		JToggleButton connectButton = new JToggleButton("Connect"); //$NON-NLS-1$ //$NON-NLS-2$
-		connectButton.setAction(connectAction);
-		toolBar.add(connectButton);
-		
-		JSeparator separator = new JSeparator();
-		toolBar.add(separator);
 
-		//Instrument selector combo
+		level1Chart = new Level1Chart("No instrument selected");
+		frame.getContentPane().add(level1Chart, BorderLayout.CENTER);
+
+		JPanel controlPanel = new JPanel();
+		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
+		// Connect button
+		JToggleButton connectButton = new JToggleButton("Connect");
+		connectButton.setHorizontalAlignment(SwingConstants.LEFT);
+		connectButton.setAction(connectAction);
+
+		// Instrument selector combo
 		instrumentComboBox = new JComboBox<Instrument>();
+
+		JButton historyButton = new JButton("History");
+		historyButton.setAction(historyAction);
+
+		JToggleButton captureButon = new JToggleButton("Capture");
+		captureButon.setAction(captureAction);
+		controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		controlPanel.add(connectButton);
+		controlPanel.add(instrumentComboBox);
+		controlPanel.add(historyButton);
+		controlPanel.add(captureButon);
 		instrumentComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set caption to selected instrument
-				JComboBox<Instrument> source = (JComboBox<Instrument>)e.getSource();
-				Instrument instrument = (Instrument)source.getSelectedItem();
-				priceChart.title = instrument.toString();
+				JComboBox<Instrument> source = (JComboBox<Instrument>) e
+						.getSource();
+				Instrument instrument = (Instrument) source.getSelectedItem();
+				level1Chart.title = instrument.toString();
 			}
 		});
-		toolBar.add(instrumentComboBox);
-		
-		JToggleButton captureButon = new JToggleButton("Capture"); //$NON-NLS-1$ //$NON-NLS-2$
-		captureButon.setAction(captureAction);
-
-		toolBar.add(captureButon);
-		
-		priceChart= new PriceChart("No instrument selected");
-		frame.getContentPane().add(priceChart, BorderLayout.CENTER);
 	}
-	
+
+	/**
+	 * Returns current instrument
+	 * @return
+	 */
+	private Instrument getInstrument(){
+		Instrument selectedInstrument = (Instrument) instrumentComboBox
+				.getSelectedItem();
+		return selectedInstrument;
+	}
 	/**
 	 * Connect to data provider
+	 * 
 	 * @author dima
-	 *
+	 * 
 	 */
 	private class ConnectAction extends AbstractAction {
 		public ConnectAction() {
 			putValue(NAME, "Connect");
 			putValue(SHORT_DESCRIPTION, "Connect to data provider");
 		}
+
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton source = (AbstractButton) e.getSource();
-			if(source.isSelected()){
+			if (source.isSelected()) {
 				putValue(NAME, "Connected");
 				adapter.connect();
-			} else{
-				putValue(NAME, "Connect");				
+			} else {
+				putValue(NAME, "Connect");
 				adapter.disconnect();
-			}			
+			}
 		}
 	}
+
 	private class CaptureAction extends AbstractAction {
 		public CaptureAction() {
 			putValue(NAME, "Capture");
 			putValue(SHORT_DESCRIPTION, "Capture data");
 		}
+
 		public void actionPerformed(ActionEvent e) {
 			AbstractButton source = (AbstractButton) e.getSource();
-			if(source.isSelected()){
+			if (source.isSelected()) {
 				putValue(NAME, "Capturing");
-				Instrument selectedInstrument = (Instrument)instrumentComboBox.getSelectedItem();
+				Instrument selectedInstrument = getInstrument();
 				instrumentComboBox.setEnabled(false);
-				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),windowInstance);
-				
-			} else{
+				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),
+						windowInstance);
+
+			} else {
 				putValue(NAME, "Capture");
-				Instrument selectedInstrument = (Instrument)instrumentComboBox.getSelectedItem();
-				realTimeProvider.removeLevel1Listener(selectedInstrument.getId(),windowInstance);
+				Instrument selectedInstrument = (Instrument) instrumentComboBox
+						.getSelectedItem();
+				realTimeProvider.removeLevel1Listener(
+						selectedInstrument.getId(), windowInstance);
 				instrumentComboBox.setEnabled(true);
-			}				
+			}
 		}
 	}
-	
+	/**
+	 * Connect to data provider
+	 * 
+	 * @author dima
+	 * 
+	 */
+	private class HistoryAction extends AbstractAction {
+		public HistoryAction() {
+			putValue(NAME, "Load history");
+			putValue(SHORT_DESCRIPTION, "Loads history");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			level1Chart.clear();
+			// Load history
+			List<Level1> data = historyProvider.findLevel1Last(getInstrument().getId(), level1Chart.getMaxItemCount());
+			level1Chart.addLevel1(data);
+		}
+	}	
+
 	/**
 	 * Level1 changed
 	 */
 	@Override
 	public void OnMarketDataChanged(Level1 level1) {
-		priceChart.addLevel1(level1);
-		
+		level1Chart.addLevel1(level1);
+
 	}
 
 }
