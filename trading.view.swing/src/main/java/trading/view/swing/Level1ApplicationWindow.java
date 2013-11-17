@@ -1,45 +1,70 @@
 package trading.view.swing;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+//import trading.app.TradingApplication1;
 import trading.app.TradingApplicationContext;
-import trading.app.adapter.Adapter;
-import trading.app.history.HistoryProvider;
-import trading.app.history.HistoryWriter;
 import trading.app.realtime.MarketListener;
-import trading.app.realtime.RealTimeProvider;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
-import java.util.List;
-import java.awt.BorderLayout;
-
-import javax.swing.JComboBox;
-import javax.swing.JToggleButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractButton;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.SwingConstants;
-import javax.swing.JButton;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JPanel;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JCheckBox;
-
 public class Level1ApplicationWindow implements MarketListener<Level1> {
+	// Spring application context
+	static GenericXmlApplicationContext ctx;	
+	/**
+	 * Main cycle for dev only
+	 * ToDo: remove later
+	 * @param args
+	 * @throws InterruptedException
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws
+			InterruptedException, IOException {
+		// Spring initialization
+		ctx = new GenericXmlApplicationContext();
+		ctx.load("classpath:META-INF/spring/application-context.xml");
+		ctx.registerShutdownHook();
+		ctx.refresh();
+
+		// Run application
+		final Level1ApplicationWindow appWindow = ctx.getBean(Level1ApplicationWindow.class);
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					//Level1ApplicationWindow window = new Level1ApplicationWindow(context);
+					appWindow.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+	}	
+	
 	/**
 	 * Capture real time data action
 	 */
@@ -141,13 +166,17 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	private final Action historyAction = new HistoryAction();
 	private boolean isWriteEnabled = true;
 
-
+	public Level1ApplicationWindow(){
+		
+	}
+	
 	/**
 	 * Ctor
 	 * @param context Trading application context
 	 */
 	public Level1ApplicationWindow(TradingApplicationContext context) {
 		tradingApplicationContext = context;
+		// Listen instrument info
 		tradingApplicationContext.getRealTimeProvider()
 				.addInstrumentListener(new MarketListener<Instrument>() {
 					@Override
@@ -155,6 +184,7 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 						instrumentComboBox.addItem(entity);
 					}
 				});
+		// Standard initialization call
 		initialize();
 	}
 

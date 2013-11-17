@@ -1,21 +1,9 @@
 package trading.app;
 
-import java.awt.EventQueue;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
-
-import trading.app.adapter.Adapter;
-import trading.app.history.HistoryProvider;
-import trading.app.history.HistoryWriter;
-import trading.app.realtime.RealTimeProvider;
-import trading.data.model.Level1;
-import trading.view.swing.Level1ApplicationWindow;
+//import trading.view.swing.Level1ApplicationWindow;
 
 /**
  * Main application class for debugging under JavaSE
@@ -69,6 +57,6 @@ public class TradingApplication1  {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-		Level1ApplicationWindow.run(tradingApplicationContext);
+		//Level1ApplicationWindow.run(tradingApplicationContext);
 	}
 }
