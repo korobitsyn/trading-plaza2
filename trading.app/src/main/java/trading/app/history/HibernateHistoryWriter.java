@@ -40,6 +40,11 @@ public class HibernateHistoryWriter implements HistoryWriter {
 	@Override
 	public void setEnabled(boolean isEnabled) {
 		this.enabled = isEnabled;
+		if(enabled){
+			startListening();
+		} else{
+			stopListening();
+		}
 	}
 
 	/**

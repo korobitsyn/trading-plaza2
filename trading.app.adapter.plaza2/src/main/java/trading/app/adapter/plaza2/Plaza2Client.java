@@ -3,8 +3,12 @@ package trading.app.adapter.plaza2;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.micexrts.cgate.*;
-import ru.micexrts.cgate.messages.*;
+import ru.micexrts.cgate.CGate;
+import ru.micexrts.cgate.CGateException;
+import ru.micexrts.cgate.Connection;
+import ru.micexrts.cgate.ErrorCode;
+import ru.micexrts.cgate.Listener;
+import ru.micexrts.cgate.State;
 
 /**
  * Plaza2 client

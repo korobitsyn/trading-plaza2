@@ -37,7 +37,9 @@ public class HibernateHistoryProvider implements HistoryProvider {
 		query.setParameter(trading.data.Constants.QueryParamName.START_TIME, start);
 		query.setParameter(trading.data.Constants.QueryParamName.END_TIME, end);
 		
+		@SuppressWarnings("unchecked")
 		List<Level1> data = query.list();
+
 		return data;
 	}
 
@@ -54,6 +56,7 @@ public class HibernateHistoryProvider implements HistoryProvider {
 		//		query.setFirstResult(0);
 		//query.setMaxResults(lastCount);
 
+		@SuppressWarnings("unchecked")
 		List<Level1> data = query.list();
 
 		return data;
@@ -62,6 +65,7 @@ public class HibernateHistoryProvider implements HistoryProvider {
 	@Override
 	public List<Instrument> findInstrumentAll() {
 		Query query = hibernateSession.getNamedQuery(trading.data.Constants.QueryName.INSTRUMENT_FIND_ALL);
+		@SuppressWarnings("unchecked")
 		List<Instrument> instruments = query.list();
 		return instruments;
 	}
