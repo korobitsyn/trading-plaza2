@@ -13,10 +13,6 @@ import trading.data.model.Instrument;
 import trading.data.model.Level1;
 
 import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.swing.JToolBar;
-
 import java.awt.BorderLayout;
 
 import javax.swing.JComboBox;
@@ -28,8 +24,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractButton;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JSeparator;
-import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
@@ -41,33 +35,89 @@ import java.awt.event.WindowEvent;
 import javax.swing.JPanel;
 
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 
 public class Level1ApplicationWindow implements MarketListener<Level1> {
+	/**
+	 * Capture real time data action
+	 */
+	private class CaptureAction extends AbstractAction {
+		public CaptureAction() {
+			putValue(NAME, "Listen");
+			putValue(SHORT_DESCRIPTION, "Listen market data");
+		}
 
-	private JFrame frame;
-	private Adapter adapter;
-	private HistoryProvider historyProvider;
-	private HistoryWriter historyWriter;
-	private RealTimeProvider realTimeProvider;
-	private JComboBox<Instrument> instrumentComboBox;
-	private final Action connectAction = new ConnectAction();
-	private final Action listenAction = new CaptureAction();
-	private final Action historyAction = new HistoryAction();
-	private Level1ApplicationWindow windowInstance = this;
-	private Level1Chart level1Chart;
-	private boolean isWriteEnabled = true;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AbstractButton source = (AbstractButton) e.getSource();
+			if (source.isSelected()) {
+				historyAction.setEnabled(false);
+				Instrument selectedInstrument = getInstrument();
+				instrumentComboBox.setEnabled(false);
+				level1Chart.clear();
 
+				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),
+						windowInstance);
+
+			} else {
+				Instrument selectedInstrument = (Instrument) instrumentComboBox
+						.getSelectedItem();
+				realTimeProvider.removeLevel1Listener(
+						selectedInstrument.getId(), windowInstance);
+				instrumentComboBox.setEnabled(true);
+				historyAction.setEnabled(true);
+			}
+		}
+	}
+	/**
+	 * Connect to data provider
+	 * 
+	 * @author dimaString title
+	 */
+	private class ConnectAction extends AbstractAction {
+		public ConnectAction() {
+			putValue(NAME, "Connect");
+			putValue(SHORT_DESCRIPTION, "Connect to data provider");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AbstractButton source = (AbstractButton) e.getSource();
+			if (source.isSelected()) {
+				adapter.connect();
+			} else {
+				adapter.disconnect();
+			}
+		}
+	}
+	/**
+	 * Load history from data provider
+	 * 
+	 * @author dima
+	 * 
+	 */
+	private class HistoryAction extends AbstractAction {
+		public HistoryAction() {
+			putValue(NAME, "Load history");
+			putValue(SHORT_DESCRIPTION, "Loads history");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			level1Chart.clear();
+			// Load history
+			List<Level1> data = historyProvider.findLevel1Last(getInstrument()
+					.getId(), level1Chart.getMaxItemCount());
+			level1Chart.addLevel1(data);
+		}
+	}
 	/**
 	 * Launch the application. For test only
 	 */
 	public static void run(final Adapter a, final RealTimeProvider rp,
 			final HistoryProvider hp, final HistoryWriter w) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Level1ApplicationWindow window = new Level1ApplicationWindow(
@@ -79,6 +129,22 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 			}
 		});
 	}
+	private Level1ApplicationWindow windowInstance = this;
+	private Level1Chart level1Chart;
+	private JComboBox<Instrument> instrumentComboBox;
+	private JFrame frame;
+	private Adapter adapter;
+	private HistoryProvider historyProvider;
+	private HistoryWriter historyWriter;
+
+
+	private RealTimeProvider realTimeProvider;
+	
+	private final Action connectAction = new ConnectAction();
+	private final Action listenAction = new CaptureAction();
+	private final Action historyAction = new HistoryAction();
+	private boolean isWriteEnabled = true;
+
 
 	/**
 	 * Ctor
@@ -100,6 +166,17 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	}
 
 	/**
+	 * Returns current instrument
+	 * 
+	 * @return
+	 */
+	private Instrument getInstrument() {
+		Instrument selectedInstrument = (Instrument) instrumentComboBox
+				.getSelectedItem();
+		return selectedInstrument;
+	}
+
+	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
@@ -112,20 +189,22 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 				ComboBoxModel<Instrument> model = new DefaultComboBoxModel(
 						instruments.toArray());
 				instrumentComboBox.setModel(model);
-				level1Chart.setTitle(instrumentComboBox.getSelectedItem().toString());
+				level1Chart.setTitle(instrumentComboBox.getSelectedItem()
+						.toString());
 			}
 		});
-		frame.setTitle("Level1"); //$NON-NLS-1$ //$NON-NLS-2$
+		frame.setTitle("Level1"); //$NON-NLS-1$ 
 		frame.setBounds(100, 100, 1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		// Main chart
 		level1Chart = new Level1Chart("No instrument selected");
 		level1Chart.setTitle("");
 		frame.getContentPane().add(level1Chart, BorderLayout.CENTER);
 
 		JPanel controlPanel = new JPanel();
 		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
-		// Connect button
+
+		// Connect to provider button 
 		JToggleButton connectButton = new JToggleButton("Connect");
 		connectButton.setToolTipText("Connect to data provider");
 		connectButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -134,34 +213,8 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 		// Instrument selector combo
 		instrumentComboBox = new JComboBox<Instrument>();
 		instrumentComboBox.setToolTipText("Select instrument to work with");
-
-		JButton historyButton = new JButton("History");
-		historyButton.setToolTipText("Load history from database");
-		historyButton.setAction(historyAction);
-
-		JToggleButton listenButon = new JToggleButton("Listen");
-		listenButon.setToolTipText("Capture real time data from market");
-		listenButon.setAction(listenAction);
-		controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		controlPanel.add(connectButton);
-		controlPanel.add(instrumentComboBox);
-		controlPanel.add(historyButton);
-		controlPanel.add(listenButon);
-		
-		// History writer configuration
-		JCheckBox writeHistoryCheckBox = new JCheckBox("Write history");
-		writeHistoryCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JCheckBox source = (JCheckBox) e.getSource();
-				isWriteEnabled = source.isSelected();
-				historyWriter.setEnabled(isWriteEnabled);
-				
-			}
-		});
-		writeHistoryCheckBox.setToolTipText("Write to database when listening");
-		writeHistoryCheckBox.setSelected(true);
-		controlPanel.add(writeHistoryCheckBox);
 		instrumentComboBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Set caption to selected instrument
 				JComboBox<Instrument> source = (JComboBox<Instrument>) e
@@ -170,99 +223,48 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 				level1Chart.setTitle(instrument.toString());
 				// Add to history writer
 				historyWriter.getInstrumentIds().clear();
-				historyWriter.getInstrumentIds().add(new Integer(instrument.getId()));
+				historyWriter.getInstrumentIds().add(
+						new Integer(instrument.getId()));
 			}
 		});
-	}
+		// Load history button
+		JButton historyButton = new JButton("History");
+		historyButton.setToolTipText("Load history from database");
+		historyButton.setAction(historyAction);
 
+		// Listen market button
+		JToggleButton listenButon = new JToggleButton("Listen");
+		listenButon.setToolTipText("Capture real time data from market");
+		listenButon.setAction(listenAction);
+		controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		controlPanel.add(connectButton);
+		controlPanel.add(instrumentComboBox);
+		controlPanel.add(historyButton);
+		controlPanel.add(listenButon);
 
-	/**
-	 * Returns current instrument
-	 * @return
-	 */
-	private Instrument getInstrument(){
-		Instrument selectedInstrument = (Instrument) instrumentComboBox
-				.getSelectedItem();
-		return selectedInstrument;
-	}
-	/**
-	 * Connect to data provider
-	 * @author dimaString title
-	 */
-	private class ConnectAction extends AbstractAction {
-		public ConnectAction() {
-			putValue(NAME, "Connect");
-			putValue(SHORT_DESCRIPTION, "Connect to data provider");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			AbstractButton source = (AbstractButton) e.getSource();
-			if (source.isSelected()) {
-				adapter.connect();
-			} else {
-				adapter.disconnect();
+		// History write checkbox
+		JCheckBox writeHistoryCheckBox = new JCheckBox("Write history");
+		writeHistoryCheckBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Enable/disable history writer
+				JCheckBox source = (JCheckBox) e.getSource();
+				isWriteEnabled = source.isSelected();
+				historyWriter.setEnabled(isWriteEnabled);
 			}
-		}
+		});
+		writeHistoryCheckBox.setToolTipText("Write to database when listening");
+		writeHistoryCheckBox.setSelected(true);
+		controlPanel.add(writeHistoryCheckBox);
 	}
-
-	/**
-	 * Capture real time data action
-	 */
-	private class CaptureAction extends AbstractAction {
-		public CaptureAction() {
-			putValue(NAME, "Listen");
-			putValue(SHORT_DESCRIPTION, "Listen market data");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			AbstractButton source = (AbstractButton) e.getSource();
-			if (source.isSelected()) {
-				historyAction.setEnabled(false);
-				Instrument selectedInstrument = getInstrument();
-				instrumentComboBox.setEnabled(false);
-				level1Chart.clear();
-				
-				realTimeProvider.addLevel1Listener(selectedInstrument.getId(),
-						windowInstance);
-
-			} else {
-				Instrument selectedInstrument = (Instrument) instrumentComboBox
-						.getSelectedItem();
-				realTimeProvider.removeLevel1Listener(
-						selectedInstrument.getId(), windowInstance);
-				instrumentComboBox.setEnabled(true);
-				historyAction.setEnabled(true);
-			}
-		}
-	}
-	/**
-	 * Load history from data provider
-	 * 
-	 * @author dima
-	 * 
-	 */
-	private class HistoryAction extends AbstractAction {
-		public HistoryAction() {
-			putValue(NAME, "Load history");
-			putValue(SHORT_DESCRIPTION, "Loads history");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			level1Chart.clear();
-			// Load history
-			List<Level1> data = historyProvider.findLevel1Last(getInstrument().getId(), level1Chart.getMaxItemCount());
-			level1Chart.addLevel1(data);
-		}
-	}	
 
 	/**
 	 * Level1 changed event
 	 */
 	@Override
 	public void OnMarketDataChanged(Level1 level1) {
-		
+		// Add prices to chart
 		level1Chart.addLevel1(level1);
-
 	}
 
 }

@@ -8,11 +8,16 @@
 	<context:annotation-config />
 	<context:component-scan base-package="trading.app"></context:component-scan>
 
-	<bean id="application" class="trading.app.TradingApplication1">
+
+	<bean id="applicationContext" class="trading.app.TradingApplicationContext">
 		<property name="adapter" ref="adapter" />
 		<property name="realTimeProvider" ref="realTimeProvider"/>
 		<property name="historyProvider" ref="historyProvider" />
 		<property name="historyWriter" ref="historyWriter" />
+	</bean>
+
+	<bean id="application" class="trading.app.TradingApplication1">
+		<property name="applicationContext" ref="applicationContext" />
 	</bean>
 	
 	<bean id="adapter" name="adapter, realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
