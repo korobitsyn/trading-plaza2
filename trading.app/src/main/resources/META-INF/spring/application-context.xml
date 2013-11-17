@@ -7,9 +7,14 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<context:annotation-config />
 	<context:component-scan base-package="trading.app"></context:component-scan>
+	
+	<bean id="adapter" name="adapter, realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
+	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
+	<bean  id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
+		<property name="realTimeProvider" ref="realTimeProvider"></property>
+	</bean>
 
-
-	<bean id="applicationContext" class="trading.app.TradingApplicationContext">
+	<bean id="tradingApplicationContext" class="trading.app.TradingApplicationContext">
 		<property name="adapter" ref="adapter" />
 		<property name="realTimeProvider" ref="realTimeProvider"/>
 		<property name="historyProvider" ref="historyProvider" />
@@ -17,15 +22,6 @@
 	</bean>
 
 	<bean id="application" class="trading.app.TradingApplication1">
-		<property name="applicationContext" ref="applicationContext" />
+		<property name="tradingApplicationContext" ref="tradingApplicationContext" />
 	</bean>
-	
-	<bean id="adapter" name="adapter, realTimeProvider" class="trading.app.adapter.plaza2.Plaza2Adapter"/>
-	<bean id="historyProvider" class="trading.app.history.HibernateHistoryProvider"/>
-
-	<bean  id="historyWriter" class="trading.app.history.HibernateHistoryWriter" init-method="init" >
-		<property name="realTimeProvider" ref="realTimeProvider"></property>
-	</bean>
-
-
 </beans>

@@ -25,20 +25,20 @@ import trading.view.swing.Level1ApplicationWindow;
 public class TradingApplication1  {
 	// Spring application context
 	static GenericXmlApplicationContext ctx;
-	private TradingApplicationContext applicationContext;
+	private TradingApplicationContext tradingApplicationContext;
 	
 	/**
 	 * @return the applicationContext
 	 */
-	public TradingApplicationContext getApplicationContext() {
-		return applicationContext;
+	public TradingApplicationContext getTradingApplicationContext() {
+		return tradingApplicationContext;
 	}
 
 	/**
 	 * @param applicationContext the applicationContext to set
 	 */
-	public void setApplicationContext(TradingApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
+	public void setTradingApplicationContext(TradingApplicationContext applicationContext) {
+		this.tradingApplicationContext = applicationContext;
 	}
 
 	/**
@@ -69,10 +69,6 @@ public class TradingApplication1  {
 	 * @throws IOException 
 	 */
 	public void run() throws IOException{
-		Level1ApplicationWindow.run(applicationContext.getAdapter(), applicationContext.getRealTimeProvider(), applicationContext.getHistoryProvider(), applicationContext.getHistoryWriter());
-		
-		
-		//readHistory();
-		//writeHistory();
+		Level1ApplicationWindow.run(tradingApplicationContext);
 	}
 }
