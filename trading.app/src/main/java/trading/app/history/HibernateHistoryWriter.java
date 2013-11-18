@@ -1,5 +1,8 @@
 package trading.app.history;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Session;
 
 import trading.app.history.HistoryWriter;
@@ -19,13 +22,40 @@ public class HibernateHistoryWriter implements HistoryWriter {
 
 	private  RealTimeProvider realTimeProvider = null;
 	private Session hibernateSession = null;
-	// Hardcode futures instrument id
-	// ToDo: add instrument id setter
-	private int instrumentId = 193886;
+	private List<Integer> instrumentIds = new ArrayList<Integer>();
+	
+	private boolean enabled = true;
+	
+	/**
+	 * @see HistoryWriter#isEnabled()
+	 */
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-	
-	
-	/* (non-Javadoc)
+	/**
+	 * @see HistoryWriter#setEnabled(boolean)
+	 */
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		this.enabled = isEnabled;
+		if(enabled){
+			startListening();
+		} else{
+			stopListening();
+		}
+	}
+
+	/**
+	 * @see HistoryWriter#getInstrumentIds()
+	 */
+	@Override
+	public  List<Integer> getInstrumentIds(){
+		return instrumentIds;
+	}
+
+	/** 
 	 * @see trading.app.HistoryWriter#getProvider()
 	 */
 	@Override
@@ -33,10 +63,7 @@ public class HibernateHistoryWriter implements HistoryWriter {
 		return realTimeProvider;
 	}
 
-
-
-
-	/* (non-Javadoc)
+	/**
 	 * @see trading.app.HistoryWriter#setProvider(trading.app.provider.DynamicProvider)
 	 */
 	@Override
@@ -44,39 +71,41 @@ public class HibernateHistoryWriter implements HistoryWriter {
 		this.realTimeProvider = provider;
 	}
 
-
-
-
-	/* (non-Javadoc)
+	/**
 	 * @see trading.app.HistoryWriter#init(trading.app.provider.DynamicProvider)
 	 */
 	@Override
 	public void init() {
-
-
 		// Init hibernate session
 		hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-		// Add instrument listener
-		realTimeProvider.addInstrumentListener(
-				new MarketListener<Instrument>() {
-					@Override
-					public void OnMarketDataChanged(Instrument entity) {
-						onInstrument(entity);
+		startListening();
+	}
 
-					}
-				});
-		// Add level1 listener
-		realTimeProvider.addLevel1Listener(instrumentId,
-				new MarketListener<Level1>() {
-					@Override
-					public void OnMarketDataChanged(Level1 entity) {
-						onLevel1(entity);
-					}
-				});
+	
+	/**
+	 * Start market listening
+	 */
+	private void startListening(){
+		// Add instrument listener
+		realTimeProvider.addInstrumentListener(instrumentListener);
+		// Listen level1 for all instruments
+		for(int instrumentId : instrumentIds){
+			realTimeProvider.addLevel1Listener(instrumentId, level1Listener);
+		}
 	}
 	
-
+	/**
+	 * Stop market listening
+	 */
+	private void stopListening(){
+		// Do not listen data for instruments in list
+		for(int instrumentId : instrumentIds){
+			realTimeProvider.removeLevel1Listener(instrumentId,level1Listener);
+		}
+		// Do not listen instrument infos
+		realTimeProvider.removeInstrumentListener(instrumentListener);
+	}
 	
 
 	/**
@@ -135,4 +164,25 @@ public class HibernateHistoryWriter implements HistoryWriter {
 			hibernateSession.close();
 		}
 	}
+	
+	/**
+	 * Listener to instrument data
+	 */
+	MarketListener<Instrument> instrumentListener = new MarketListener<Instrument>() {
+		@Override
+		public void OnMarketDataChanged(Instrument entity) {
+			onInstrument(entity);
+
+		}
+	};
+	/**
+	 * Listener to level1 data
+	 */
+	MarketListener<Level1> level1Listener = new MarketListener<Level1>() {
+		@Override
+		public void OnMarketDataChanged(Level1 entity) {
+			onLevel1(entity);
+		}
+	};
+	
 }

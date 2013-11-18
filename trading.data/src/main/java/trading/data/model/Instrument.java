@@ -1,7 +1,11 @@
 package trading.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import trading.data.Constants;
+
 import java.util.List;
 
 
@@ -10,7 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-//@NamedQuery(name="Instrument.findAll", query="SELECT i from Instrument i")
+@NamedQuery(name=Constants.QueryName.INSTRUMENT_FIND_ALL, query="SELECT i from Instrument i")
 public class Instrument implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -85,5 +89,9 @@ public class Instrument implements Serializable {
 
 		return level1;
 	}
-
+	@Override
+	public String toString(){
+		return getCode();
+	}
+	
 }

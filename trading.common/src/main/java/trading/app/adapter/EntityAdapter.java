@@ -1,9 +1,5 @@
 package trading.app.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observer;
-
 import trading.app.realtime.MarketListener;
 
 /**

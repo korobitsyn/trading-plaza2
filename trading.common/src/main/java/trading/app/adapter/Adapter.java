@@ -1,7 +1,5 @@
 package trading.app.adapter;
 
-import trading.data.model.Instrument;
-import trading.data.model.Level1;
 
 /**
  * Adapter interface

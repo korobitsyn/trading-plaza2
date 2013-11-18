@@ -24,4 +24,9 @@
 	<bean id="application" class="trading.app.TradingApplication1">
 		<property name="tradingApplicationContext" ref="tradingApplicationContext" />
 	</bean>
+	
+	<bean id="view" class="trading.view.swing.Level1ApplicationWindow">
+		<constructor-arg ref="tradingApplicationContext"></constructor-arg>
+	</bean>
 </beans>
+

@@ -89,6 +89,7 @@ public class Plaza2Adapter implements ISubscriber, Adapter, RealTimeProvider {
 	 */
 
 	public void connect() {
+		this.plaza2Client = new Plaza2Client(this);
 		this.plaza2Client.connect();
 	}
 
