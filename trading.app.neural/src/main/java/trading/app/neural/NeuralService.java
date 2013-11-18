@@ -2,7 +2,6 @@ package trading.app.neural;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
+
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationElliott;
 import org.encog.engine.network.activation.ActivationLinear;
@@ -23,9 +23,9 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
-import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
+
 import trading.app.neural.NeuralContext;
 //import trading.data.MLBarDataConverter;
 //import trading.data.MLBarDataLoader;
@@ -38,31 +38,20 @@ import trading.app.neural.NeuralContext;
  * @author pdg
  *
  */
-public class NeuralService {
+public class NeuralService extends NeuralServiceBase {
 	
-	private NeuralContext neuralContext;
-	
-	/**
-	 * Get context
-	 * @return
-	 */
-	public NeuralContext getNeuralContext(){
-		return neuralContext;
-	}
 	/**
 	 * Constructor for neural context
 	 * @param neuralContext
 	 */
 	public NeuralService(NeuralContext neuralContext){
-		this.neuralContext = neuralContext;
+		super(neuralContext);
 	}
 	
     /**
-     * Create network with layers
-     *
-     * @param layers neurons in layers
-     * @return
+     * @see NeuralServiceBase#createNetwork(List) 
      */
+	@Override
     public BasicNetwork createNetwork(List<Integer> layers) {
         if (layers.size() < 2) {
             throw new IllegalArgumentException("Wrong network layers count");
@@ -99,11 +88,10 @@ public class NeuralService {
     }
     
     /**
-     * Train with default train dataset
-     * @throws FileNotFoundException
-     * @throws IOException 
+	 * @see NeuralServiceBase#trainNetwork()
      */
-    public void trainNetwork() throws FileNotFoundException, IOException{
+	@Override
+    public void trainNetwork(){
          //MLDataSet ds = MLBarDataLoader.getTrainMLDataSet();
          //trainNetwork(ds);
     }
@@ -199,29 +187,4 @@ public class NeuralService {
 //        }
 //    }
 
-    /**
-     * Saves current network to file
-     *
-     * @param fileName
-     */
-    public void saveNetwork(File file) {
-        EncogDirectoryPersistence.saveObject(file, neuralContext.getNetwork());
-    }
-
-    /**
-     * Load network from file
-     *
-     * @param fileName
-     */
-    public void loadNetwork(File file) {
-        BasicNetwork network = (BasicNetwork) EncogDirectoryPersistence.loadObject(file);
-        neuralContext.setNetwork(network);
-    }
-
-    /**
-     * Reset network weights
-     */
-    public void resetNetwork() {
-        neuralContext.getNetwork().reset();
-    }
 }
