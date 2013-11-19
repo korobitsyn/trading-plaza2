@@ -17,6 +17,7 @@ public class TradingApplicationContext {
 	private RealTimeProvider realTimeProvider;
 	private HistoryProvider historyProvider;
 	private HistoryWriter historyWriter;
+	private InstrumentContext instrumentContext;
 	
 	/**
 	 * 
@@ -80,5 +81,19 @@ public class TradingApplicationContext {
 	 */
 	public void setHistoryProvider(HistoryProvider historyProvider) {
 		this.historyProvider = historyProvider;
+	}
+
+	/**
+	 * @return the instrumentContext
+	 */
+	public InstrumentContext getInstrumentContext() {
+		return instrumentContext;
+	}
+
+	/**
+	 * @param instrumentContext the instrumentContext to set
+	 */
+	public void setInstrumentContext(InstrumentContext instrumentContext) {
+		this.instrumentContext = instrumentContext;
 	}
 }
