@@ -22,11 +22,12 @@
 		<property name="historyWriter" ref="historyWriter" />
 	</bean>
 	<bean id="neuralContext" class="trading.app.neural.NeuralContext">
-		<constructor-arg ref="tradingApplicationContext"></constructor-arg>
+		<constructor-arg name="tradingApplicationContext" ref="tradingApplicationContext"></constructor-arg>
+		<property name="neuralService" ref="neuralService"></property>
 	</bean>
 	
 	<bean id="neuralService" class="trading.app.neural.NeuralService">
-		<constructor-arg ref="neuralContext"></constructor-arg>
+		<property name="neuralContext" ref="neuralContext"></property>
 	</bean>
 
 	

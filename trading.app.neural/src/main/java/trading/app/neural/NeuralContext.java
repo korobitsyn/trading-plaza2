@@ -14,15 +14,18 @@ public class NeuralContext {
 	private BasicNetwork network;
 	private TrainingContext trainingContext = new TrainingContext();
 	private TradingApplicationContext tradingApplicationContext;
+	private NeuralServiceBase neuralService;
 	
 	private int predictionInterval;
 
 	/**
 	 * Main ctor
-	 * @param applicationContext TradingApplicationContext
+	 * @param tradingApplicationContext TradingApplicationContext
+	 * @param neuralService Neural service bean
 	 */
-	public NeuralContext(TradingApplicationContext applicationContext){
-		tradingApplicationContext = applicationContext;
+	public NeuralContext(TradingApplicationContext tradingApplicationContext){
+		this.tradingApplicationContext = tradingApplicationContext;
+
 	}
 	
 	/**
@@ -66,6 +69,18 @@ public class NeuralContext {
 	public void setPredictionInterval(int predictionInterval) {
 		this.predictionInterval = predictionInterval;
 	}
+
+	/**
+	 * @return the neuralService
+	 */
+	public NeuralServiceBase getNeuralService() {
+		return neuralService;
+	}
+	public void setNeuralService(NeuralServiceBase neuralService){
+		this.neuralService = neuralService;
+	}
+
+
 
 	
 }

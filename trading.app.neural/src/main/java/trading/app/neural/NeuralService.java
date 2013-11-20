@@ -39,15 +39,10 @@ import trading.app.neural.NeuralContext;
  *
  */
 public class NeuralService extends NeuralServiceBase {
-	
 	/**
-	 * Constructor for neural context
-	 * @param neuralContext
+	 * Ctor
 	 */
-	public NeuralService(NeuralContext neuralContext){
-		super(neuralContext);
-	}
-	
+	public NeuralService(){}
     /**
      * @see NeuralServiceBase#createNetwork(List) 
      */

@@ -33,5 +33,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.app"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.adapter.plaza2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/trading.app.neural"/>
+	<classpathentry kind="lib" path="/trading.app.neural/lib/encog-core-3.1.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

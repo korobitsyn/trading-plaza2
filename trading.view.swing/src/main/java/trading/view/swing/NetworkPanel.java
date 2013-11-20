@@ -14,6 +14,7 @@ import javax.swing.text.DefaultFormatter;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import org.encog.neural.networks.BasicNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NetworkPanel extends JPanel {
@@ -51,6 +54,7 @@ public class NetworkPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, label_1, 166, SpringLayout.WEST, this);
 		add(label_1);
 		
+		txtLayers = new JFormattedTextField("10,10,2");
 		springLayout.putConstraint(SpringLayout.NORTH, txtLayers, 81, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, txtLayers, 182, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, txtLayers, 100, SpringLayout.NORTH, this);
@@ -130,10 +134,35 @@ public class NetworkPanel extends JPanel {
 			e.printStackTrace();
 		}
 		Integer predictionInterval = (Integer)this.txtPredictionInterval.getValue();
+		// Form neuron counts in layers
+		List<Integer> layers = new ArrayList<Integer>();
+		String[] layerStrings = txtLayers.getText().split(",");
+		for(String neuronsString: layerStrings){
+			int neurons = Integer.parseInt(neuronsString);
+			layers.add(neurons);
+		}
+		// Create network
+		BasicNetwork network = neuralContext.getNeuralService().createNetwork(layers);
+		neuralContext.setNetwork(network);
 		
-		String[] layers = txtLayers.getText().split(",");
+		// Update view after network creation
+		updateView();
 	}
 	
+	/**
+	 * Update view from context
+	 */
+	private void updateView(){
 
+		// Update layers text
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < neuralContext.getNetwork().getLayerCount(); i++){
+			int neurons = neuralContext.getNetwork().getLayerNeuronCount(i);
+			sb.append(neurons);
+			sb.append(",");
+		}
+		String layersString = sb.toString().replaceAll(",$", "");
+		txtLayers.setText(layersString);
+	}
 
 }

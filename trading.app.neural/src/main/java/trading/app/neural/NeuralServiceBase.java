@@ -18,11 +18,17 @@ public abstract class NeuralServiceBase {
 	protected NeuralContext neuralContext;
 
 	/**
+	 * @param neuralContext the neuralContext to set
+	 */
+	public void setNeuralContext(NeuralContext neuralContext) {
+		this.neuralContext = neuralContext;
+	}
+	/**
 	 * Construct with neural context data
 	 * @param neuralContext
 	 */
-	public NeuralServiceBase(NeuralContext neuralContext) {
-		this.neuralContext = neuralContext;
+	public NeuralServiceBase() {
+
 	}
 	/**
 	 * Create network with layers
