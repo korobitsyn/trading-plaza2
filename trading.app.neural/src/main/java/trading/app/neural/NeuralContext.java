@@ -12,10 +12,16 @@ import trading.app.TradingApplicationContext;
  */
 public class NeuralContext {
 	private BasicNetwork network;
-	private TrainingContext trainingContext;
+	private TrainingContext trainingContext = new TrainingContext();
 	private TradingApplicationContext tradingApplicationContext;
 
-	
+	/**
+	 * Main ctor
+	 * @param applicationContext TradingApplicationContext
+	 */
+	public NeuralContext(TradingApplicationContext applicationContext){
+		tradingApplicationContext = applicationContext;
+	}
 	
 	/**
 	 * @return the network
@@ -39,24 +45,11 @@ public class NeuralContext {
 	}
 
 	/**
-	 * @param trainingContext the trainingContext to set
-	 */
-	public void setTrainingContext(TrainingContext trainingContext) {
-		this.trainingContext = trainingContext;
-	}
-
-	/**
 	 * @return the tradingApplicationContext
 	 */
 	public TradingApplicationContext getTradingApplicationContext() {
 		return tradingApplicationContext;
 	}
 
-	/**
-	 * @param tradingApplicationContext the tradingApplicationContext to set
-	 */
-	public void setTradingApplicationContext(TradingApplicationContext tradingApplicationContext) {
-		this.tradingApplicationContext = tradingApplicationContext;
-	}
 	
 }

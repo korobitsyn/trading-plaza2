@@ -14,19 +14,24 @@
 		<property name="realTimeProvider" ref="realTimeProvider"></property>
 	</bean>
 
+
 	<bean id="tradingApplicationContext" class="trading.app.TradingApplicationContext">
 		<property name="adapter" ref="adapter" />
 		<property name="realTimeProvider" ref="realTimeProvider"/>
 		<property name="historyProvider" ref="historyProvider" />
 		<property name="historyWriter" ref="historyWriter" />
 	</bean>
-
-	<bean id="application" class="trading.app.TradingApplication1">
-		<property name="tradingApplicationContext" ref="tradingApplicationContext" />
+	<bean id="neuralContext" class="trading.app.neural.NeuralContext">
+		<constructor-arg ref="tradingApplicationContext"></constructor-arg>
 	</bean>
 	
-	<bean id="view" class="trading.view.swing.Level1ApplicationWindow">
-		<constructor-arg ref="tradingApplicationContext"></constructor-arg>
+	<bean id="neuralService" class="trading.app.neural.NeuralService">
+		<constructor-arg ref="neuralContext"></constructor-arg>
+	</bean>
+
+	
+	<bean id="view" class="trading.view.swing.NeuralNetworkForm">
+		<constructor-arg ref="neuralContext"></constructor-arg>
 	</bean>
 </beans>
 

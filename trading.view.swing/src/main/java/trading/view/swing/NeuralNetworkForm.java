@@ -9,30 +9,52 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.SpringLayout;
 import javax.swing.Box;
 import javax.swing.border.LineBorder;
+
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+import trading.app.neural.NeuralContext;
+
 import java.awt.Color;
 
 public class NeuralNetworkForm extends JFrame {
-
+	// Spring application context
+	static GenericXmlApplicationContext ctx;
+	private NeuralContext neuralContext;
+	
 	private JPanel contentPane;
 	private NetworkPanel networkPanel;
 	private LearnPanel learnPanel;
 	private TestPanel testPanel;
+	
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		// Spring initialization
+		ctx = new GenericXmlApplicationContext();
+		ctx.load("classpath:META-INF/spring/application-context.xml");
+		ctx.registerShutdownHook();
+		ctx.refresh();	
+		
+		final NeuralNetworkForm frame = ctx.getBean(NeuralNetworkForm.class);
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NeuralNetworkForm frame = new NeuralNetworkForm();
+					//NeuralNetworkForm frame = new NeuralNetworkForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +66,8 @@ public class NeuralNetworkForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NeuralNetworkForm() {
+	public NeuralNetworkForm(NeuralContext context) {
+		neuralContext = context;
 		setTitle("Neural Network  Trading");
 
 		
