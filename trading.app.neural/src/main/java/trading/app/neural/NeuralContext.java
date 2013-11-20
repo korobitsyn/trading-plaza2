@@ -14,6 +14,8 @@ public class NeuralContext {
 	private BasicNetwork network;
 	private TrainingContext trainingContext = new TrainingContext();
 	private TradingApplicationContext tradingApplicationContext;
+	
+	private int predictionInterval;
 
 	/**
 	 * Main ctor
@@ -49,6 +51,20 @@ public class NeuralContext {
 	 */
 	public TradingApplicationContext getTradingApplicationContext() {
 		return tradingApplicationContext;
+	}
+
+	/**
+	 * @return the predictionInterval
+	 */
+	public int getPredictionInterval() {
+		return predictionInterval;
+	}
+
+	/**
+	 * @param predictionInterval the predictionInterval to set
+	 */
+	public void setPredictionInterval(int predictionInterval) {
+		this.predictionInterval = predictionInterval;
 	}
 
 	

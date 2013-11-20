@@ -27,6 +27,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import trading.app.neural.NeuralContext;
 
 import java.awt.Color;
+import javax.swing.JButton;
 
 public class NeuralNetworkForm extends JFrame {
 	// Spring application context
@@ -89,7 +90,7 @@ public class NeuralNetworkForm extends JFrame {
 		contentPane.add(tabbedPane);
 
 		// Add network tab
-		networkPanel = new NetworkPanel();
+		networkPanel = new NetworkPanel(neuralContext);
 		tabbedPane.addTab("Network", null, networkPanel, null);
 		
 		// Add learn tab
