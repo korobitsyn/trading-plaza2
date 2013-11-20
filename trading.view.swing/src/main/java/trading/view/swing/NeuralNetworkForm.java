@@ -28,6 +28,10 @@ import trading.app.neural.NeuralContext;
 
 import java.awt.Color;
 import javax.swing.JButton;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class NeuralNetworkForm extends JFrame {
 	// Spring application context
@@ -91,6 +95,20 @@ public class NeuralNetworkForm extends JFrame {
 
 		// Add network tab
 		networkPanel = new NetworkPanel(neuralContext);
+		networkPanel.updateView();
+		networkPanel.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// Save from ui to context
+				networkPanel.updateContext();
+			}
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// Load from context to UI
+				networkPanel.updateView();
+			}
+		});
+
 		tabbedPane.addTab("Network", null, networkPanel, null);
 		
 		// Add learn tab
