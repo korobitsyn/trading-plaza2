@@ -1,5 +1,7 @@
 package trading.app.neural;
 
+import java.util.List;
+
 import org.encog.neural.networks.BasicNetwork;
 
 import trading.app.TradingApplicationContext;
@@ -13,6 +15,8 @@ public class NeuralContext {
 	private TrainingContext trainingContext;
 	private TradingApplicationContext tradingApplicationContext;
 
+	
+	
 	/**
 	 * @return the network
 	 */
