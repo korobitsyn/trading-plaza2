@@ -301,7 +301,6 @@ public class NetworkPanel extends JPanel {
 		txtWindowSize.setText(neuralContext.getLevel1WindowSize().toString());
 		txtPredictionInterval.setText(neuralContext.getPredictionInterval().toString());
 		
-		
 		// Buttons 
 		boolean isNetworkNotNull = (neuralContext.getNetwork() != null);
 		btnSave.setEnabled(isNetworkNotNull);

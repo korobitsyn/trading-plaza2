@@ -30,10 +30,15 @@ public class Level1Loader  {
 	 */
 	public MLData loadTrainMLDataSet(){
 		int instrumentId = neuralContext.getTradingApplicationContext().getInstrumentContext().getInstrument().getId();
-		//int dataSize = neuralContext.getTrainingContext().
-		//List<Level1> data = neuralContext.getTradingApplicationContext().getHistoryProvider().findLevel1Last(neuralContext.getTradingApplicationContext().getInstrumentContext().getInstrument().getId(), dataSize);
-				return null;
+		
+		int dataSize = neuralContext.getLevel1WindowSize();
+		List<Level1> data = neuralContext.getTradingApplicationContext().getHistoryProvider().findLevel1Last(neuralContext.getTradingApplicationContext().getInstrumentContext().getInstrument().getId(), dataSize);
+		
+		
+		return null;
 	}
+	
+	
 
 	
 	
