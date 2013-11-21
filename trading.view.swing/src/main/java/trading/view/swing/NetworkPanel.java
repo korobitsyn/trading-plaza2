@@ -5,11 +5,13 @@ import javax.swing.JLabel;
 
 import java.awt.Font;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
@@ -22,6 +24,8 @@ import trading.app.neural.NeuralContext;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileFilter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -30,9 +34,13 @@ import java.util.List;
 public class NetworkPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private NeuralContext neuralContext;
-	JFormattedTextField txtPredictionInterval;
-	JFormattedTextField txtLayers;
-
+	final JFormattedTextField txtPredictionInterval;
+	final JFormattedTextField txtLayers;
+	final JFileChooser fileChooser;
+	final JButton btnCreate;
+	final JButton btnLoad;	
+	final JButton btnSave;	
+	final JButton btnReset;	
 	/**
 	 * Create the panel.
 	 */
@@ -110,7 +118,8 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.WEST, this);
 		add(label_3);
 
-		JButton btnCreate = new JButton("Create");
+		// Create button
+		btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				createNetwork();
@@ -126,7 +135,13 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.EAST, this);
 		add(btnCreate);
 
-		JButton btnLoad = new JButton("Load");
+		// Load button
+		btnLoad = new JButton("Load");
+		btnLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loadNetwork();
+			}
+		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnLoad, 10,
 				SpringLayout.NORTH, label_1);
 		springLayout.putConstraint(SpringLayout.WEST, btnLoad, -90,
@@ -135,7 +150,13 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.EAST, btnCreate);
 		add(btnLoad);
 
-		JButton btnSave = new JButton("Save");
+		// Save button
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveNetwork();
+			}
+		});
 		springLayout.putConstraint(SpringLayout.SOUTH, btnLoad, -17,
 				SpringLayout.NORTH, btnSave);
 		springLayout.putConstraint(SpringLayout.NORTH, btnSave, 140,
@@ -148,7 +169,13 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.EAST, btnCreate);
 		add(btnSave);
 
-		JButton btnReset = new JButton("Reset");
+		// Reset button
+		btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				resetNetwork();
+			}
+		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnReset, 201,
 				SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, btnReset, 0,
@@ -158,15 +185,63 @@ public class NetworkPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, btnReset, 0,
 				SpringLayout.EAST, btnCreate);
 		add(btnReset);
+		
+		// File chooser
+		fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Network config (.cfg)", "cfg"));
 
+		updateView();
 	}
 
+	/**
+	 * Reset network weights
+	 */
+	private void resetNetwork(){
+		updateContext();
+		neuralContext.getNetwork().reset();
+		updateView();
+	}
+	
+	/**
+	 * Load network weights from file
+	 */
+	private void loadNetwork(){
+		updateContext();
+		// Show open dialog and open
+		if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+			neuralContext.getNeuralService().loadNetwork(fileChooser.getSelectedFile());
+		}
+		updateView();
+	}
+	
+	/**
+	 * Save network weights to file
+	 * @return
+	 */
+	private void saveNetwork(){
+		updateContext();
+	
+		// Shiw save dialog and save
+		if(fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+			File file = fileChooser.getSelectedFile();
+			String path = file.getAbsolutePath();
+			if(!path.endsWith("cfg")){
+				file = new File(path+".cfg");
+			
+			}
+			neuralContext.getNeuralService().saveNetwork(file);
+		}
+		updateView();
+	}
+	
 	/**
 	 * Create new neural network
 	 * 
 	 * @throws ParseException
 	 */
 	private void createNetwork() {
+
 		// int predictionInterval;
 		try {
 			this.txtPredictionInterval.commitEdit();
@@ -196,7 +271,7 @@ public class NetworkPanel extends JPanel {
 	 * Update view from context
 	 */
 	public void updateView() {
-
+		// Update layers from network
 		String layersString = "0,0,2";
 		if (neuralContext.getNetwork() != null) {
 			// Update layers text
@@ -209,6 +284,10 @@ public class NetworkPanel extends JPanel {
 			layersString = sb.toString().replaceAll(",$", "");
 		}
 		txtLayers.setText(layersString);
+		// Buttons 
+		boolean isNetworkNotNull = (neuralContext.getNetwork() != null);
+		btnSave.setEnabled(isNetworkNotNull);
+		btnReset.setEnabled(isNetworkNotNull);
 	}
 
 	/**
@@ -218,8 +297,5 @@ public class NetworkPanel extends JPanel {
 		int predictionInterval = Integer.parseInt(txtPredictionInterval
 				.getText());
 		neuralContext.setPredictionInterval(predictionInterval);
-	}
-
-	public void aaa() {
 	}
 }

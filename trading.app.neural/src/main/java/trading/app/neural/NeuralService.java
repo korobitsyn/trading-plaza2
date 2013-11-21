@@ -2,6 +2,7 @@ package trading.app.neural;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
@@ -23,6 +24,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
 
@@ -94,6 +96,7 @@ public class NeuralService extends NeuralServiceBase {
     /**
      * Train on specific dataset
      */
+
     public void trainNetwork(MLDataSet dataSet) throws FileNotFoundException, IOException {
         neuralContext.getTrainingContext().setLastError(0);
         neuralContext.getTrainingContext().setSamplesCount(dataSet.size());      
@@ -145,41 +148,4 @@ public class NeuralService extends NeuralServiceBase {
         Logger.getLogger(NeuralService.class.getName()).info(String.format("Training time  %d minutes",  trainWatch.getElapsedMilliseconds() / 1000/60, Double.toString(train.getError())));
         train.finishTraining();
     }
-
-    /**
-     * Predict results
-     */
-//    private static void testNetwork() throws FileNotFoundException, IOException {
-//        BasicNetwork network = NeuralContext.Network.getNetwork();
-//
-//        // Get entities from csv files
-//        List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
-//        NeuralContext.Test.setMaxIterationCount(pairs.size());
-//
-//        int iteration = 1;
-//        // Go through every input/ideal pair
-//        for (DataPair pair : pairs) {
-//            // Process every 15 min
-////            BarEntity lastSmallBar = pair.getInputEntity().getSmallBars().get(pair.getInputEntity().getSmallBars().size()-1);
-////            if(lastSmallBar.getFutureTime().get(Calendar.MINUTE)%15 != 0){
-////                continue;
-////            }
-//                
-//            MLData input = MLBarDataConverter.inputEntityToMLData(pair.getInputEntity());
-//            // Compute network prediction
-//            MLData output = network.compute(input);
-//
-//            // Get network output
-//            OutputEntity idealEntity = pair.getOutputEntity();
-//            OutputEntity realEntity = OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(), idealEntity.getFutureIntervalMillis(), output.getData(0), output.getData(1));
-//
-//            // Store values in context
-//            NeuralContext.Test.setIteration(iteration);
-//            NeuralContext.Test.setIdealEntity(idealEntity);
-//            NeuralContext.Test.setPredictedEntity(realEntity);
-//
-//            iteration++;
-//        }
-//    }
-
 }
