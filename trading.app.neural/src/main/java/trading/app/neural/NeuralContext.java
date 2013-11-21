@@ -16,7 +16,8 @@ public class NeuralContext {
 	private TradingApplicationContext tradingApplicationContext;
 	private NeuralServiceBase neuralService;
 	
-	private int predictionInterval;
+	private int predictionInterval = 60;
+	private int level1WindowSize = 100;
 
 	/**
 	 * Main ctor
@@ -59,14 +60,14 @@ public class NeuralContext {
 	/**
 	 * @return the predictionInterval
 	 */
-	public int getPredictionInterval() {
+	public Integer getPredictionInterval() {
 		return predictionInterval;
 	}
 
 	/**
 	 * @param predictionInterval the predictionInterval to set
 	 */
-	public void setPredictionInterval(int predictionInterval) {
+	public void setPredictionInterval(Integer predictionInterval) {
 		this.predictionInterval = predictionInterval;
 	}
 
@@ -78,6 +79,22 @@ public class NeuralContext {
 	}
 	public void setNeuralService(NeuralServiceBase neuralService){
 		this.neuralService = neuralService;
+	}
+
+	/**
+	 * Get level1 item count in data window
+	 * @return the level1WindowSize
+	 */
+	public Integer getLevel1WindowSize() {
+		return level1WindowSize;
+	}
+
+	/**
+	 * Set level1 item count in data window
+	 * @param level1WindowSize the level1WindowSize to set
+	 */
+	public void setLevel1WindowSize(Integer level1WindowSize) {
+		this.level1WindowSize = level1WindowSize;
 	}
 
 

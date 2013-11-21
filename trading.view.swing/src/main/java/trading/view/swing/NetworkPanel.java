@@ -41,6 +41,8 @@ public class NetworkPanel extends JPanel {
 	final JButton btnLoad;	
 	final JButton btnSave;	
 	final JButton btnReset;	
+	final JFormattedTextField txtWindowSize;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -186,6 +188,17 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.EAST, btnCreate);
 		add(btnReset);
 		
+		txtWindowSize = new JFormattedTextField();
+		txtWindowSize.setText("100");
+		springLayout.putConstraint(SpringLayout.NORTH, txtWindowSize, 18, SpringLayout.SOUTH, txtPredictionInterval);
+		springLayout.putConstraint(SpringLayout.WEST, txtWindowSize, 0, SpringLayout.WEST, txtLayers);
+		add(txtWindowSize);
+		
+		JLabel lblWindowSize = new JLabel("Window size:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblWindowSize, 3, SpringLayout.NORTH, txtWindowSize);
+		springLayout.putConstraint(SpringLayout.EAST, lblWindowSize, -37, SpringLayout.WEST, txtWindowSize);
+		add(lblWindowSize);
+		
 		// File chooser
 		fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -283,7 +296,12 @@ public class NetworkPanel extends JPanel {
 			}
 			layersString = sb.toString().replaceAll(",$", "");
 		}
+		// Text fields
 		txtLayers.setText(layersString);
+		txtWindowSize.setText(neuralContext.getLevel1WindowSize().toString());
+		txtPredictionInterval.setText(neuralContext.getPredictionInterval().toString());
+		
+		
 		// Buttons 
 		boolean isNetworkNotNull = (neuralContext.getNetwork() != null);
 		btnSave.setEnabled(isNetworkNotNull);
@@ -294,8 +312,12 @@ public class NetworkPanel extends JPanel {
 	 * Update context from this view
 	 */
 	public void updateContext() {
+		// Update predictoin interval
 		int predictionInterval = Integer.parseInt(txtPredictionInterval
 				.getText());
 		neuralContext.setPredictionInterval(predictionInterval);
+		// Update window size
+		int windowSize = Integer.parseInt(txtWindowSize.getText());
+		neuralContext.setLevel1WindowSize(windowSize);
 	}
 }
