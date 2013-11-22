@@ -11,7 +11,10 @@ public class TrainingContext {
     private double lastError; 
     private int maxEpochCount = 10;
     private long lastEpochMilliseconds = 0;
-    private int samplesCount = 0;
+    private int trainSamples = 10;
+    private int predictionSamples = 10;
+    private int trainStep = 1;
+    
     private long trainMilliseconds = 0;
     private Train train;
     
@@ -63,18 +66,7 @@ public class TrainingContext {
 	public void setLastEpochMilliseconds(long lastEpochMilliseconds) {
 		this.lastEpochMilliseconds = lastEpochMilliseconds;
 	}
-	/**
-	 * @return the samplesCount
-	 */
-	public int getSamplesCount() {
-		return samplesCount;
-	}
-	/**
-	 * @param samplesCount the samplesCount to set
-	 */
-	public void setSamplesCount(int samplesCount) {
-		this.samplesCount = samplesCount;
-	}
+
 	/**
 	 * @return the trainMilliseconds
 	 */
@@ -98,6 +90,42 @@ public class TrainingContext {
 	 */
 	public void setTrain(Train train) {
 		this.train = train;
+	}
+	/**
+	 * @return the trainSamples
+	 */
+	public Integer getTrainSamples() {
+		return trainSamples;
+	}
+	/**
+	 * @param trainSamples the trainSamples to set
+	 */
+	public void setTrainSamples(Integer trainSamples) {
+		this.trainSamples = trainSamples;
+	}
+	/**
+	 * @return the predictionSamples
+	 */
+	public Integer getPredictionSamples() {
+		return predictionSamples;
+	}
+	/**
+	 * @param predictionSamples the predictionSamples to set
+	 */
+	public void setPredictionSamples(Integer predictionSamples) {
+		this.predictionSamples = predictionSamples;
+	}
+	/**
+	 * @return the trainStep
+	 */
+	public Integer getTrainStep() {
+		return trainStep;
+	}
+	/**
+	 * @param trainStep the trainStep to set
+	 */
+	public void setTrainStep(Integer trainStep) {
+		this.trainStep = trainStep;
 	}
     
 }

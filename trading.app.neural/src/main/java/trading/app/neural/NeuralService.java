@@ -99,7 +99,7 @@ public class NeuralService extends NeuralServiceBase {
 
     public void trainNetwork(MLDataSet dataSet) throws FileNotFoundException, IOException {
         neuralContext.getTrainingContext().setLastError(0);
-        neuralContext.getTrainingContext().setSamplesCount(dataSet.size());      
+        //neuralContext.getTrainingContext().setSamplesCount(dataSet.size());      
         BasicNetwork network = neuralContext.getNetwork();
 
        // Backpropagation training
