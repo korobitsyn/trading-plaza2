@@ -46,7 +46,7 @@ public class Level1EntityTest extends AbstractTest {
 		assertEquals(cal.get(Calendar.MINUTE), level1LastTimeCal.get(Calendar.MINUTE));
 		assertEquals(cal.get(Calendar.SECOND), level1LastTimeCal.get(Calendar.SECOND));
 		assertEquals(cal.get(Calendar.MILLISECOND), level1LastTimeCal.get(Calendar.MILLISECOND));
-		
+		// Assert prices and volumes
 		assertEquals(price, level1.getLastPrice());
 		assertEquals(size, level1.getLastSize());
 		assertEquals(bid, level1.getBid());

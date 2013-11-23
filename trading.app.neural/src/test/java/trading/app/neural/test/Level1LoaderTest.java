@@ -6,6 +6,8 @@ package trading.app.neural.test;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -32,12 +34,24 @@ public class Level1LoaderTest extends AbstractTest {
 	public void testLoadTrainMLDataSet() {
 		fail("Not yet implemented");
 	}
+	
 	/**
 	 * Test method for {@link trading.app.neural.loader.Level1Loader#getOutputData()}.
 	 */
 	@Test
 	public void getOutputDataTest(){
-		fail("Not yet implemented");
+		Level1Loader loader = new Level1Loader(null);
+		// Prepare params
+		Level1 item1 = new Level1(new Date(), new BigDecimal(1), 1, new BigDecimal(1),1, new BigDecimal(1),1);
+		Level1 item2 = new Level1(new Date(), new BigDecimal(2), 2, new BigDecimal(2),2, new BigDecimal(2),2);
+		Level1 item3 = new Level1(new Date(), new BigDecimal(3), 3, new BigDecimal(3),3, new BigDecimal(3),3);
+		double minBid = (Math.min(item3.getBid().doubleValue(), item2.getBid().doubleValue()) - item1.getBid().doubleValue()) / item1.getBid().doubleValue();
+		double maxAsk = (Math.max(item3.getAsk().doubleValue(), item2.getAsk().doubleValue()) - item1.getAsk().doubleValue()) / item1.getAsk().doubleValue();
+		// Invoke
+		MLData data = ReflectionTestUtils.invokeMethod(loader, "getOutputData", item1, Arrays.asList(new Level1[]{item2, item3}));
+		// Assert
+		assertEquals(data.getData(0), minBid, Constants.DOUBLE_COMPARISON_PRECISION);
+		assertEquals(data.getData(1), maxAsk, Constants.DOUBLE_COMPARISON_PRECISION);
 	}
 	
 	/**
