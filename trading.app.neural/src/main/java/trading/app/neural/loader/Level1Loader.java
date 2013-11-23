@@ -1,6 +1,7 @@
 package trading.app.neural.loader;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.encog.ml.data.MLData;
@@ -119,7 +120,7 @@ public class Level1Loader  {
 				continue;
 			}
 			// Add to data and update pos
-			pos = addLevelData(data, pos, entity, lastEntity);
+			pos = addLevel1Data(data, pos, entity, lastEntity);
 			lastEntity = entity;
 		}
 		
@@ -131,10 +132,10 @@ public class Level1Loader  {
 	 * @param level1
 	 * @return index position
 	 */ 
-	private int addLevelData(MLData data, int pos, Level1 level1, Level1 prevLevel1){
+	private int addLevel1Data(MLData data, int pos, Level1 level1, Level1 prevLevel1){
 		//List<Double> data = new ArrayList();
 		// 0 - Date
-		double normalizedDate = 1/(new Long(level1.getDate().getTime()).doubleValue());
+		double normalizedDate = getNormalizedDate(level1.getDate());
 		data.add(pos++, normalizedDate);
 		// 1 - Price
 		double normalizedPrice = getNormalizedPrice(level1.getLastPrice(), prevLevel1.getLastPrice()); 
@@ -177,5 +178,15 @@ public class Level1Loader  {
 		// Convert to delta %
 		double normalized = (current.doubleValue() - prev.doubleValue()) / prev.doubleValue();
 		return normalized;
+	}
+	
+	/**
+	 * Date normalization
+	 * @param date
+	 * @return
+	 */
+	private double getNormalizedDate(Date date){
+		return 1/(new Long(date.getTime()).doubleValue());
+		
 	}
 }
