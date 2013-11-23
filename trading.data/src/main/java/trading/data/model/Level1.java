@@ -2,7 +2,9 @@
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,8 +32,6 @@ import javax.persistence.TemporalType;
 @NamedNativeQueries(value={
 		@NamedNativeQuery(resultClass=Level1.class, name=trading.data.Constants.QueryName.LEVEL1_FIND_LAST, query="SELECT level1.* FROM (SELECT * FROM level1 WHERE instrument_id = :" + trading.data.Constants.QueryParamName.INSTRUMENT_ID + " ORDER BY date DESC LIMIT :" + trading.data.Constants.QueryParamName.COUNT + ") AS level1 ORDER BY level1.date ASC")
 })
-
-
 public class Level1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -47,6 +47,36 @@ public class Level1 implements Serializable {
 	private Instrument instrument;
 
 	public Level1() {
+	}
+	/**
+	 * Construct level1 from price and size values
+	 * @param date
+	 * @param price
+	 * @param size
+	 * @param bid
+	 * @param bidSize
+	 * @param ask
+	 * @param askSize
+	 */
+	public Level1(Date date, BigDecimal price, Integer size, BigDecimal bid, Integer bidSize, BigDecimal ask, Integer askSize){
+		// Today's day date and time
+		Calendar dayCal = GregorianCalendar.getInstance(); 
+		dayCal.setTimeInMillis(date.getTime());
+		this.date = dayCal.getTime();
+		
+		// Time inside day
+		Calendar timeOfDayCal = GregorianCalendar.getInstance();
+		timeOfDayCal.setTimeInMillis(date.getTime());
+		timeOfDayCal.set(Calendar.DAY_OF_YEAR, 1);
+		timeOfDayCal.set(Calendar.YEAR, 0);
+		this.lastTime = timeOfDayCal.getTime();
+		
+		this.lastPrice = price;
+		this.lastSize = size;
+		this.bid = bid;
+		this.bidSize = bidSize;
+		this.ask = ask;
+		this.askSize = askSize;
 	}
 
 

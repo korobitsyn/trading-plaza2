@@ -33,9 +33,16 @@ public class Level1LoaderTest extends AbstractTest {
 		fail("Not yet implemented");
 	}
 	/**
+	 * Test method for {@link trading.app.neural.loader.Level1Loader#getOutputData()}.
+	 */
+	@Test
+	public void getOutputDataTest(){
+		fail("Not yet implemented");
+	}
+	
+	/**
 	 * Test method for {@link trading.app.neural.loader.Level1Loader#addLevel1Data}.
 	 */
-
 	@Test
 	public void addLevel1DataTest(){
 		// Prepare method wide params
