@@ -2,7 +2,7 @@
  * 
  */
 
-package trading.app.neural.loader;
+package trading.app.neural.test;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
@@ -15,6 +15,7 @@ import org.encog.ml.data.basic.BasicMLData;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import trading.app.neural.loader.Level1Loader;
 import trading.app.neural.test.config.Constants;
 import trading.data.model.Level1;
 
