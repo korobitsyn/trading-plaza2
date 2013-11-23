@@ -73,24 +73,8 @@ public class Level1LoaderTest extends AbstractTest {
 		prevCal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
 		prevCal.add(Calendar.MILLISECOND, -1);
 
-		Level1 level1 = new Level1(){{ 
-			setDate(cal.getTime()); 
-			setLastPrice(new BigDecimal(2)); 
-			setLastSize(2);
-			setBid(new BigDecimal(2));
-			setBidSize(2);
-			setAsk(new BigDecimal(2));
-			setAskSize(2);
-		}};
-		Level1 prevLevel1 = new Level1(){{ 
-			setDate(prevCal.getTime()); 
-			setLastPrice(new BigDecimal(1)); 
-			setLastSize(1);
-			setBid(new BigDecimal(1));
-			setBidSize(1);
-			setAsk(new BigDecimal(1));
-			setAskSize(1);
-		}};
+		Level1 level1 = new Level1(cal.getTime(),new BigDecimal(2),2, new BigDecimal(2),2,new BigDecimal(2),2);
+		Level1 prevLevel1 = new Level1(cal.getTime(),new BigDecimal(1),1, new BigDecimal(1),1,new BigDecimal(1),1);
 		
 		// Call and check the result
 		int pos = 0;
