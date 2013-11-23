@@ -60,166 +60,190 @@ public class NetworkPanel extends JPanel {
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 
-		JLabel label = new JLabel("Neural Network summary");
-		springLayout.putConstraint(SpringLayout.NORTH, label, 23,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, label, 24,
-				SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST, label, 224,
-				SpringLayout.WEST, this);
-		label.setFont(new Font("Dialog", Font.BOLD, 14));
-		add(label);
+		
+		JPanel settingsPanel = new JPanel();
+		springLayout.putConstraint(SpringLayout.NORTH, settingsPanel, 60, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, settingsPanel, 24, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, settingsPanel, -10, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, settingsPanel, 343, SpringLayout.WEST, this);
+		add(settingsPanel);
+		SpringLayout sl_settingsPanel = new SpringLayout();
+		settingsPanel.setLayout(sl_settingsPanel);
 
 		JLabel label_1 = new JLabel("Layers:");
-		springLayout.putConstraint(SpringLayout.WEST, label_1, 121,
-				SpringLayout.WEST, this);
-		add(label_1);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, label_1, 10, SpringLayout.NORTH, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, label_1, 97, SpringLayout.WEST, settingsPanel);
+		springLayout.putConstraint(SpringLayout.WEST, label_1, 121, SpringLayout.WEST, this);
+		settingsPanel.add(label_1);
 
 		txtLayers = new JFormattedTextField("10,10,2");
-		springLayout.putConstraint(SpringLayout.NORTH, label_1, 3, SpringLayout.NORTH, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtLayers, -2, SpringLayout.NORTH, label_1);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtLayers, 18, SpringLayout.EAST, label_1);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtLayers, -90, SpringLayout.EAST, settingsPanel);
 		springLayout.putConstraint(SpringLayout.EAST, label_1, -10, SpringLayout.WEST, txtLayers);
+		springLayout.putConstraint(SpringLayout.EAST, txtLayers, 339, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.WEST, txtLayers, 182, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, txtLayers, 100, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.NORTH, txtLayers, 81,
 				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, txtLayers, 182,
-				SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, txtLayers, 100,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, txtLayers, 339,
-				SpringLayout.WEST, this);
 		txtLayers.setText("1,2,3");
 		txtLayers.setAlignmentY(0.0f);
 		txtLayers.setAlignmentX(0.0f);
-		add(txtLayers);
+		settingsPanel.add(txtLayers);
 
 		JLabel lblPredictionSize = new JLabel("Prediction size:");
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblPredictionSize, 85, SpringLayout.NORTH, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblPredictionSize, 40, SpringLayout.WEST, settingsPanel);
 		springLayout.putConstraint(SpringLayout.WEST, lblPredictionSize, 82,
 				SpringLayout.WEST, this);
-		add(lblPredictionSize);
+		settingsPanel.add(lblPredictionSize);
 
 		txtPredictionSize = new JFormattedTextField(new Integer(60));
-		springLayout.putConstraint(SpringLayout.WEST, txtPredictionSize, 0, SpringLayout.WEST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblPredictionSize, -18, SpringLayout.WEST, txtPredictionSize);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtPredictionSize, 0, SpringLayout.EAST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtPredictionSize, -2, SpringLayout.NORTH, lblPredictionSize);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtPredictionSize, 0, SpringLayout.WEST, txtLayers);
+		springLayout.putConstraint(SpringLayout.NORTH, txtPredictionSize, 4, SpringLayout.NORTH, lblPredictionSize);
+		springLayout.putConstraint(SpringLayout.WEST, txtPredictionSize, 10, SpringLayout.EAST, lblPredictionSize);
 		txtPredictionSize.setText("60");
-		add(txtPredictionSize);
+		settingsPanel.add(txtPredictionSize);
 
 		// Create button
 		btnCreate = new JButton("Create");
+		springLayout.putConstraint(SpringLayout.NORTH, btnCreate, 60, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, btnCreate, -150, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.EAST, btnCreate, -50, SpringLayout.EAST, this);
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				createNetwork();
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, btnCreate, 35,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, btnCreate, -140,
-				SpringLayout.EAST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, btnCreate, 65,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, btnCreate, -50,
-				SpringLayout.EAST, this);
 		add(btnCreate);
 
 		// Load button
 		btnLoad = new JButton("Load");
-		springLayout.putConstraint(SpringLayout.NORTH, btnLoad, 28, SpringLayout.SOUTH, btnCreate);
+		springLayout.putConstraint(SpringLayout.NORTH, btnLoad, 38, SpringLayout.SOUTH, btnCreate);
+		springLayout.putConstraint(SpringLayout.WEST, btnLoad, 0, SpringLayout.WEST, btnCreate);
+		springLayout.putConstraint(SpringLayout.EAST, btnLoad, -50, SpringLayout.EAST, this);
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadNetwork();
 			}
 		});
-		springLayout.putConstraint(SpringLayout.WEST, btnLoad, -90,
-				SpringLayout.EAST, btnCreate);
-		springLayout.putConstraint(SpringLayout.EAST, btnLoad, 0,
-				SpringLayout.EAST, btnCreate);
 		add(btnLoad);
 
 		// Save button
 		btnSave = new JButton("Save");
-		springLayout.putConstraint(SpringLayout.SOUTH, btnLoad, -17, SpringLayout.NORTH, btnSave);
+		springLayout.putConstraint(SpringLayout.NORTH, btnSave, 20, SpringLayout.SOUTH, btnLoad);
+		springLayout.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, btnCreate);
+		springLayout.putConstraint(SpringLayout.EAST, btnSave, 0, SpringLayout.EAST, btnCreate);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				saveNetwork();
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, btnSave, 140,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, btnSave, 0,
-				SpringLayout.WEST, btnCreate);
-		springLayout.putConstraint(SpringLayout.SOUTH, btnSave, 170,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, btnSave, 0,
-				SpringLayout.EAST, btnCreate);
 		add(btnSave);
 
 		// Reset button
 		btnReset = new JButton("Reset");
+		springLayout.putConstraint(SpringLayout.NORTH, btnReset, 32, SpringLayout.SOUTH, btnSave);
+		springLayout.putConstraint(SpringLayout.WEST, btnReset, 0, SpringLayout.WEST, btnCreate);
+		springLayout.putConstraint(SpringLayout.EAST, btnReset, 0, SpringLayout.EAST, btnCreate);
+		springLayout.putConstraint(SpringLayout.EAST, txtPredictionSize, -281, SpringLayout.WEST, btnReset);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				resetNetwork();
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, btnReset, 201,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, btnReset, 0,
-				SpringLayout.WEST, btnCreate);
-		springLayout.putConstraint(SpringLayout.SOUTH, btnReset, 231,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, btnReset, 0,
-				SpringLayout.EAST, btnCreate);
 		add(btnReset);
 		
 		txtWindowSize = new JFormattedTextField();
-		springLayout.putConstraint(SpringLayout.SOUTH, txtWindowSize, -245, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.NORTH, txtPredictionSize, 12, SpringLayout.SOUTH, txtWindowSize);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtWindowSize, 19, SpringLayout.SOUTH, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtWindowSize, 166, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtWindowSize, 0, SpringLayout.EAST, txtLayers);
 		springLayout.putConstraint(SpringLayout.EAST, txtWindowSize, -281, SpringLayout.WEST, btnSave);
-		springLayout.putConstraint(SpringLayout.EAST, txtPredictionSize, 0, SpringLayout.EAST, txtWindowSize);
+		springLayout.putConstraint(SpringLayout.NORTH, txtWindowSize, 6, SpringLayout.NORTH, btnSave);
 		txtWindowSize.setText("100");
-		add(txtWindowSize);
+		settingsPanel.add(txtWindowSize);
 		
 		JLabel lblWindowSize = new JLabel("Window size:");
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblWindowSize, 23, SpringLayout.SOUTH, label_1);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblWindowSize, 55, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblWindowSize, 0, SpringLayout.EAST, label_1);
 		springLayout.putConstraint(SpringLayout.WEST, txtWindowSize, 10, SpringLayout.EAST, lblWindowSize);
 		springLayout.putConstraint(SpringLayout.NORTH, lblPredictionSize, 17, SpringLayout.SOUTH, lblWindowSize);
 		springLayout.putConstraint(SpringLayout.EAST, lblPredictionSize, 0, SpringLayout.EAST, lblWindowSize);
 		springLayout.putConstraint(SpringLayout.NORTH, lblWindowSize, 7, SpringLayout.NORTH, btnSave);
 		springLayout.putConstraint(SpringLayout.EAST, lblWindowSize, 0, SpringLayout.EAST, label_1);
-		add(lblWindowSize);
+		settingsPanel.add(lblWindowSize);
 		
 		// Samples count
 		txtTrainSamples = new JFormattedTextField();
-		springLayout.putConstraint(SpringLayout.SOUTH, txtPredictionSize, -12, SpringLayout.NORTH, txtTrainSamples);
-		springLayout.putConstraint(SpringLayout.WEST, txtTrainSamples, 0, SpringLayout.WEST, txtLayers);
-		springLayout.putConstraint(SpringLayout.SOUTH, txtTrainSamples, 0, SpringLayout.SOUTH, btnReset);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtTrainSamples, 118, SpringLayout.NORTH, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtTrainSamples, 0, SpringLayout.EAST, txtLayers);
 		springLayout.putConstraint(SpringLayout.EAST, txtTrainSamples, -281, SpringLayout.WEST, btnReset);
-		add(txtTrainSamples);
+		springLayout.putConstraint(SpringLayout.SOUTH, txtTrainSamples, 0, SpringLayout.SOUTH, btnReset);
+		settingsPanel.add(txtTrainSamples);
 		
 		JLabel lblSamplesCount = new JLabel("Train samples:");
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblSamplesCount, 120, SpringLayout.NORTH, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtTrainSamples, 18, SpringLayout.EAST, lblSamplesCount);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblSamplesCount, 46, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblSamplesCount, 0, SpringLayout.EAST, label_1);
+		springLayout.putConstraint(SpringLayout.WEST, txtTrainSamples, 10, SpringLayout.EAST, lblSamplesCount);
 		springLayout.putConstraint(SpringLayout.SOUTH, lblSamplesCount, 0, SpringLayout.SOUTH, btnReset);
 		springLayout.putConstraint(SpringLayout.EAST, lblSamplesCount, 0, SpringLayout.EAST, label_1);
-		add(lblSamplesCount);
+		settingsPanel.add(lblSamplesCount);
 		
 		txtPredictionSamples = new JFormattedTextField();
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtPredictionSamples, 0, SpringLayout.WEST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtPredictionSamples, -90, SpringLayout.EAST, settingsPanel);
 		springLayout.putConstraint(SpringLayout.NORTH, txtPredictionSamples, 288, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, txtPredictionSamples, 182, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, txtPredictionSamples, -104, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, txtPredictionSamples, -124, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, txtPredictionSamples, -421, SpringLayout.EAST, this);
-		add(txtPredictionSamples);
+		settingsPanel.add(txtPredictionSamples);
 		
 		lblPredictionSamples = new JLabel("Prediction samples:");
-		springLayout.putConstraint(SpringLayout.NORTH, lblPredictionSamples, 0, SpringLayout.NORTH, txtPredictionSamples);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblPredictionSamples, 10, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblPredictionSamples, 0, SpringLayout.EAST, label_1);
 		springLayout.putConstraint(SpringLayout.EAST, lblPredictionSamples, 0, SpringLayout.EAST, lblWindowSize);
-		add(lblPredictionSamples);
+		settingsPanel.add(lblPredictionSamples);
 		
 		trainStep = new JSpinner();
-		trainStep.setModel(new SpinnerNumberModel(new Integer(1), new Integer(0), null, new Integer(1)));
-		springLayout.putConstraint(SpringLayout.WEST, trainStep, 0, SpringLayout.WEST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, trainStep, 18, SpringLayout.EAST, lblPredictionSamples);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, trainStep, -115, SpringLayout.EAST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblPredictionSamples, 2, SpringLayout.NORTH, trainStep);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, trainStep, 26, SpringLayout.SOUTH, txtPredictionSamples);
 		springLayout.putConstraint(SpringLayout.SOUTH, trainStep, -16, SpringLayout.NORTH, txtPredictionSamples);
 		springLayout.putConstraint(SpringLayout.EAST, trainStep, -421, SpringLayout.EAST, this);
-		add(trainStep);
+		trainStep.setModel(new SpinnerNumberModel(new Integer(1), new Integer(0), null, new Integer(1)));
+		settingsPanel.add(trainStep);
 		
 		JLabel lblTrainStep = new JLabel("Train step:");
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtPredictionSamples, -2, SpringLayout.NORTH, lblTrainStep);
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblTrainStep, 23, SpringLayout.SOUTH, lblSamplesCount);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblTrainStep, 73, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblTrainStep, 0, SpringLayout.EAST, label_1);
+		springLayout.putConstraint(SpringLayout.WEST, trainStep, 10, SpringLayout.EAST, lblTrainStep);
+		springLayout.putConstraint(SpringLayout.NORTH, lblPredictionSamples, 18, SpringLayout.SOUTH, lblTrainStep);
 		springLayout.putConstraint(SpringLayout.NORTH, lblTrainStep, 3, SpringLayout.NORTH, trainStep);
 		springLayout.putConstraint(SpringLayout.EAST, lblTrainStep, 0, SpringLayout.EAST, label_1);
-		add(lblTrainStep);
+		settingsPanel.add(lblTrainStep);
 		
+		JLabel label = new JLabel("Neural Network summary");
+		springLayout.putConstraint(SpringLayout.EAST, label, 320,
+				SpringLayout.WEST, this);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, label, 10, SpringLayout.WEST, this);
+		sl_settingsPanel.putConstraint(SpringLayout.SOUTH, label, -5, SpringLayout.NORTH, settingsPanel);
+		add(label);
+		springLayout.putConstraint(SpringLayout.NORTH, label, 23,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, label, 24,
+				SpringLayout.WEST, this);
+		label.setFont(new Font("Dialog", Font.BOLD, 16));
+		springLayout.putConstraint(SpringLayout.NORTH, label_1, 44, SpringLayout.SOUTH, label);
+
 		// File chooser
 		fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
