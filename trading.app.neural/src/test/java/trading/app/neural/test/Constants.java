@@ -1,4 +1,4 @@
-package trading.app.neural.test.config;
+package trading.app.neural.test;
 
 /**
  * @author dima
