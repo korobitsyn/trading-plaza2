@@ -10,6 +10,7 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
+import org.jboss.logging.Logger;
 
 import trading.app.history.HistoryProvider;
 import trading.app.neural.NeuralContext;
@@ -21,8 +22,10 @@ import trading.data.model.Level1;
  *
  */
 public class Level1Loader  {
+	
 	private NeuralContext neuralContext;
-
+	
+	private static Logger LOG = Logger.getLogger(Level1Loader.class); 
 	
 	/**
 	 * Constructor for context
@@ -51,17 +54,21 @@ public class Level1Loader  {
 		// Load last data from database
 		int instrumentId = neuralContext.getTradingApplicationContext().getInstrumentContext().getInstrument().getId();
 		HistoryProvider historyProvider = neuralContext.getTradingApplicationContext().getHistoryProvider();
-		List<Level1> data = historyProvider.findLevel1Last( instrumentId, dataSize);
-		if(data.size() < dataSize){
-			throw new IllegalArgumentException("History data is not enough for given window size, prediction size and samples count");
+		List<Level1> data = historyProvider.findLevel1Last( instrumentId, dataSize+1);
+		if(data.size() < dataSize + 1){
+			IllegalArgumentException ex = new IllegalArgumentException("History data is not enough for given window size, prediction size and samples count");
+			LOG.error(ex);
+			throw ex;
+
 		}
 		
 		// Create and fill dataset
 		MLDataSet dataSet = new BasicMLDataSet();
 		// Prepare samples for training
+		// First item is a prev bar
 		for(int i = 0; i < trainSamples; i+=trainStep) {
 			// Extract input data for one sample
-			List<Level1> inputWindow = data.subList(i, i+windowSize);
+			List<Level1> inputWindow = data.subList(i, i+windowSize+1);
 			MLData inputData = entitiesToMLData(inputWindow);
 
 			// Get output data
@@ -117,6 +124,7 @@ public class Level1Loader  {
 		int pos = 0;
 		for(Level1 entity: entityList){
 			if(lastEntity == null){
+				lastEntity = entity;
 				continue;
 			}
 			// Add to data and update pos
