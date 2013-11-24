@@ -41,6 +41,7 @@ public abstract class NeuralServiceBase implements NeuralService {
 	 * @see trading.app.neural.NeuralService#trainNetwork()
 	 */
     @Override
+
 	public abstract void trainNetwork() throws FileNotFoundException, IOException;
     
     

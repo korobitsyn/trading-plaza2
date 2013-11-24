@@ -6,7 +6,6 @@ import org.encog.neural.networks.BasicNetwork;
 
 import trading.app.TradingApplicationContext;
 import trading.app.neural.mlData.NeuralDataManager;
-
 /**
  * Context contains neural network configuration and current state
  * @author pdg
