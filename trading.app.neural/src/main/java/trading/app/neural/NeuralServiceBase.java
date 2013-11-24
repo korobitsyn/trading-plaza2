@@ -13,13 +13,14 @@ import org.encog.persist.EncogDirectoryPersistence;
  * @author dima
  *
  */
-public abstract class NeuralServiceBase {
+public abstract class NeuralServiceBase implements NeuralService {
 
 	protected NeuralContext neuralContext;
 
-	/**
-	 * @param neuralContext the neuralContext to set
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#setNeuralContext(trading.app.neural.NeuralContext)
 	 */
+	@Override
 	public void setNeuralContext(NeuralContext neuralContext) {
 		this.neuralContext = neuralContext;
 	}
@@ -30,49 +31,48 @@ public abstract class NeuralServiceBase {
 	public NeuralServiceBase() {
 
 	}
-	/**
-	 * Create network with layers
-	 * @param layers Neurons in layers
-	 * @return
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#createNetwork(java.util.List)
 	 */
-    public abstract BasicNetwork createNetwork(List<Integer> layers); 
+    @Override
+	public abstract BasicNetwork createNetwork(List<Integer> layers); 
     
-    /**
-     * Create train dataset and train network
-     */
-    public abstract void trainNetwork();
-    
-    
-	/**
-	 * Get context
-	 * @return
+    /* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#trainNetwork()
 	 */
+    @Override
+	public abstract void trainNetwork();
+    
+    
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#getNeuralContext()
+	 */
+	@Override
 	public NeuralContext getNeuralContext() {
 		return neuralContext;
 	}
 
-	/**
-	 * Saves current network to file
-	 *
-	 * @param fileName
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#saveNetwork(java.io.File)
 	 */
+	@Override
 	public void saveNetwork(File file) {
 	    EncogDirectoryPersistence.saveObject(file, neuralContext.getNetwork());
 	}
 
-	/**
-	 * Load network from file
-	 *
-	 * @param fileName
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#loadNetwork(java.io.File)
 	 */
+	@Override
 	public void loadNetwork(File file) {
 	    BasicNetwork network = (BasicNetwork) EncogDirectoryPersistence.loadObject(file);
 	    neuralContext.setNetwork(network);
 	}
 
-	/**
-	 * Reset network weights
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#resetNetwork()
 	 */
+	@Override
 	public void resetNetwork() {
 	    neuralContext.getNetwork().reset();
 	}
