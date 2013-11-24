@@ -112,7 +112,7 @@ public class NeuralNetworkForm extends JFrame {
 		tabbedPane.addTab("Network", null, networkPanel, null);
 		
 		// Add learn tab
-		learnPanel = new LearnPanel();
+		learnPanel = new LearnPanel(neuralContext);
 		tabbedPane.addTab("Learn", null, learnPanel, null);
 
 		testPanel = new TestPanel();

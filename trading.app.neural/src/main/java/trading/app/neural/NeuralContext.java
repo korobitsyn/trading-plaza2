@@ -5,6 +5,7 @@ import java.util.List;
 import org.encog.neural.networks.BasicNetwork;
 
 import trading.app.TradingApplicationContext;
+import trading.app.neural.mlData.NeuralDataManager;
 
 /**
  * Context contains neural network configuration and current state
@@ -15,6 +16,7 @@ public class NeuralContext {
 	private TrainingContext trainingContext = new TrainingContext();
 	private TradingApplicationContext tradingApplicationContext;
 	private NeuralService neuralService;
+	private NeuralDataManager neuralDataManager;
 	
 	private int predictionSize = 60;
 	private int level1WindowSize = 100;
@@ -96,6 +98,20 @@ public class NeuralContext {
 	 */
 	public void setLevel1WindowSize(Integer level1WindowSize) {
 		this.level1WindowSize = level1WindowSize;
+	}
+
+	/**
+	 * @return the neuralDataManager
+	 */
+	public NeuralDataManager getNeuralDataManager() {
+		return neuralDataManager;
+	}
+
+	/**
+	 * @param neuralDataManager the neuralDataManager to set
+	 */
+	public void setNeuralDataManager(NeuralDataManager neuralDataManager) {
+		this.neuralDataManager = neuralDataManager;
 	}
 
 }

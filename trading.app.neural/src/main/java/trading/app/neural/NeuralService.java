@@ -1,6 +1,8 @@
 package trading.app.neural;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import org.encog.neural.networks.BasicNetwork;
@@ -26,8 +28,10 @@ public interface NeuralService {
 
 	/**
 	 * Create train dataset and train network
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public abstract void trainNetwork();
+	public abstract void trainNetwork() throws FileNotFoundException, IOException;
 
 	/**
 	 * Get context

@@ -85,18 +85,20 @@ public class NeuralServiceImpl extends NeuralServiceBase {
     }
     
     /**
-	 * @see NeuralServiceBase#trainNetwork()
+	 * @throws IOException 
+     * @throws FileNotFoundException 
+     * @see NeuralServiceBase#trainNetwork()
      */
 	@Override
-    public void trainNetwork(){
-         //MLDataSet ds = MLBarDataLoader.getTrainMLDataSet();
-         //trainNetwork(ds);
+    public void trainNetwork() throws FileNotFoundException, IOException{
+		// Load defautl train dataset and train network
+         MLDataSet ds = neuralContext.getNeuralDataManager().loadTrainMLDataSet();
+         trainNetwork(ds);
     }
     
     /**
      * Train on specific dataset
      */
-
     public void trainNetwork(MLDataSet dataSet) throws FileNotFoundException, IOException {
         neuralContext.getTrainingContext().setLastError(0);
         //neuralContext.getTrainingContext().setSamplesCount(dataSet.size());      

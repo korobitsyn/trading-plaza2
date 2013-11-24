@@ -1,4 +1,4 @@
-package trading.app.neural.loader;
+package trading.app.neural.mlData;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,23 +21,27 @@ import trading.data.model.Level1;
  * @author pdg
  *
  */
-public class Level1Loader  {
+public class Level1DataManager implements NeuralDataManager  {
 	
 	private NeuralContext neuralContext;
 	
-	private static Logger LOG = Logger.getLogger(Level1Loader.class); 
+	private static Logger LOG = Logger.getLogger(Level1DataManager.class); 
 	
 	/**
 	 * Constructor for context
 	 * @param context
 	 */
-	public Level1Loader(NeuralContext context){
+	public Level1DataManager(NeuralContext context){
 		neuralContext = context;
 	}
 	
 	/* (non-Javadoc)
 	 * @see trading.app.neural.converter.MLDataLoader#loadTrainMLDataSet()
 	 */
+	/* (non-Javadoc)
+	 * @see trading.app.neural.mlData.EncogDataManager#loadTrainMLDataSet()
+	 */
+	@Override
 	public MLDataSet loadTrainMLDataSet(){
 		// Prepare parameters to use further in this function
 		int windowSize = neuralContext.getLevel1WindowSize();

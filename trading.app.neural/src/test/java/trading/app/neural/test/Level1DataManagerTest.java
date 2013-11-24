@@ -26,7 +26,8 @@ import trading.app.InstrumentContext;
 import trading.app.TradingApplicationContext;
 import trading.app.history.HistoryProvider;
 import trading.app.neural.NeuralContext;
-import trading.app.neural.loader.Level1Loader;
+import trading.app.neural.mlData.NeuralDataManager;
+import trading.app.neural.mlData.Level1DataManager;
 import trading.app.neural.test.Constants;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.when;
  * @author dima
  * 
  */
-public class Level1LoaderTest extends AbstractTest {
+public class Level1DataManagerTest extends AbstractTest {
 	// Items for test
 	private List<Level1> level1List = Arrays.asList(new Level1[] {
 			new Level1(new Date(), new BigDecimal(1), 1,
@@ -56,7 +57,7 @@ public class Level1LoaderTest extends AbstractTest {
 	
 	/**
 	 * Test method for
-	 * {@link trading.app.neural.loader.Level1Loader#loadTrainMLDataSet()}.
+	 * {@link trading.app.neural.mlData.Level1DataManager#loadTrainMLDataSet()}.
 	 */
 	@Test
 	public void testLoadTrainMLDataSet() {
@@ -98,7 +99,7 @@ public class Level1LoaderTest extends AbstractTest {
 		context.getTrainingContext().setPredictionSamples(0);
 		context.getTrainingContext().setTrainStep(1);
 
-		Level1Loader loader = new Level1Loader(context);
+		NeuralDataManager loader = new Level1DataManager(context);
 		MLDataSet dataSet = loader.loadTrainMLDataSet();
 		// window 2 samples of 1 item, 1 previous bar, 1 prediction
 		// 4 items overall
@@ -109,11 +110,11 @@ public class Level1LoaderTest extends AbstractTest {
 	
 	/**
 	 * Test method for
-	 * {@link trading.app.neural.loader.Level1Loader#entitiesToMLDataTest()}.
+	 * {@link trading.app.neural.mlData.Level1DataManager#entitiesToMLDataTest()}.
 	 */
 	@Test
 	public void entitiesToMLDataTest(){
-		Level1Loader loader = new Level1Loader(null);
+		NeuralDataManager loader = new Level1DataManager(null);
 		List<Level1> entities = level1List.subList(0, 3);
 		MLData mlData = ReflectionTestUtils.invokeMethod(loader, "entitiesToMLData", entities);
 		
@@ -124,11 +125,11 @@ public class Level1LoaderTest extends AbstractTest {
 	
 	/**
 	 * Test method for
-	 * {@link trading.app.neural.loader.Level1Loader#getOutputData()}.
+	 * {@link trading.app.neural.mlData.Level1DataManager#getOutputData()}.
 	 */
 	@Test
 	public void getOutputDataTest() {
-		Level1Loader loader = new Level1Loader(null);
+		NeuralDataManager loader = new Level1DataManager(null);
 		// Prepare params
 		Level1 item1 = level1List.get(0);
 		Level1 item2 = level1List.get(1);
@@ -151,12 +152,12 @@ public class Level1LoaderTest extends AbstractTest {
 
 	/**
 	 * Test method for
-	 * {@link trading.app.neural.loader.Level1Loader#addLevel1Data}.
+	 * {@link trading.app.neural.mlData.Level1DataManager#addLevel1Data}.
 	 */
 	@Test
 	public void addLevel1DataTest() {
 		// Prepare method wide params
-		Level1Loader loader = new Level1Loader(null);
+		NeuralDataManager loader = new Level1DataManager(null);
 		Integer singleLevel1Size = (Integer) ReflectionTestUtils.getField(
 				loader, "LEVEL1_DATA_SIZE");
 		MLData mlData = new BasicMLData(singleLevel1Size + 2);
@@ -203,12 +204,12 @@ public class Level1LoaderTest extends AbstractTest {
 
 	/**
 	 * Test method for
-	 * {@link trading.app.neural.loader.Level1Loader#getNormalizedPrice}.
+	 * {@link trading.app.neural.mlData.Level1DataManager#getNormalizedPrice}.
 	 */
 	@Test
 	public void testGetNormalizedPrice() {
 
-		Level1Loader loader = new Level1Loader(null);
+		NeuralDataManager loader = new Level1DataManager(null);
 		double result = ReflectionTestUtils.invokeMethod(loader,
 				"getNormalizedPrice", new BigDecimal(1), new BigDecimal(1));
 		assertEquals(0, result, Constants.DOUBLE_COMPARISON_PRECISION);
@@ -232,11 +233,11 @@ public class Level1LoaderTest extends AbstractTest {
 
 	/**
 	 * Test method for
-	 * {@link trading.app.neural.loader.Level1Loader#getNormalizedSize}.
+	 * {@link trading.app.neural.mlData.Level1DataManager#getNormalizedSize}.
 	 */
 	@Test
 	public void testGetNormalizedSize() {
-		Level1Loader loader = new Level1Loader(null);
+		NeuralDataManager loader = new Level1DataManager(null);
 		double result = ReflectionTestUtils.invokeMethod(loader,
 				"getNormalizedSize", 1, 1);
 		assertEquals(0.0, result, Constants.DOUBLE_COMPARISON_PRECISION);
@@ -269,7 +270,7 @@ public class Level1LoaderTest extends AbstractTest {
 	 * @param level1
 	 * @param prevLevel1
 	 */
-	private void assertMLDataContainsLevel1(Level1Loader loader, MLData mlData,
+	private void assertMLDataContainsLevel1(NeuralDataManager loader, MLData mlData,
 			int index, Level1 level1, Level1 prevLevel1) {
 
 		// Get normalized data to compare
