@@ -26,7 +26,7 @@
 		<property name="neuralService" ref="neuralService"></property>
 	</bean>
 	
-	<bean id="neuralService" class="trading.app.neural.NeuralService">
+	<bean id="neuralService" class="trading.app.neural.NeuralServiceImpl">
 		<property name="neuralContext" ref="neuralContext"></property>
 	</bean>
 

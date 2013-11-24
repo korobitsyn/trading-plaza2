@@ -14,7 +14,7 @@ public class NeuralContext {
 	private BasicNetwork network;
 	private TrainingContext trainingContext = new TrainingContext();
 	private TradingApplicationContext tradingApplicationContext;
-	private NeuralServiceBase neuralService;
+	private NeuralService neuralService;
 	
 	private int predictionSize = 60;
 	private int level1WindowSize = 100;
@@ -75,10 +75,10 @@ public class NeuralContext {
 	/**
 	 * @return the neuralService
 	 */
-	public NeuralServiceBase getNeuralService() {
+	public NeuralService getNeuralService() {
 		return neuralService;
 	}
-	public void setNeuralService(NeuralServiceBase neuralService){
+	public void setNeuralService(NeuralService neuralService){
 		this.neuralService = neuralService;
 	}
 
