@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogDirectoryPersistence;
+import com.google.common.eventbus.*;
+
+import com.google.common.eventbus.EventBus;
 
 /**
  * Base class for all neural services
@@ -14,7 +17,7 @@ import org.encog.persist.EncogDirectoryPersistence;
  *
  */
 public abstract class NeuralServiceBase implements NeuralService {
-
+	EventBus eventBus = new EventBus();
 	protected NeuralContext neuralContext;
 
 	/* (non-Javadoc)
@@ -76,5 +79,12 @@ public abstract class NeuralServiceBase implements NeuralService {
 	@Override
 	public void resetNetwork() {
 	    neuralContext.getNetwork().reset();
+	}
+	/**
+	 * @return the eventBus
+	 */
+	@Override
+	public EventBus getEventBus() {
+		return eventBus;
 	}
 }

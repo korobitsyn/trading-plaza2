@@ -28,126 +28,154 @@ import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Stopwatch;
 import org.encog.util.simple.EncogUtility;
 
+import com.google.common.eventbus.EventBus;
+
 import trading.app.neural.NeuralContext;
 //import trading.data.MLBarDataConverter;
 //import trading.data.MLBarDataLoader;
 //import trading.data.model.BarEntity;
 //import trading.data.model.DataPair;
 //import trading.data.model.OutputEntity;
+import trading.app.neural.events.TrainIterationCompletedEvent;
 
 /**
  * Neural network service
+ * 
  * @author pdg
- *
+ * 
  */
 public class NeuralServiceImpl extends NeuralServiceBase {
+
 	/**
 	 * Ctor
 	 */
-	public NeuralServiceImpl(){}
-    /**
-     * @see NeuralServiceBase#createNetwork(List) 
-     */
+	public NeuralServiceImpl() {
+	}
+
+	/**
+	 * @see NeuralServiceBase#createNetwork(List)
+	 */
 	@Override
-    public BasicNetwork createNetwork(List<Integer> layers) {
-        if (layers.size() < 2) {
-            throw new IllegalArgumentException("Wrong network layers count");
-        }
-        final FeedForwardPattern pattern = new FeedForwardPattern();
-        // Input neurons
-        int input = layers.get(0);
-        pattern.setInputNeurons(input);
-        // Hidden neurons
-        for (int i = 1; ((i < layers.size() - 1)); i++) {
-            int neurons = layers.get(i);
-            if (neurons > 0) {
-                pattern.addHiddenLayer(layers.get(i));
-            }
-        }
-        // Output neurons
-        int output = layers.get(layers.size() - 1);
-        pattern.setOutputNeurons(output);
+	public BasicNetwork createNetwork(List<Integer> layers) {
+		if (layers.size() < 2) {
+			throw new IllegalArgumentException("Wrong network layers count");
+		}
+		final FeedForwardPattern pattern = new FeedForwardPattern();
+		// Input neurons
+		int input = layers.get(0);
+		pattern.setInputNeurons(input);
+		// Hidden neurons
+		for (int i = 1; ((i < layers.size() - 1)); i++) {
+			int neurons = layers.get(i);
+			if (neurons > 0) {
+				pattern.addHiddenLayer(layers.get(i));
+			}
+		}
+		// Output neurons
+		int output = layers.get(layers.size() - 1);
+		pattern.setOutputNeurons(output);
 
-//        // Activation functioni
-        pattern.setActivationFunction(new ActivationTANH());
-//        pattern.setActivationFunction(new ActivationLinear());
-//        //pattern.setActivationFunction(new ActivationElliott()); 
+		// // Activation functioni
+		pattern.setActivationFunction(new ActivationTANH());
+		// pattern.setActivationFunction(new ActivationLinear());
+		// //pattern.setActivationFunction(new ActivationElliott());
 
-        // Create network
-        final BasicNetwork network = (BasicNetwork) pattern.generate();
-        // Randomize the network
-        (new ConsistentRandomizer(-1, 1, 100)).randomize(network);
-        neuralContext.setNetwork(network);
+		// Create network
+		final BasicNetwork network = (BasicNetwork) pattern.generate();
+		// Randomize the network
+		(new ConsistentRandomizer(-1, 1, 100)).randomize(network);
+		neuralContext.setNetwork(network);
 
-        return network;
+		return network;
 
+	}
 
-    }
-    
-    /**
-	 * @throws IOException 
-     * @throws FileNotFoundException 
-     * @see NeuralServiceBase#trainNetwork()
-     */
+	/**
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @see NeuralServiceBase#trainNetwork()
+	 */
 	@Override
-    public void trainNetwork() throws FileNotFoundException, IOException{
-		// Load defautl train dataset and train network 
-         MLDataSet ds = neuralContext.getNeuralDataManager().loadTrainMLDataSet();
-         trainNetwork(ds);
-    }
-    
-    /**
-     * Train on specific dataset
-     */
-    public void trainNetwork(MLDataSet dataSet) throws FileNotFoundException, IOException {
-        neuralContext.getTrainingContext().setLastError(0);
-        //neuralContext.getTrainingContext().setSamplesCount(dataSet.size());      
-        BasicNetwork network = neuralContext.getNetwork();
+	public void trainNetwork() throws FileNotFoundException, IOException {
+		// Load defautl train dataset and train network
+		MLDataSet ds = neuralContext.getNeuralDataManager()
+				.loadTrainMLDataSet();
+		trainNetwork(ds);
+	}
 
-       // Backpropagation training
-        //ResilientPropagation train = new ResilientPropagation(network, ds, 0, RPROPConst.DEFAULT_MAX_STEP);
-        ResilientPropagation train = new ResilientPropagation(network, dataSet);
-        //Backpropagation train = new Backpropagation(network, ds);
-        train.setThreadCount(10);
-        neuralContext.getTrainingContext().setTrain(train);
-        
-        Logger.getLogger(NeuralServiceImpl.class.getName()).info("Start training");
-        
-        // Create watches
-        Stopwatch trainWatch = new Stopwatch();
-        trainWatch.reset();
-        trainWatch.start();
-        
-        Stopwatch epochWatch = new Stopwatch();
-        epochWatch.reset();
-        epochWatch.start();
-        double lastError = 0;
-        double sameErrorCount = 0;
-        final int maxErrorCount = 10; // If error does not change maxErrorCount loops, training completed
-        for (int epoch = 1; epoch <= neuralContext.getTrainingContext().getMaxEpochCount() && sameErrorCount <=maxErrorCount; epoch++) {
-            epochWatch.reset();
-            // Do training iteration
-            train.iteration();
-            // Calculate error
-            double error = train.getError();
-            // Increase error coujnt
-            if(error==lastError)
-            {
-                sameErrorCount++;
-            }else{
-                sameErrorCount = 0;
-                lastError = error;
-            }
-            // Update view
-            neuralContext.getTrainingContext().setLastEpoch(epoch);
-            neuralContext.getTrainingContext().setLastEpochMilliseconds(epochWatch.getElapsedMilliseconds());
-            neuralContext.getTrainingContext().setTrainMilliseconds(trainWatch.getElapsedMilliseconds());
-            neuralContext.getTrainingContext().setLastError(error);
-            Logger.getLogger(NeuralServiceImpl.class.getName()).info(String.format("Epoch %d. Time %d sec, error %s", epoch, epochWatch.getElapsedMilliseconds() / 1000, Double.toString(error)));
-        }
-        trainWatch.stop();
-        epochWatch.stop();
-        Logger.getLogger(NeuralServiceImpl.class.getName()).info(String.format("Training time  %d minutes",  trainWatch.getElapsedMilliseconds() / 1000/60, Double.toString(train.getError())));
-        train.finishTraining();
-    }
+	/**
+	 * Train on specific dataset
+	 */
+	public void trainNetwork(MLDataSet dataSet) throws FileNotFoundException,
+			IOException {
+		neuralContext.getTrainingContext().setLastError(0);
+		// neuralContext.getTrainingContext().setSamplesCount(dataSet.size());
+		BasicNetwork network = neuralContext.getNetwork();
+
+		// Backpropagation training
+		// ResilientPropagation train = new ResilientPropagation(network, ds, 0,
+		// RPROPConst.DEFAULT_MAX_STEP);
+		ResilientPropagation train = new ResilientPropagation(network, dataSet);
+		// Backpropagation train = new Backpropagation(network, ds);
+		train.setThreadCount(10);
+		neuralContext.getTrainingContext().setTrain(train);
+
+		Logger.getLogger(NeuralServiceImpl.class.getName()).info(
+				"Start training");
+
+		// Create watches
+		Stopwatch trainWatch = new Stopwatch();
+		trainWatch.reset();
+		trainWatch.start();
+
+		Stopwatch epochWatch = new Stopwatch();
+		epochWatch.reset();
+		epochWatch.start();
+		double lastError = 0;
+		double sameErrorCount = 0;
+		final int maxErrorCount = 10; // If error does not change maxErrorCount
+										// loops, training completed
+		for (int epoch = 1; epoch <= neuralContext.getTrainingContext()
+				.getMaxEpochCount() && sameErrorCount <= maxErrorCount; epoch++) {
+			epochWatch.reset();
+			// Do training iteration
+			train.iteration();
+			// Calculate error
+			double error = train.getError();
+			// Increase error coujnt
+			if (error == lastError) {
+				sameErrorCount++;
+			} else {
+				sameErrorCount = 0;
+				lastError = error;
+			}
+			// Update neural context
+			neuralContext.getTrainingContext().setLastEpoch(epoch);
+			neuralContext.getTrainingContext().setLastEpochMilliseconds(
+					epochWatch.getElapsedMilliseconds());
+			neuralContext.getTrainingContext().setTrainMilliseconds(
+					trainWatch.getElapsedMilliseconds());
+			neuralContext.getTrainingContext().setLastError(error);
+			
+			// Raise event
+			TrainIterationCompletedEvent event = new TrainIterationCompletedEvent(
+					epoch, neuralContext.getTrainingContext()
+							.getLastEpochMilliseconds(), neuralContext
+							.getTrainingContext().getTrainMilliseconds());
+			eventBus.post(event);
+
+			// Log
+			Logger.getLogger(NeuralServiceImpl.class.getName()).info(
+					String.format("Epoch %d. Time %d sec, error %s", epoch,
+							epochWatch.getElapsedMilliseconds() / 1000,
+							Double.toString(error)));
+		}
+		trainWatch.stop();
+		epochWatch.stop();
+		Logger.getLogger(NeuralServiceImpl.class.getName()).info(
+				String.format("Training time  %d minutes",
+						trainWatch.getElapsedMilliseconds() / 1000 / 60,
+						Double.toString(train.getError())));
+		train.finishTraining();
+	}
 }

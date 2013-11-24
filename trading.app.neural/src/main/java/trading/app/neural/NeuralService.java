@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import com.google.common.eventbus.*;
 
 import org.encog.neural.networks.BasicNetwork;
 
@@ -57,5 +58,11 @@ public interface NeuralService {
 	 * Reset network weights
 	 */
 	public abstract void resetNetwork();
+
+	/**
+	 * Gets event bus for this service
+	 * @return
+	 */
+	public abstract EventBus getEventBus();
 
 }
