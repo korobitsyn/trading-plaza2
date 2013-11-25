@@ -17,7 +17,7 @@ public class TradingApplicationContext {
 	private RealTimeProvider realTimeProvider;
 	private HistoryProvider historyProvider;
 	private HistoryWriter historyWriter;
-	private InstrumentContext instrumentContext;
+	private InstrumentContext instrumentContext = new InstrumentContext();
 	
 	/**
 	 * 
