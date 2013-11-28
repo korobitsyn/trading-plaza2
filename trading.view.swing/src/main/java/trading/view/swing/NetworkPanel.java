@@ -329,6 +329,10 @@ public class NetworkPanel extends JPanel {
 	 * Update view from context
 	 */
 	public void updateView() {
+		if(neuralContext == null){
+			return;
+		}
+		
 		// Update layers from network
 		String layersString = "0,0,2";
 		if (neuralContext.getNetwork() != null) {

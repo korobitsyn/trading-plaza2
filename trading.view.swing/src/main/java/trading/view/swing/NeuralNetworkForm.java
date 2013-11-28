@@ -94,7 +94,7 @@ public class NeuralNetworkForm extends JFrame {
 		contentPane.add(tabbedPane);
 
 		// Add runtime tab
-		Level1RuntimePanel runtimePanel = new Level1RuntimePanel(neuralContext.getTradingApplicationContext());
+		Level1RuntimePanel runtimePanel = new Level1RuntimePanel((neuralContext!=null)?neuralContext.getTradingApplicationContext() : null);
 		tabbedPane.addTab("Runtime", null, runtimePanel, null);
 
 		

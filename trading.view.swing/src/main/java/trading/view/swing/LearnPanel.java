@@ -34,7 +34,7 @@ public class LearnPanel extends JPanel {
 	private final JLabel lblTotalTime;
 	private final JComboBox instrumentComboBox;
 	JButton learnButton;
-	
+
 	/**
 	 * Create the panel.
 	 * 
@@ -42,6 +42,7 @@ public class LearnPanel extends JPanel {
 	 *            Neural network context to work with
 	 */
 	public LearnPanel(NeuralContext context) {
+
 		this.neuralContext = context;
 
 		SpringLayout springLayout = new SpringLayout();
@@ -94,24 +95,31 @@ public class LearnPanel extends JPanel {
 		add(lblTotalTime);
 
 		instrumentComboBox = new JComboBox();
-		springLayout.putConstraint(SpringLayout.SOUTH, instrumentComboBox, -6, SpringLayout.NORTH, learnProgressBar);
+		springLayout.putConstraint(SpringLayout.SOUTH, instrumentComboBox, -6,
+				SpringLayout.NORTH, learnProgressBar);
 		instrumentComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Instrument instrument = (Instrument)instrumentComboBox.getSelectedItem();
-				neuralContext.getTradingApplicationContext().getInstrumentContext().setInstrument(instrument);
-				updateView();
+				if (neuralContext != null) {
+					Instrument instrument = (Instrument) instrumentComboBox
+							.getSelectedItem();
+					neuralContext.getTradingApplicationContext()
+							.getInstrumentContext().setInstrument(instrument);
+					updateView();
+				}
 			}
 		});
 		add(instrumentComboBox);
-		
+
 		JLabel lblInstrument = new JLabel("Instrument:");
-		springLayout.putConstraint(SpringLayout.WEST, instrumentComboBox, 7, SpringLayout.EAST, lblInstrument);
-		springLayout.putConstraint(SpringLayout.NORTH, lblInstrument, 5, SpringLayout.NORTH, instrumentComboBox);
-		springLayout.putConstraint(SpringLayout.EAST, lblInstrument, 0, SpringLayout.EAST, lblEpoch);
+		springLayout.putConstraint(SpringLayout.WEST, instrumentComboBox, 7,
+				SpringLayout.EAST, lblInstrument);
+		springLayout.putConstraint(SpringLayout.NORTH, lblInstrument, 5,
+				SpringLayout.NORTH, instrumentComboBox);
+		springLayout.putConstraint(SpringLayout.EAST, lblInstrument, 0,
+				SpringLayout.EAST, lblEpoch);
 		add(lblInstrument);
 		initInstrumentComboBox();
-		
-		
+
 		updateView();
 	}
 
@@ -138,13 +146,16 @@ public class LearnPanel extends JPanel {
 	 * Initiate instrument combo box
 	 */
 	private void initInstrumentComboBox() {
+		if (neuralContext == null) {
+			return;
+		}
 		// Load instruments from data
 		HistoryProvider history = neuralContext.getTradingApplicationContext()
 				.getHistoryProvider();
 		List<Instrument> instruments = history.findInstrumentAll();
 		// Add instruments to combo box
 		ComboBoxModel<Instrument> model = new DefaultComboBoxModel<Instrument>(
-				instruments.toArray(new Instrument[]{}));
+				instruments.toArray(new Instrument[] {}));
 		instrumentComboBox.setModel(model);
 	}
 
@@ -152,6 +163,9 @@ public class LearnPanel extends JPanel {
 	 * Update view from context
 	 */
 	private void updateView() {
+		if(neuralContext == null){
+			return;
+		}
 		TrainingContext context = neuralContext.getTrainingContext();
 		// Update progress bar
 		learnProgressBar.setMaximum(context.getMaxEpochCount());
@@ -163,9 +177,10 @@ public class LearnPanel extends JPanel {
 				context.getLastEpochMilliseconds()).doubleValue() / 1000));
 		lblTotalTime.setText(String.format("Total time: %f sec", new Long(
 				context.getTrainMilliseconds()).doubleValue()));
-		
+
 		// Enable learn button if instrument is set
-		learnButton.setEnabled(neuralContext.getTradingApplicationContext().getInstrumentContext().getInstrument()!=null);
+		learnButton.setEnabled(neuralContext.getTradingApplicationContext()
+				.getInstrumentContext().getInstrument() != null);
 	}
 
 	/**
