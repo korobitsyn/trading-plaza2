@@ -30,40 +30,10 @@ import trading.app.TradingApplicationContext;
 import trading.app.realtime.MarketListener;
 import trading.data.model.Instrument;
 import trading.data.model.Level1;
+import javax.swing.SpringLayout;
 
-public class Level1ApplicationWindow implements MarketListener<Level1> {
-	// Spring application context
-	static GenericXmlApplicationContext ctx;	
-	/**
-	 * Main cycle for dev only
-	 * ToDo: remove later
-	 * @param args
-	 * @throws InterruptedException
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws
-			InterruptedException, IOException {
-		// Spring initialization
-		ctx = new GenericXmlApplicationContext();
-		ctx.load("classpath:META-INF/spring/application-context.xml");
-		ctx.registerShutdownHook();
-		ctx.refresh();
+public class Level1RuntimePanel extends JPanel implements MarketListener<Level1> {
 
-		// Run application
-		final Level1ApplicationWindow appWindow = ctx.getBean(Level1ApplicationWindow.class);
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					//Level1ApplicationWindow window = new Level1ApplicationWindow(context);
-					appWindow.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-	}	
 	
 	/**
 	 * Capture real time data action
@@ -138,26 +108,11 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 			level1Chart.addLevel1(data);
 		}
 	}
-	/**
-	 * Launch the application. For test only
-	 */
-	public static void run(final TradingApplicationContext context) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Level1ApplicationWindow window = new Level1ApplicationWindow(context);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	private Level1ApplicationWindow windowInstance = this;
+
+	private Level1RuntimePanel windowInstance = this;
 	private Level1Chart level1Chart;
 	private JComboBox<Instrument> instrumentComboBox;
-	private JFrame frame;
+	//private JPanel frame;
 
 	private TradingApplicationContext tradingApplicationContext;
 	
@@ -166,15 +121,15 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	private final Action historyAction = new HistoryAction();
 	private boolean isWriteEnabled = true;
 
-	public Level1ApplicationWindow(){
-		
+	public Level1RuntimePanel(){
+		initialize();
 	}
 	
 	/**
 	 * Ctor
 	 * @param context Trading application context
 	 */
-	public Level1ApplicationWindow(TradingApplicationContext context) {
+	public Level1RuntimePanel(TradingApplicationContext context) {
 		tradingApplicationContext = context;
 		// Listen instrument info
 		tradingApplicationContext.getRealTimeProvider()
@@ -203,8 +158,10 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.addWindowListener(new WindowAdapter() {
+	
+
+
+		/*addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				List<Instrument> instruments = tradingApplicationContext.getHistoryProvider()
@@ -215,17 +172,27 @@ public class Level1ApplicationWindow implements MarketListener<Level1> {
 				level1Chart.setTitle(instrumentComboBox.getSelectedItem()
 						.toString());
 			}
-		});
-		frame.setTitle("Level1"); //$NON-NLS-1$ 
-		frame.setBounds(100, 100, 1024, 768);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		});*/
+ 
+		setBounds(100, 100, 1024, 768);
+		SpringLayout springLayout = new SpringLayout();
+		setLayout(springLayout);
+		
 		// Main chart
 		level1Chart = new Level1Chart("No instrument selected");
+		springLayout.putConstraint(SpringLayout.NORTH, level1Chart, 50, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, level1Chart, 0, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, level1Chart, 0, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, level1Chart, 0, SpringLayout.EAST, this);
 		level1Chart.setTitle("");
-		frame.getContentPane().add(level1Chart, BorderLayout.CENTER);
+		add(level1Chart);
 
 		JPanel controlPanel = new JPanel();
-		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
+		springLayout.putConstraint(SpringLayout.NORTH, controlPanel, 0, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, controlPanel, 0, SpringLayout.WEST, level1Chart);
+		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, 50, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, controlPanel, 0, SpringLayout.EAST, level1Chart);
+		add(controlPanel);
 
 		// Connect to provider button 
 		JToggleButton connectButton = new JToggleButton("Connect");

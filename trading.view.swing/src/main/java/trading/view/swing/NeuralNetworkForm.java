@@ -93,6 +93,11 @@ public class NeuralNetworkForm extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.EAST, tabbedPane, 0, SpringLayout.EAST, contentPane);
 		contentPane.add(tabbedPane);
 
+		// Add runtime tab
+		Level1RuntimePanel runtimePanel = new Level1RuntimePanel(neuralContext.getTradingApplicationContext());
+		tabbedPane.addTab("Runtime", null, runtimePanel, null);
+
+		
 		// Add network tab
 		networkPanel = new NetworkPanel(neuralContext);
 		networkPanel.updateView();
@@ -108,7 +113,6 @@ public class NeuralNetworkForm extends JFrame {
 				networkPanel.updateView();
 			}
 		});
-
 		tabbedPane.addTab("Network", null, networkPanel, null);
 		
 		// Add learn tab
