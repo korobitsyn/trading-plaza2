@@ -37,25 +37,43 @@ public class Level1DataManager implements NeuralDataManager {
 		neuralContext = context;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see trading.app.neural.converter.MLDataLoader#loadTrainMLDataSet()
+	/**
+	 * Load dataset for additional training on last data
+	 * Is called when prediction interval completed and we can compare previous network prediction with reality happened.
+	 * @return
 	 */
-	/*
-	 * (non-Javadoc)
+	@Override
+	public MLDataSet loadAdditionalTrainMLDataSet(){
+		// Load data with one last prediction and related training windows
+		return loadTrainMLDataSet(1);
+		
+	}
+	
+	
+	/**
 	 * 
 	 * @see trading.app.neural.mlData.EncogDataManager#loadTrainMLDataSet()
 	 */
 	@Override
-	public MLDataSet loadTrainMLDataSet() {
+	public MLDataSet loadTrainMLDataSet(){
+		int predictionSamples = neuralContext.getTrainingContext()
+				.getPredictionSamples();
+		return loadTrainMLDataSet(predictionSamples);
+	}
+	
+	/**
+	 * 
+	 * @param predictionSamples prediction data samples in dataset. Got from context for main training and 1 for additional training on last data 
+	 * 
+	 */
+	public MLDataSet loadTrainMLDataSet(int predictionSamples) {
 		// Prepare parameters to use further in this function
 		int windowSize = neuralContext.getLevel1WindowSize();
 		int trainStep = neuralContext.getTrainingContext().getTrainStep();
 		int predictionSize = neuralContext.getPredictionSize();
 		int trainSamples = neuralContext.getTrainingContext().getTrainSamples();
-		int predictionSamples = neuralContext.getTrainingContext()
-				.getPredictionSamples();
+//		int predictionSamples = neuralContext.getTrainingContext()
+//				.getPredictionSamples();
 
 		// Train and prediction offsets offset from end
 		int predictionOffset = predictionSize * predictionSamples;
@@ -80,24 +98,6 @@ public class Level1DataManager implements NeuralDataManager {
 		// Create and fill dataset
 		MLDataSet dataSet = new BasicMLDataSet();
 		// Prepare samples for training
-		// First item is a prev bar
-		// for(int i = 0; i < trainSamples; i+=trainStep) {
-		// // Extract input data for one sample
-		// List<Level1> inputWindow = data.subList(i, i+windowSize+1);
-		// MLData inputData = entitiesToMLData(inputWindow);
-		//
-		// // Get output data
-		// Level1 lastInputLevel1 = inputWindow.get(inputWindow.size()-1);
-		// List<Level1> predictionWindow = data.subList(i+windowSize,
-		// i+windowSize + predictionSize);
-		// MLData outputData = getOutputData(lastInputLevel1, predictionWindow);
-		//
-		// // Create data pair for encog and add to dataset
-		// MLDataPair pair = new BasicMLDataPair(inputData, outputData);
-
-		// MLDataPair pair = getMLDataPair(data, i+windowSize-1);
-		// dataSet.add(pair);
-		// }
 		for (int i = 0; i < trainSamples; i += trainStep) {
 			MLDataPair pair = getMLDataPair(data, windowSize+i);
 			dataSet.add(pair);

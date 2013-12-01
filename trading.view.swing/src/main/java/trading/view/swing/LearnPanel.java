@@ -131,15 +131,7 @@ public class LearnPanel extends JPanel {
 	 */
 	private void trainNetwork() {
 		resetTrainingContext();
-		try {
-			neuralContext.getNeuralService().trainNetwork();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		neuralContext.getNeuralService().trainNetwork();
 	}
 
 	/**

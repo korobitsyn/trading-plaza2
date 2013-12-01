@@ -16,4 +16,6 @@ public interface NeuralDataManager {
 
 	public abstract MLDataPair getMLDataPair(List<Level1> data, int index);
 
+	public abstract MLDataSet loadAdditionalTrainMLDataSet();
+
 }

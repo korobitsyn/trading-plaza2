@@ -69,7 +69,7 @@ public class Level1DataManagerTest extends AbstractTest {
 		NeuralContext context = new NeuralContext(appContext);
 		context.setLevel1WindowSize(1);
 		context.setPredictionSize(1);
-		Level1DataManager manager = new Level1DataManager(context);
+		NeuralDataManager manager = new Level1DataManager(context);
 		// Invoke
 		MLDataPair pair = manager.getMLDataPair(level1List, 1);
 		// Assert input data in pair

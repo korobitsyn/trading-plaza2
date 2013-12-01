@@ -5,11 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogDirectoryPersistence;
-import com.google.common.eventbus.*;
 
-import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.*;
 
 /**
  * Base class for all neural services
@@ -40,12 +40,20 @@ public abstract class NeuralServiceBase implements NeuralService {
     @Override
 	public abstract BasicNetwork createNetwork(List<Integer> layers); 
     
-    /* (non-Javadoc)
+    /**
 	 * @see trading.app.neural.NeuralService#trainNetwork()
 	 */
-    @Override
 
-	public abstract void trainNetwork() throws FileNotFoundException, IOException;
+    /**
+     * General train of network
+     */
+    @Override
+	public abstract void trainNetwork();
+    
+	/**
+	 * Train network on last data
+	 */
+	public abstract void trainNetworkAdditional();    
     
     
 	/* (non-Javadoc)
@@ -87,4 +95,5 @@ public abstract class NeuralServiceBase implements NeuralService {
 	public EventBus getEventBus() {
 		return eventBus;
 	}
+
 }

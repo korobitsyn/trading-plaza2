@@ -32,8 +32,13 @@ public interface NeuralService {
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	public abstract void trainNetwork() throws FileNotFoundException, IOException;
+	public abstract void trainNetwork();
 
+	/**
+	 * Train network on last data
+	 */
+	public abstract void trainNetworkAdditional();
+	
 	/**
 	 * Get context
 	 * @return
