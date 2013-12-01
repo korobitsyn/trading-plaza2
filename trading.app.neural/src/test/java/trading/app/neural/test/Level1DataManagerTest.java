@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.junit.Test;
@@ -50,17 +51,46 @@ public class Level1DataManagerTest extends AbstractTest {
 			new Level1(new Date(), new BigDecimal(3), 3,
 					new BigDecimal(3), 3,
 					new BigDecimal(3), 3),
-			new Level1(new Date(), new BigDecimal(4), 4,
-					new BigDecimal(4), 4,
-					new BigDecimal(4), 4),
+			new Level1(new Date(), new BigDecimal(5), 5,
+					new BigDecimal(5), 5,
+					new BigDecimal(5), 5),
+					new Level1(new Date(), new BigDecimal(5), 5,
+							new BigDecimal(5), 5,
+							new BigDecimal(5), 5),					
 	});
+	
+	/**
+	 * Test method for
+	 * {@link trading.app.neural.mlData.Level1DataManager#getMLDataPair(List, int)}.
+	 */
+	@Test
+	public void getMLDataPairTest(){
+		TradingApplicationContext appContext = new TradingApplicationContext();
+		NeuralContext context = new NeuralContext(appContext);
+		context.setLevel1WindowSize(1);
+		context.setPredictionSize(1);
+		Level1DataManager manager = new Level1DataManager(context);
+		// Invoke
+		MLDataPair pair = manager.getMLDataPair(level1List, 1);
+		// Assert input data in pair
+		assertMLDataContainsLevel1(manager, pair.getInput(), 0, level1List.get(1), level1List.get(0));
+		// Assert output data
+		MLData output = pair.getIdeal();
+
+		// Invoke
+		MLData rightOutput = ReflectionTestUtils.invokeMethod(manager, "getOutputData",
+				level1List.get(1), level1List.subList(2, 3));	
+		
+		assertEquals(rightOutput.getData(0), output.getData(0), Constants.DOUBLE_COMPARISON_PRECISION); 
+		assertEquals(rightOutput.getData(1), output.getData(1), Constants.DOUBLE_COMPARISON_PRECISION); 
+	}
 	
 	/**
 	 * Test method for
 	 * {@link trading.app.neural.mlData.Level1DataManager#loadTrainMLDataSet()}.
 	 */
 	@Test
-	public void testLoadTrainMLDataSet() {
+	public void loadTrainMLDataSetTest() {
 		// History provider mock
 		HistoryProvider historyProvider = org.mockito.Mockito
 				.mock(HistoryProvider.class);
@@ -69,7 +99,7 @@ public class Level1DataManagerTest extends AbstractTest {
 					@Override
 					public List<Level1> answer(InvocationOnMock invocation)
 							throws Throwable {
-						return level1List.subList(0, 3);
+						return level1List.subList(0, 4);
 					}
 				});
 		// Prepare test context
@@ -104,6 +134,8 @@ public class Level1DataManagerTest extends AbstractTest {
 		// window 2 samples of 1 item, 1 previous bar, 1 prediction
 		// 4 items overall
 		assertEquals(2, dataSet.size());
+		
+		
 		assertMLDataContainsLevel1(loader, dataSet.get(0).getInput(), 0, level1List.get(1), level1List.get(0));
 		assertMLDataContainsLevel1(loader, dataSet.get(1).getInput(), 0, level1List.get(2), level1List.get(1));
 	}
@@ -207,7 +239,7 @@ public class Level1DataManagerTest extends AbstractTest {
 	 * {@link trading.app.neural.mlData.Level1DataManager#getNormalizedPrice}.
 	 */
 	@Test
-	public void testGetNormalizedPrice() {
+	public void getNormalizedPriceTest() {
 
 		NeuralDataManager loader = new Level1DataManager(null);
 		double result = ReflectionTestUtils.invokeMethod(loader,
@@ -236,7 +268,7 @@ public class Level1DataManagerTest extends AbstractTest {
 	 * {@link trading.app.neural.mlData.Level1DataManager#getNormalizedSize}.
 	 */
 	@Test
-	public void testGetNormalizedSize() {
+	public void getNormalizedSizeTest() {
 		NeuralDataManager loader = new Level1DataManager(null);
 		double result = ReflectionTestUtils.invokeMethod(loader,
 				"getNormalizedSize", 1, 1);
@@ -260,6 +292,8 @@ public class Level1DataManagerTest extends AbstractTest {
 
 	}
 
+
+	
 	/**
 	 * Check whether mldata contains level1
 	 * 
