@@ -95,5 +95,15 @@ public abstract class NeuralServiceBase implements NeuralService {
 	public EventBus getEventBus() {
 		return eventBus;
 	}
-
+	
+	/**
+	* @see NeuralService#getFirstLayerSize(int)
+	 */
+	@Override
+	public abstract int getFirstLayerSize(int entityListSize);
+	
+	/**
+	 * @see NeuralService#getLastLayerSize()
+	 */
+	public abstract int getLastLayerSize();	
 }

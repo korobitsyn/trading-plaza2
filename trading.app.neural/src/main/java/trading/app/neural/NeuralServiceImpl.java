@@ -37,6 +37,7 @@ import trading.app.neural.NeuralContext;
 //import trading.data.model.DataPair;
 //import trading.data.model.OutputEntity;
 import trading.app.neural.events.TrainIterationCompletedEvent;
+import trading.app.neural.mlData.Level1DataManager;
 
 /**
  * Neural network service
@@ -51,7 +52,20 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	 */
 	public NeuralServiceImpl() {
 	}
-
+	/**
+	* @see NeuralServiceBase#getFirstLayerSize(int)
+	*/
+	@Override
+	public int getFirstLayerSize(int entityListSize){
+		return entityListSize * Level1DataManager.LEVEL1_DATA_SIZE;
+	}
+	
+	/**
+	 * @see NeuralServiceBase#getLastLayerSize()
+	 */
+	public int getLastLayerSize(){
+		return Level1DataManager.OUTPUT_SIZE;
+	}
 	/**
 	 * @see NeuralServiceBase#createNetwork(List)
 	 */

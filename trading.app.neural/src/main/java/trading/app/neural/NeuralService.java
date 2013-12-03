@@ -70,4 +70,17 @@ public interface NeuralService {
 	 */
 	public abstract EventBus getEventBus();
 
+	/**
+	 * Gets size of 1st network layer for entities count
+	 * @param entityListSize
+	 * @return
+	 */
+	public abstract int getFirstLayerSize(int entityListSize);
+	
+	/**
+	 * Get size of last network layer
+	 * @return
+	 */
+	public abstract int getLastLayerSize();
+
 }

@@ -22,7 +22,9 @@ import org.encog.neural.networks.BasicNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import antlr.StringUtils;
 import trading.app.neural.NeuralContext;
+import trading.app.neural.mlData.Level1DataManager;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,10 +33,12 @@ import java.io.FileFilter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -89,8 +93,6 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.NORTH, label_1);
 		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtLayers, 18,
 				SpringLayout.EAST, label_1);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtLayers, -90,
-				SpringLayout.EAST, settingsPanel);
 		springLayout.putConstraint(SpringLayout.EAST, label_1, -10,
 				SpringLayout.WEST, txtLayers);
 		springLayout.putConstraint(SpringLayout.EAST, txtLayers, 339,
@@ -107,17 +109,15 @@ public class NetworkPanel extends JPanel {
 		settingsPanel.add(txtLayers);
 
 		JLabel lblPredictionSize = new JLabel("Prediction size:");
-		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblPredictionSize,
-				40, SpringLayout.WEST, settingsPanel);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblPredictionSize, 0, SpringLayout.EAST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblPredictionSize, 40, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblPredictionSize, -90, SpringLayout.EAST, settingsPanel);
 		springLayout.putConstraint(SpringLayout.WEST, lblPredictionSize, 82,
 				SpringLayout.WEST, this);
 		settingsPanel.add(lblPredictionSize);
 
 		txtPredictionSize = new JFormattedTextField(new Integer(60));
-		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtPredictionSize, 0,
-				SpringLayout.WEST, txtLayers);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtPredictionSize, 0, SpringLayout.EAST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtPredictionSize, 168, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtPredictionSize, -90, SpringLayout.EAST, settingsPanel);
 		txtPredictionSize.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -194,18 +194,15 @@ public class NetworkPanel extends JPanel {
 		add(btnReset);
 
 		txtWindowSize = new JFormattedTextField();
+		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtWindowSize, 19, SpringLayout.SOUTH, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtWindowSize, -90, SpringLayout.EAST, settingsPanel);
 		txtWindowSize.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				updateNeededLevel1Count();
+				correctNetworkLayersView();
 			}
 		});
-		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtWindowSize, 19,
-				SpringLayout.SOUTH, txtLayers);
-		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtWindowSize, 166,
-				SpringLayout.WEST, settingsPanel);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtWindowSize, 0,
-				SpringLayout.EAST, txtLayers);
 		springLayout.putConstraint(SpringLayout.EAST, txtWindowSize, -281,
 				SpringLayout.WEST, btnSave);
 		springLayout.putConstraint(SpringLayout.NORTH, txtWindowSize, 6,
@@ -214,6 +211,7 @@ public class NetworkPanel extends JPanel {
 		settingsPanel.add(txtWindowSize);
 
 		JLabel lblWindowSize = new JLabel("Window size:");
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtWindowSize, 16, SpringLayout.EAST, lblWindowSize);
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblWindowSize, 23,
 				SpringLayout.SOUTH, label_1);
 		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblWindowSize, 55,
@@ -265,8 +263,8 @@ public class NetworkPanel extends JPanel {
 
 		txtPredictionSamples = new JFormattedTextField();
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtPredictionSamples, 6, SpringLayout.SOUTH, txtPredictionSize);
-		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtPredictionSamples, 0, SpringLayout.WEST, txtLayers);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtPredictionSamples, 0, SpringLayout.EAST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtPredictionSamples, 168, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtPredictionSamples, -90, SpringLayout.EAST, settingsPanel);
 		txtPredictionSamples.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -285,19 +283,17 @@ public class NetworkPanel extends JPanel {
 
 		lblPredictionSamples = new JLabel("Prediction samples:");
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblPredictionSamples, 0, SpringLayout.NORTH, txtPredictionSamples);
-		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblPredictionSamples,
-				10, SpringLayout.WEST, settingsPanel);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblPredictionSamples, 0, SpringLayout.EAST, txtLayers);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblPredictionSamples, 10, SpringLayout.WEST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblPredictionSamples, -90, SpringLayout.EAST, settingsPanel);
 		springLayout.putConstraint(SpringLayout.EAST, lblPredictionSamples, 0,
 				SpringLayout.EAST, lblWindowSize);
 		settingsPanel.add(lblPredictionSamples);
 
 		txtTrainStep = new JFormattedTextField();
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtTrainStep, -115, SpringLayout.EAST, settingsPanel);
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtPredictionSize, 15, SpringLayout.SOUTH, txtTrainStep);
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblPredictionSize, 17, SpringLayout.SOUTH, txtTrainStep);
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, txtTrainStep, 6, SpringLayout.SOUTH, txtTrainSamples);
-		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtTrainStep, 0, SpringLayout.WEST, txtLayers);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtTrainStep, -115, SpringLayout.EAST, settingsPanel);
 		txtTrainStep.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -312,10 +308,11 @@ public class NetworkPanel extends JPanel {
 		settingsPanel.add(txtTrainStep);
 
 		JLabel lblTrainStep = new JLabel("Train step:");
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblTrainStep, -169, SpringLayout.EAST, settingsPanel);
+		sl_settingsPanel.putConstraint(SpringLayout.WEST, txtTrainStep, 18, SpringLayout.EAST, lblTrainStep);
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblTrainStep, 2, SpringLayout.NORTH, txtTrainStep);
 		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblTrainStep, 73,
 				SpringLayout.WEST, settingsPanel);
-		sl_settingsPanel.putConstraint(SpringLayout.EAST, lblTrainStep, -18, SpringLayout.WEST, txtTrainStep);
 		springLayout.putConstraint(SpringLayout.WEST, txtTrainStep, 10,
 				SpringLayout.EAST, lblTrainStep);
 		springLayout.putConstraint(SpringLayout.NORTH, lblPredictionSamples,
@@ -343,6 +340,8 @@ public class NetworkPanel extends JPanel {
 				SpringLayout.SOUTH, label);
 
 		lblNeededItems = new JLabel("Items");
+		sl_settingsPanel.putConstraint(SpringLayout.EAST, txtLayers, 0,
+				SpringLayout.EAST, lblNeededItems);
 		sl_settingsPanel.putConstraint(SpringLayout.NORTH, lblNeededItems, 277, SpringLayout.NORTH, settingsPanel);
 		sl_settingsPanel.putConstraint(SpringLayout.SOUTH, lblNeededItems, -35, SpringLayout.SOUTH, settingsPanel);
 		sl_settingsPanel.putConstraint(SpringLayout.WEST, lblNeededItems, 10, SpringLayout.WEST, settingsPanel);
@@ -476,6 +475,29 @@ public class NetworkPanel extends JPanel {
 
 	}
 
+
+	/**
+	 * Set network layers first and last layers  
+	 */
+	private void correctNetworkLayersView(){
+		// Extract layers from comma delimited string to array
+		Integer windowSize =  Integer.parseInt(txtWindowSize.getText());
+		String layersString = txtLayers.getText();
+		String[] layersArray = layersString.split(",");
+
+		// Replace first and last items
+		layersArray[0] = new Integer(neuralContext.getNeuralService().getFirstLayerSize(windowSize)).toString();
+		layersArray[layersArray.length-1] = new Integer(neuralContext.getNeuralService().getLastLayerSize()).toString();
+		
+		// Convert back to string
+		layersString = Arrays.toString(layersArray);
+		StringBuilder sb;
+		
+		layersString = layersString.replaceAll("\\[|\\]", "");
+		txtLayers.setText(layersString);
+		
+	}
+	
 	/**
 	 * Update level1Neededlabel
 	 */

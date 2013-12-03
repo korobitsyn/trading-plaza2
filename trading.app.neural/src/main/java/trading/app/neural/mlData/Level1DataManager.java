@@ -166,8 +166,8 @@ public class Level1DataManager implements NeuralDataManager {
 	/**
 	 * Size of one level1 data
 	 */
-	private static final int LEVEL1_DATA_SIZE = 7;
-	private static final int OUTPUT_SIZE = 2;
+	public static final int LEVEL1_DATA_SIZE = 7;
+	public static final int OUTPUT_SIZE = 2;
 
 	/**
 	 * Convert level1 list to mldata
