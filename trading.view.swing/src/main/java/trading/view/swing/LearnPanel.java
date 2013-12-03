@@ -39,6 +39,7 @@ public class LearnPanel extends JPanel {
 	private final JComboBox instrumentComboBox;
 	JButton learnButton;
 	private final JFormattedTextField txtMaxEpochCount;
+	private JLabel lblLastError;
 
 	/**
 	 * Create the panel.
@@ -87,17 +88,13 @@ public class LearnPanel extends JPanel {
 		add(lblEpoch);
 
 		lblLastEpochTime = new JLabel("Last epoch: 0 ms");
-		springLayout.putConstraint(SpringLayout.NORTH, lblLastEpochTime, 16,
-				SpringLayout.SOUTH, lblEpoch);
-		springLayout.putConstraint(SpringLayout.WEST, lblLastEpochTime, 0,
-				SpringLayout.WEST, learnProgressBar);
+		springLayout.putConstraint(SpringLayout.NORTH, lblLastEpochTime, 0, SpringLayout.NORTH, lblEpoch);
+		springLayout.putConstraint(SpringLayout.WEST, lblLastEpochTime, 109, SpringLayout.EAST, lblEpoch);
 		add(lblLastEpochTime);
 
 		lblTotalTime = new JLabel("Total time: 0 sec");
-		springLayout.putConstraint(SpringLayout.NORTH, lblTotalTime, 17,
-				SpringLayout.SOUTH, lblLastEpochTime);
-		springLayout.putConstraint(SpringLayout.WEST, lblTotalTime, 10,
-				SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, lblTotalTime, 6, SpringLayout.SOUTH, lblEpoch);
+		springLayout.putConstraint(SpringLayout.WEST, lblTotalTime, 0, SpringLayout.WEST, lblEpoch);
 		add(lblTotalTime);
 
 		instrumentComboBox = new JComboBox();
@@ -136,6 +133,11 @@ public class LearnPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.NORTH, lblEpochCount, 0, SpringLayout.NORTH, txtMaxEpochCount);
 		springLayout.putConstraint(SpringLayout.EAST, lblEpochCount, -11, SpringLayout.WEST, txtMaxEpochCount);
 		add(lblEpochCount);
+		
+		lblLastError = new JLabel("Last error: 0");
+		springLayout.putConstraint(SpringLayout.NORTH, lblLastError, 6, SpringLayout.SOUTH, lblTotalTime);
+		springLayout.putConstraint(SpringLayout.WEST, lblLastError, 10, SpringLayout.WEST, this);
+		add(lblLastError);
 		initInstrumentComboBox();
 
 		updateView();
@@ -196,6 +198,8 @@ public class LearnPanel extends JPanel {
 				context.getLastEpochMilliseconds()).doubleValue() / 1000));
 		lblTotalTime.setText(String.format("Total time: %f sec", new Long(
 				context.getTrainMilliseconds()).doubleValue()));
+		
+		lblLastError.setText(String.format("Last error: %f", new Double(context.getLastError())));
 
 		// Enable learn button if instrument is set
 		learnButton.setEnabled(neuralContext.getTradingApplicationContext()
