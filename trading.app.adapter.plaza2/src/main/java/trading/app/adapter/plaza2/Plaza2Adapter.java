@@ -132,9 +132,9 @@ public class Plaza2Adapter implements ISubscriber, Adapter, RealTimeProvider {
 			break;
 		// Default
 		default:
-			System.out.println(message);
-			System.out.println(String.format("Message type: %d",
-					message.getType()));
+			//System.out.println(message);
+			//System.out.println(String.format("Message type: %d",
+			//		message.getType()));
 		}
 
 		return ErrorCode.OK;

@@ -243,6 +243,7 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 				tradingApplicationContext.getHistoryWriter().setEnabled(isWriteEnabled);
 			}
 		});
+		tradingApplicationContext.getHistoryWriter().setEnabled(isWriteEnabled);		
 		writeHistoryCheckBox.setToolTipText("Write to database when listening");
 		writeHistoryCheckBox.setSelected(true);
 		controlPanel.add(writeHistoryCheckBox);
