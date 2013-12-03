@@ -14,6 +14,7 @@ import javax.swing.SpringLayout;
 import trading.app.history.HistoryProvider;
 import trading.app.neural.NeuralContext;
 import trading.app.neural.TrainingContext;
+import trading.app.neural.events.TrainIterationCompletedEvent;
 import trading.data.model.Instrument;
 
 import java.awt.event.ActionListener;
@@ -26,6 +27,9 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.event.ListDataListener;
 
+import com.google.common.eventbus.Subscribe;
+import javax.swing.JFormattedTextField;
+
 public class LearnPanel extends JPanel {
 	private NeuralContext neuralContext;
 	private final JProgressBar learnProgressBar;
@@ -34,6 +38,7 @@ public class LearnPanel extends JPanel {
 	private final JLabel lblTotalTime;
 	private final JComboBox instrumentComboBox;
 	JButton learnButton;
+	private final JFormattedTextField txtMaxEpochCount;
 
 	/**
 	 * Create the panel.
@@ -44,6 +49,7 @@ public class LearnPanel extends JPanel {
 	public LearnPanel(NeuralContext context) {
 
 		this.neuralContext = context;
+		this.neuralContext.getNeuralService().getEventBus().register(this);
 
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
@@ -118,6 +124,18 @@ public class LearnPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, lblInstrument, 0,
 				SpringLayout.EAST, lblEpoch);
 		add(lblInstrument);
+		
+		txtMaxEpochCount = new JFormattedTextField();
+		springLayout.putConstraint(SpringLayout.NORTH, txtMaxEpochCount, 27, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, txtMaxEpochCount, -225, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.EAST, txtMaxEpochCount, -186, SpringLayout.EAST, this);
+		txtMaxEpochCount.setText("10");
+		add(txtMaxEpochCount);
+		
+		JLabel lblEpochCount = new JLabel("Epoch count");
+		springLayout.putConstraint(SpringLayout.NORTH, lblEpochCount, 0, SpringLayout.NORTH, txtMaxEpochCount);
+		springLayout.putConstraint(SpringLayout.EAST, lblEpochCount, -11, SpringLayout.WEST, txtMaxEpochCount);
+		add(lblEpochCount);
 		initInstrumentComboBox();
 
 		updateView();
@@ -130,8 +148,16 @@ public class LearnPanel extends JPanel {
 	 * @throws FileNotFoundException
 	 */
 	private void trainNetwork() {
-		resetTrainingContext();
-		neuralContext.getNeuralService().trainNetwork();
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// Run training thread
+				resetTrainingContext();
+				neuralContext.getNeuralService().trainNetwork();	
+				
+			}}).start();;
+
 	}
 
 	/**
@@ -150,6 +176,7 @@ public class LearnPanel extends JPanel {
 				instruments.toArray(new Instrument[] {}));
 		instrumentComboBox.setModel(model);
 	}
+
 
 	/**
 	 * Update view from context
@@ -183,6 +210,13 @@ public class LearnPanel extends JPanel {
 		context.setLastEpoch(0);
 		context.setLastEpochMilliseconds(0);
 		context.setTrainMilliseconds(0);
+		Integer maxEpochCount = Integer.valueOf(txtMaxEpochCount.getText());
+		neuralContext.getTrainingContext().setMaxEpochCount(maxEpochCount);
+		updateView();
+	}
+	
+	@Subscribe
+	public void onTrainIterationCompleted(TrainIterationCompletedEvent event){
 		updateView();
 	}
 }

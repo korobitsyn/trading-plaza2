@@ -420,7 +420,7 @@ public class NetworkPanel extends JPanel {
 
 		// Calculate neuron counts in layers
 		List<Integer> layers = new ArrayList<Integer>();
-		String[] layerStrings = txtLayers.getText().split(",");
+		String[] layerStrings = txtLayers.getText().replaceAll("\\s","").split(",");
 		for (String neuronsString : layerStrings) {
 			int neurons = Integer.parseInt(neuronsString);
 			layers.add(neurons);
