@@ -52,20 +52,22 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	 */
 	public NeuralServiceImpl() {
 	}
+
 	/**
-	* @see NeuralServiceBase#getFirstLayerSize(int)
-	*/
+	 * @see NeuralServiceBase#getFirstLayerSize(int)
+	 */
 	@Override
-	public int getFirstLayerSize(int entityListSize){
+	public int getFirstLayerSize(int entityListSize) {
 		return entityListSize * Level1DataManager.LEVEL1_DATA_SIZE;
 	}
-	
+
 	/**
 	 * @see NeuralServiceBase#getLastLayerSize()
 	 */
-	public int getLastLayerSize(){
+	public int getLastLayerSize() {
 		return Level1DataManager.OUTPUT_SIZE;
 	}
+
 	/**
 	 * @see NeuralServiceBase#createNetwork(List)
 	 */
@@ -110,24 +112,27 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	 * @see NeuralServiceBase#trainNetwork()
 	 */
 	@Override
-	public void trainNetwork(){
+	public void trainNetwork() {
 		// Load defautl train dataset and train network
 		MLDataSet ds = neuralContext.getNeuralDataManager()
 				.loadTrainMLDataSet();
 		trainNetwork(ds);
 	}
+
 	/**
 	 * Additional training of network on last data
 	 */
 	public void trainNetworkAdditional() {
 		// Get dataset for additional training and train on it
-		MLDataSet ds = neuralContext.getNeuralDataManager().loadAdditionalTrainMLDataSet();
+		MLDataSet ds = neuralContext.getNeuralDataManager()
+				.loadAdditionalTrainMLDataSet();
 		trainNetwork(ds);
-	}	
+	}
+
 	/**
 	 * Train on specific dataset
 	 */
-	void trainNetwork(MLDataSet dataSet){
+	void trainNetwork(MLDataSet dataSet) {
 		neuralContext.getTrainingContext().setLastError(0);
 		// neuralContext.getTrainingContext().setSamplesCount(dataSet.size());
 		BasicNetwork network = neuralContext.getNetwork();
@@ -176,12 +181,13 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 			neuralContext.getTrainingContext().setTrainMilliseconds(
 					trainWatch.getElapsedMilliseconds());
 			neuralContext.getTrainingContext().setLastError(error);
-			
+
 			// Raise event
 			TrainIterationCompletedEvent event = new TrainIterationCompletedEvent(
 					epoch, neuralContext.getTrainingContext()
 							.getLastEpochMilliseconds(), neuralContext
-							.getTrainingContext().getTrainMilliseconds());
+							.getTrainingContext().getTrainMilliseconds(),
+					neuralContext.getTrainingContext().getLastError());
 			eventBus.post(event);
 
 			// Log
@@ -198,60 +204,68 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 						Double.toString(train.getError())));
 		train.finishTraining();
 	}
-//	
-//	  /**
-//     * Train on samples window
-//     * @param pairs
-//     * @param currentIndex 
-//     */
-//    private static void train(List<DataPair> pairs, int currentIndex) throws FileNotFoundException, IOException{
-//             // Train on previous samples window
-//            List<DataPair> trainPairs = pairs.subList(currentIndex - NeuralContext.NetworkSettings.getSmallBarsWindowSize()+1, currentIndex+1);
-//            MLDataSet trainSet = MLBarDataLoader.getMLDataSet(trainPairs);
-//            NeuralService.trainNetwork(trainSet);       
-//    }
-//    /**
-//     * Test on samples window
-//     * @param pairs
-//     * @param currentIndex 
-//     */
-//    private static void test(List<DataPair> pairs, int currentIndex){
-//                BasicNetwork network = NeuralContext.Network.getNetwork();    
-//            
-//               // Prepare data for prediction
-//            DataPair currentPair = pairs.get(currentIndex);
-//            MLData input = MLBarDataConverter.inputEntityToMLData(currentPair.getInputEntity());
-//            // Compute network prediction
-//             MLData output = network.compute(input);
-//            // Get network output
-//            OutputEntity idealEntity = currentPair.getOutputEntity();
-//            OutputEntity predictedEntity = OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(), idealEntity.getFutureIntervalMillis(), output.getData(0), output.getData(1));
-//
-//            // Store values in context
-//            NeuralContext.Test.setIdealEntity(idealEntity);
-//            NeuralContext.Test.setPredictedEntity(predictedEntity); 
-//    }
-//    
-//    /**
-//     * Test and learn every iteration
-//     * @throws FileNotFoundException
-//     * @throws IOException 
-//     */
-//    public static void test() throws FileNotFoundException, IOException{
-//        BasicNetwork network = NeuralContext.Network.getNetwork();
-//
-//        // Get entities from csv files
-//        List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
-//        NeuralContext.Test.setMaxIterationCount(pairs.size());
-//        int iteration = 1;
-//        for(int i = NeuralContext.NetworkSettings.getSmallBarsWindowSize(); i < NeuralContext.Test.getMaxIterationCount(); i++){
-//            // Train on previous data
-//            train(pairs, i-1);
-//            // Test on current data
-//            test(pairs,i);
-//         
-//            // Increase iteration
-//            NeuralContext.Test.setIteration(iteration++);
-//        };
-//    }	
+	//
+	// /**
+	// * Train on samples window
+	// * @param pairs
+	// * @param currentIndex
+	// */
+	// private static void train(List<DataPair> pairs, int currentIndex) throws
+	// FileNotFoundException, IOException{
+	// // Train on previous samples window
+	// List<DataPair> trainPairs = pairs.subList(currentIndex -
+	// NeuralContext.NetworkSettings.getSmallBarsWindowSize()+1,
+	// currentIndex+1);
+	// MLDataSet trainSet = MLBarDataLoader.getMLDataSet(trainPairs);
+	// NeuralService.trainNetwork(trainSet);
+	// }
+	// /**
+	// * Test on samples window
+	// * @param pairs
+	// * @param currentIndex
+	// */
+	// private static void test(List<DataPair> pairs, int currentIndex){
+	// BasicNetwork network = NeuralContext.Network.getNetwork();
+	//
+	// // Prepare data for prediction
+	// DataPair currentPair = pairs.get(currentIndex);
+	// MLData input =
+	// MLBarDataConverter.inputEntityToMLData(currentPair.getInputEntity());
+	// // Compute network prediction
+	// MLData output = network.compute(input);
+	// // Get network output
+	// OutputEntity idealEntity = currentPair.getOutputEntity();
+	// OutputEntity predictedEntity =
+	// OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(),
+	// idealEntity.getFutureIntervalMillis(), output.getData(0),
+	// output.getData(1));
+	//
+	// // Store values in context
+	// NeuralContext.Test.setIdealEntity(idealEntity);
+	// NeuralContext.Test.setPredictedEntity(predictedEntity);
+	// }
+	//
+	// /**
+	// * Test and learn every iteration
+	// * @throws FileNotFoundException
+	// * @throws IOException
+	// */
+	// public static void test() throws FileNotFoundException, IOException{
+	// BasicNetwork network = NeuralContext.Network.getNetwork();
+	//
+	// // Get entities from csv files
+	// List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
+	// NeuralContext.Test.setMaxIterationCount(pairs.size());
+	// int iteration = 1;
+	// for(int i = NeuralContext.NetworkSettings.getSmallBarsWindowSize(); i <
+	// NeuralContext.Test.getMaxIterationCount(); i++){
+	// // Train on previous data
+	// train(pairs, i-1);
+	// // Test on current data
+	// test(pairs,i);
+	//
+	// // Increase iteration
+	// NeuralContext.Test.setIteration(iteration++);
+	// };
+	// }
 }

@@ -9,6 +9,7 @@ public class TrainIterationCompletedEvent {
     private int lastEpoch;
     private long lastEpochMilliseconds = 0;
     private long trainMilliseconds = 0;
+    private double lastError = 0;
 
     /**
      * Constructor with all data needed
@@ -16,10 +17,11 @@ public class TrainIterationCompletedEvent {
      * @param lastEpochMilliseconds
      * @param trainMilliseconds
      */
-    public TrainIterationCompletedEvent(int lastEpoch, long lastEpochMilliseconds, long trainMilliseconds){
+    public TrainIterationCompletedEvent(int lastEpoch, long lastEpochMilliseconds, long trainMilliseconds, double lastError){
     	this.lastEpoch = lastEpoch;
     	this.lastEpochMilliseconds = lastEpochMilliseconds;
     	this.trainMilliseconds = trainMilliseconds;
+    	this.lastError = lastError;
     }
 	/**
 	 * @return the lastEpochMilliseconds
@@ -40,5 +42,11 @@ public class TrainIterationCompletedEvent {
 	 */
 	public long getTrainMilliseconds() {
 		return trainMilliseconds;
+	}
+	/**
+	 * @return the lastError
+	 */
+	public double getLastError() {
+		return lastError;
 	}
 }
