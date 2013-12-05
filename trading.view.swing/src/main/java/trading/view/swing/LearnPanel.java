@@ -199,8 +199,7 @@ public class LearnPanel extends JPanel {
 		plot.getRangeAxis().setAutoRange(true);
 		plot.getDomainAxis().setRange(1,
 				neuralContext.getTrainingContext().getMaxEpochCount());
-		
-		
+
 	}
 
 	/**
@@ -239,6 +238,9 @@ public class LearnPanel extends JPanel {
 		ComboBoxModel<Instrument> model = new DefaultComboBoxModel<Instrument>(
 				instruments.toArray(new Instrument[] {}));
 		instrumentComboBox.setModel(model);
+		if (instrumentComboBox.getModel().getSize() > 0) {
+			instrumentComboBox.setSelectedIndex(0);
+		}
 	}
 
 	/**
@@ -285,6 +287,7 @@ public class LearnPanel extends JPanel {
 	@Subscribe
 	public void onTrainIterationCompleted(TrainIterationCompletedEvent event) {
 		updateView();
-        errorXYSeries.add(errorXYSeries.getItemCount() + 1, event.getLastError());
+		errorXYSeries.add(errorXYSeries.getItemCount() + 1,
+				event.getLastError());
 	}
 }

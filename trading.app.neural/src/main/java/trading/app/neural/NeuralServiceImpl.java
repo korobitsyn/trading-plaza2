@@ -158,7 +158,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 		epochWatch.start();
 		double lastError = 0;
 		double sameErrorCount = 0;
-		final int maxErrorCount = 10; // If error does not change maxErrorCount
+		final int maxErrorCount = 100; // If error does not change maxErrorCount
 										// loops, training completed
 		for (int epoch = 1; epoch <= neuralContext.getTrainingContext()
 				.getMaxEpochCount() && sameErrorCount <= maxErrorCount; epoch++) {
