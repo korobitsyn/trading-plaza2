@@ -262,8 +262,8 @@ public class LearnPanel extends JPanel {
 		lblTotalTime.setText(String.format("Total time: %f sec", new Long(
 				context.getTrainMilliseconds()).doubleValue()));
 
-		lblLastError.setText(String.format("Last error: %f",
-				new Double(context.getLastError())));
+		lblLastError.setText(String.format("Last error: %f %%",
+				new Double(context.getLastError()/0.01)));
 
 		// Enable learn button if instrument is set
 		learnButton.setEnabled(neuralContext.getTradingApplicationContext()
@@ -288,6 +288,6 @@ public class LearnPanel extends JPanel {
 	public void onTrainIterationCompleted(TrainIterationCompletedEvent event) {
 		updateView();
 		errorXYSeries.add(errorXYSeries.getItemCount() + 1,
-				event.getLastError());
+				event.getLastError()/0.01);
 	}
 }
