@@ -472,6 +472,7 @@ public class NetworkPanel extends JPanel {
 		btnReset.setEnabled(isNetworkNotNull);
 
 		updateNeededLevel1Count();
+		correctNetworkLayersView();
 
 	}
 
