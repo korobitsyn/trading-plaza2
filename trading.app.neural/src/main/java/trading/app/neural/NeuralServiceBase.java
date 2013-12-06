@@ -9,6 +9,8 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogDirectoryPersistence;
 
+import trading.data.model.Level1;
+
 import com.google.common.eventbus.*;
 
 /**
@@ -106,4 +108,6 @@ public abstract class NeuralServiceBase implements NeuralService {
 	 * @see NeuralService#getLastLayerSize()
 	 */
 	public abstract int getLastLayerSize();	
+	
+
 }

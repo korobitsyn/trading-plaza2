@@ -19,7 +19,9 @@ import org.encog.engine.network.activation.ActivationLinear;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
@@ -38,6 +40,7 @@ import trading.app.neural.NeuralContext;
 //import trading.data.model.OutputEntity;
 import trading.app.neural.events.TrainIterationCompletedEvent;
 import trading.app.neural.mlData.Level1DataManager;
+import trading.data.model.Level1;
 
 /**
  * Neural network service
@@ -245,27 +248,30 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	// NeuralContext.Test.setPredictedEntity(predictedEntity);
 	// }
 	//
-	// /**
-	// * Test and learn every iteration
-	// * @throws FileNotFoundException
-	// * @throws IOException
-	// */
-	// public static void test() throws FileNotFoundException, IOException{
-	// BasicNetwork network = NeuralContext.Network.getNetwork();
-	//
-	// // Get entities from csv files
-	// List<DataPair> pairs = MLBarDataLoader.getTestEntityPairs();
-	// NeuralContext.Test.setMaxIterationCount(pairs.size());
-	// int iteration = 1;
-	// for(int i = NeuralContext.NetworkSettings.getSmallBarsWindowSize(); i <
-	// NeuralContext.Test.getMaxIterationCount(); i++){
-	// // Train on previous data
-	// train(pairs, i-1);
-	// // Test on current data
-	// test(pairs,i);
-	//
-	// // Increase iteration
-	// NeuralContext.Test.setIteration(iteration++);
-	// };
-	// }
+	/**
+	 * Test and learn every iteration
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void testNetwork() {
+		BasicNetwork network = neuralContext.getNetwork();
+		List<Level1> data = neuralContext.getNeuralDataManager().loadTestData();
+		
+		// Go through all prediction window
+		for(int i = 1; i < neuralContext.getTrainingContext().getPredictionSamples(); i ++){
+			// Get input - ideal data pair
+			MLDataPair mlDataPair = neuralContext.getNeuralDataManager().getMLDataPair(data, i);
+			// Predict
+			MLData output = network.compute(mlDataPair.getInput());
+
+			
+			
+			
+			// Train
+			MLDataSet ds = new BasicMLDataSet();
+			ds.add(mlDataPair);
+			trainNetwork(ds);
+		}
+	}
 }

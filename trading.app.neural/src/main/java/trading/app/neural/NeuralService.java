@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+
 import com.google.common.eventbus.*;
 
 import org.encog.neural.networks.BasicNetwork;
+
+import trading.data.model.Level1;
 
 /**
  * Neural service interface
@@ -82,5 +85,7 @@ public interface NeuralService {
 	 * @return
 	 */
 	public abstract int getLastLayerSize();
+	
+	
 
 }
