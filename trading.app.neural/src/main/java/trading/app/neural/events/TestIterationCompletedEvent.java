@@ -14,6 +14,14 @@ public class TestIterationCompletedEvent {
 	private double idealLow;
 	private double predictedLow;
 	private double error;
+	private int iteration;
+	
+	/**
+	 * @return the iteration
+	 */
+	public int getIteration() {
+		return iteration;
+	}
 
 	/**
 	 * Ctor with all params
@@ -23,8 +31,9 @@ public class TestIterationCompletedEvent {
 	 * @param predictedHigh
 	 * @param predictedLow
 	 */
-	public TestIterationCompletedEvent(Level1 level1,double predictedLow, double predictedHigh,  double idealLow, double idealHigh, double error){
+	public TestIterationCompletedEvent(Level1 level1, int iteration, double predictedLow, double predictedHigh,  double idealLow, double idealHigh, double error){
 		this.level1 = level1;
+		this.iteration = iteration;
 		this.idealHigh = idealHigh;
 		this.idealLow = idealLow;
 		this.predictedHigh = predictedHigh;

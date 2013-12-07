@@ -97,9 +97,9 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 		int output = layers.get(layers.size() - 1);
 		pattern.setOutputNeurons(output);
 
-		// // Activation functioni
+		// // Activation function
 		pattern.setActivationFunction(new ActivationTANH());
-		// pattern.setActivationFunction(new ActivationLinear());
+		//pattern.setActivationFunction(new ActivationLinear());
 		// //pattern.setActivationFunction(new ActivationElliott());
 
 		// Create network
@@ -224,7 +224,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 		int startIndex = neuralContext.getLevel1WindowSize()+neuralContext.getPredictionSize();
 		int step = 1;
 		// Go through all prediction window
-		for (int i = startIndex; i < startIndex + neuralContext.getTrainingContext().getPredictionSamples()* step; i += step) {
+		for (int i = startIndex, iteration = 1; i < startIndex + neuralContext.getTrainingContext().getPredictionSamples()* step; i += step, iteration++) {
 			// Get input - ideal data pair
 			MLData input = neuralContext.getNeuralDataManager().getInputData(data, i);
 			// Predict
@@ -246,6 +246,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 			Level1 level1 = data.get(i);
 			TestIterationCompletedEvent event = new TestIterationCompletedEvent(
 					level1, 
+					iteration,
 					output.getData(0), // predicted low
 					output.getData(1), // predicted high
 					ideal.getData(0), // real low

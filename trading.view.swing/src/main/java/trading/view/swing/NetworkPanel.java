@@ -443,7 +443,7 @@ public class NetworkPanel extends JPanel {
 		}
 
 		// Update layers from network
-		String layersString = "0,100,2";
+		String layersString = "0,6,2";
 		if (neuralContext.getNetwork() != null) {
 			// Update layers text
 			StringBuilder sb = new StringBuilder();
@@ -504,10 +504,11 @@ public class NetworkPanel extends JPanel {
 	 */
 	public void updateNeededLevel1Count() {
 		// Get prediction size;
-		int predictionInterval = Integer.parseInt(txtPredictionSize.getText());
+		//int predictionInterval = Integer.parseInt(txtPredictionSize.getText());
+		int predictionStep = 1;
 		int predictionSamples = Integer
 				.parseInt(txtPredictionSamples.getText());
-		int predictionSize = predictionInterval * predictionSamples;
+		int predictionSize = predictionStep * predictionSamples;
 
 		// Get trainingSzie
 		int windowSize = Integer.parseInt(txtWindowSize.getText());

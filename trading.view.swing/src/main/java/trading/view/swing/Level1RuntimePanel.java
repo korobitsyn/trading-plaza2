@@ -104,7 +104,7 @@ public class Level1RuntimePanel extends JPanel implements MarketListener<Level1>
 			level1Chart.clear();
 			// Load history
 			List<Level1> data = tradingApplicationContext.getHistoryProvider().findLevel1Last(getInstrument()
-					.getId(), level1Chart.getMaxItemCount());
+					.getId(), Constants.MAX_CHART_ITEM_C0UNT);
 			level1Chart.addLevel1(data);
 		}
 	}

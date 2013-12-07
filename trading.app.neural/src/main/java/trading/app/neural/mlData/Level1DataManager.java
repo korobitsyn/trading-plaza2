@@ -280,12 +280,13 @@ public class Level1DataManager implements NeuralDataManager {
 		int trainDataSize = windowSize + trainStep*trainSamples;
 		
 		int predictionSize = neuralContext.getPredictionSize();
-		int predictionDataSize = neuralContext.getPredictionSize() * predictionSamples;
+		int predictionStep = 1;
+		int predictionDataSize = neuralContext.getPredictionSize() * predictionStep + predictionSamples;
 		//int predictionSamples = neuralContext.getTrainingContext()
 		// .getPredictionSamples();
 
 		// Train and prediction offsets offset from end
-		int predictionOffset = predictionSize * predictionSamples;
+		int predictionOffset = predictionSize * predictionStep + predictionSamples;
 		int trainOffset = predictionOffset + trainStep * trainSamples;
 		int dataSize = trainDataSize + predictionDataSize;
 

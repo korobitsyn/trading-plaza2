@@ -40,6 +40,8 @@ import org.jfree.data.xy.DefaultTableXYDataset;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class LearnPanel extends JPanel {
 	private NeuralContext neuralContext;
@@ -140,6 +142,12 @@ public class LearnPanel extends JPanel {
 		add(lblInstrument);
 
 		txtMaxEpochCount = new JFormattedTextField();
+		txtMaxEpochCount.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateContextFromView();
+			}
+		});
 		springLayout.putConstraint(SpringLayout.NORTH, txtMaxEpochCount, 27,
 				SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, txtMaxEpochCount, -225,
@@ -180,7 +188,7 @@ public class LearnPanel extends JPanel {
 		updateView();
 
 	}
-
+	private static final int MAX_ITEM_COUNT = 100;
 	/**
 	 * Init JFreeChart
 	 */
@@ -190,16 +198,17 @@ public class LearnPanel extends JPanel {
 		XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
 		errorXYSeries = new XYSeries("Error");
 		xySeriesCollection.addSeries(errorXYSeries);
-
+		errorXYSeries.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);
 		// Create chart
 		errorChart = ChartFactory.createXYLineChart("Error value", "Epoch",
 				"Error, %", xySeriesCollection, PlotOrientation.VERTICAL, true,
 				true, true);
 		XYPlot plot = (XYPlot) errorChart.getPlot();
 		plot.getRangeAxis().setAutoRange(true);
-		plot.getDomainAxis().setRange(1,
-				neuralContext.getTrainingContext().getMaxEpochCount());
-
+//		plot.getDomainAxis().setRange(1,
+//				neuralContext.getTrainingContext().getMaxEpochCount());
+		// X auto range to proper display last error values
+		plot.getDomainAxis().setAutoRange(true);
 	}
 
 	/**
@@ -209,6 +218,7 @@ public class LearnPanel extends JPanel {
 	 * @throws FileNotFoundException
 	 */
 	private void trainNetwork() {
+		updateContextFromView();
 		new Thread(new Runnable() {
 
 			@Override
@@ -242,7 +252,15 @@ public class LearnPanel extends JPanel {
 			instrumentComboBox.setSelectedIndex(0);
 		}
 	}
-
+	
+	/**
+	 * Write changed in view data to context 
+	 */
+	private void updateContextFromView(){
+		Integer maxEpochCount = Integer.valueOf(txtMaxEpochCount.getText());
+		
+		neuralContext.getTrainingContext().setMaxEpochCount(maxEpochCount);
+	}
 	/**
 	 * Update view from context
 	 */
@@ -285,9 +303,10 @@ public class LearnPanel extends JPanel {
 	}
 
 	@Subscribe
-	public void onTrainIterationCompleted(TrainIterationCompletedEvent event) {
+	public synchronized void onTrainIterationCompleted(TrainIterationCompletedEvent event) {
 		updateView();
-		errorXYSeries.add(errorXYSeries.getItemCount() + 1,
+		double x = new Integer(event.getLastEpoch()).doubleValue();
+		errorXYSeries.add(x,
 				event.getLastError()/0.01);
 	}
 }

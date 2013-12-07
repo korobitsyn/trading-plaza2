@@ -29,6 +29,7 @@ import com.google.common.eventbus.Subscribe;
 
 import trading.app.neural.NeuralContext;
 import trading.app.neural.events.TestIterationCompletedEvent;
+import javax.swing.JLabel;
 
 /**
  * Test neural network view with charts
@@ -52,6 +53,7 @@ public class TestPanel extends JPanel {
 	XYSeries idealLowSeriesRelative;
 	XYSeries predictedHighSeriesRelative;
 	XYSeries predictedLowSeriesRelative;
+	private final JLabel lblIteration;
 	/**
 	 * Create the panel.
 	 */
@@ -82,10 +84,10 @@ public class TestPanel extends JPanel {
 		add(progressBar);
 
 		JSplitPane chartsPanel = new JSplitPane();
+		springLayout.putConstraint(SpringLayout.NORTH, chartsPanel, 89,
+				SpringLayout.NORTH, this);
 		chartsPanel.setResizeWeight(0.5);
 		chartsPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		springLayout.putConstraint(SpringLayout.NORTH, chartsPanel, 60,
-				SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, chartsPanel, 0,
 				SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, chartsPanel, 0,
@@ -105,6 +107,11 @@ public class TestPanel extends JPanel {
 		
 		// Attach to events
 		neuralContext.getNeuralService().getEventBus().register(this);
+		
+		lblIteration = new JLabel("Test iteration:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblIteration, 6, SpringLayout.SOUTH, progressBar);
+		springLayout.putConstraint(SpringLayout.WEST, lblIteration, 10, SpringLayout.WEST, this);
+		add(lblIteration);
 
 	}
 
@@ -116,9 +123,17 @@ public class TestPanel extends JPanel {
 		//TableXYDataset ds = new DefaultTableXYDataset();
 		XYSeriesCollection seriesCollection = new XYSeriesCollection();
 		idealHighSeriesAbsolute = new XYSeries("Ideal High");
+		idealHighSeriesAbsolute.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);
+
 		idealLowSeriesAbsolute = new XYSeries("Ideal Low");
+		idealLowSeriesAbsolute.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);		
+
 		predictedHighSeriesAbsolute = new XYSeries("Predicted High");
+		predictedHighSeriesAbsolute.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);		
+
 		predictedLowSeriesAbsolute = new XYSeries("Predicted Low");
+		predictedLowSeriesAbsolute.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);		
+		
 		seriesCollection.addSeries(idealHighSeriesAbsolute);
 		seriesCollection.addSeries(idealLowSeriesAbsolute);
 		seriesCollection.addSeries(predictedHighSeriesAbsolute);
@@ -146,9 +161,17 @@ public class TestPanel extends JPanel {
 		//TableXYDataset ds = new DefaultTableXYDataset();
 		XYSeriesCollection seriesCollection = new XYSeriesCollection();
 		idealHighSeriesRelative = new XYSeries("Ideal High");
+		idealHighSeriesRelative.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);		
+
 		idealLowSeriesRelative = new XYSeries("Ideal Low");
+		idealLowSeriesRelative.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);		
+
 		predictedHighSeriesRelative = new XYSeries("Predicted High");
+		predictedHighSeriesRelative.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);		
+
 		predictedLowSeriesRelative = new XYSeries("Predicted Low");
+		predictedLowSeriesRelative.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);	
+
 		seriesCollection.addSeries(idealHighSeriesRelative);
 		seriesCollection.addSeries(idealLowSeriesRelative);
 		seriesCollection.addSeries(predictedHighSeriesRelative);
@@ -233,13 +256,14 @@ public class TestPanel extends JPanel {
 	 * @param e
 	 */
 	@Subscribe
-	public void onTestIterationCompleted(TestIterationCompletedEvent e){
+	public synchronized void onTestIterationCompleted(TestIterationCompletedEvent e){
 		// Get x value (time axis)
 //		Calendar cal = GregorianCalendar.getInstance();
 //		cal.setTime(e.getLevel1().getDate());
 //		RegularTimePeriod x = RegularTimePeriod.createInstance(Millisecond.class, e.getLevel1().getDate(), cal.getTimeZone());
 		// Add xy values to the charts
-		double x = new Integer(predictedLowSeriesRelative.getItemCount()).doubleValue();
+
+		double x = new Integer(e.getIteration()).doubleValue();
 		// Relative chart
 		predictedLowSeriesRelative.add(x, e.getPredictedLow()/0.01);
 		predictedHighSeriesRelative.add(x, e.getPredictedHigh()/0.01);
@@ -250,9 +274,12 @@ public class TestPanel extends JPanel {
 		predictedHighSeriesAbsolute.add(x,e.getLevel1().getAsk().doubleValue() * (1+e.getPredictedHigh()));
 		idealLowSeriesAbsolute.add(x,e.getLevel1().getBid().doubleValue() * (1+e.getIdealLow()));
 		idealHighSeriesAbsolute.add(x,e.getLevel1().getAsk().doubleValue() * (1+e.getIdealHigh()));
+
 		
-		repaint();
+		lblIteration.setText(String.format("Iteration: %d of %d", e.getIteration(), neuralContext.getPredictionSize()));
+		progressBar.setMaximum(neuralContext.getTrainingContext().getPredictionSamples());
+		progressBar.setValue(e.getIteration());
+
+
 	}
-	
-	
 }

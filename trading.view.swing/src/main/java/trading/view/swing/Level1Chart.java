@@ -60,23 +60,24 @@ public class Level1Chart extends JPanel {
 	final static Color BID_SERIES_COLOR = Color.cyan;
 	final static Color ASK_SERIES_COLOR = Color.cyan;
 	final static Color VOLUME_SERIES_COLOR = Color.red;
-	// Max items in charts
-	int maxItemCount = 100;
-
-	/**
-	 * @return the maxItemCount
-	 */
-	public int getMaxItemCount() {
-		return maxItemCount;
-	}
-
-	/**
-	 * @param maxItemCount
-	 *            the maxItemCount to set
-	 */
-	public void setMaxItemCount(int maxItemCount) {
-		this.maxItemCount = maxItemCount;
-	}
+	
+//	// Max items in charts
+//	//int maxItemCount = 100;
+//
+//	/**
+//	 * @return the maxItemCount
+//	 */
+//	public int getMaxItemCount() {
+//		return maxItemCount;
+//	}
+//
+//	/**
+//	 * @param maxItemCount
+//	 *            the maxItemCount to set
+//	 */
+//	public void setMaxItemCount(int maxItemCount) {
+//		this.maxItemCount = maxItemCount;
+//	}
 
 	/**
 	 * Ctor, jfreechart init
@@ -154,11 +155,11 @@ public class Level1Chart extends JPanel {
 		// Add empty time series to fill later
 		// Create price series
 		priceSeries = new TimeSeries("Last price");
-		priceSeries.setMaximumItemCount(this.maxItemCount);
+		priceSeries.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);
 		bidSeries = new TimeSeries("Bid");
-		bidSeries.setMaximumItemCount(this.maxItemCount);
+		bidSeries.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);
 		askSeries = new TimeSeries("Ask");
-		askSeries.setMaximumItemCount(this.maxItemCount);
+		askSeries.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);
 
 		// Create and return DataSet with all time series
 		TimeSeriesCollection dataSet = new TimeSeriesCollection();
@@ -227,7 +228,7 @@ public class Level1Chart extends JPanel {
 		// Add empty time series to fill later
 		// Create price series
 		volumeSeries = new TimeSeries("Volume");
-		volumeSeries.setMaximumItemCount(this.maxItemCount);
+		volumeSeries.setMaximumItemCount(Constants.MAX_CHART_ITEM_C0UNT);
 		// Create and return DataSet with all time series
 		TimeSeriesCollection dataSet = new TimeSeriesCollection();
 		dataSet.addSeries(volumeSeries);
