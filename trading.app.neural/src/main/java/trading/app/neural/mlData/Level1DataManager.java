@@ -90,7 +90,8 @@ public class Level1DataManager implements NeuralDataManager {
 	 */
 	private MLData entitiesToMLData(List<Level1> entityList) {
 		// Contains network input data
-		MLData data = new BasicMLData(LEVEL1_DATA_SIZE * (entityList.size()-1));
+		MLData data = new BasicMLData(LEVEL1_DATA_SIZE
+				* (entityList.size() - 1));
 
 		Level1 lastEntity = null;
 		int pos = 0;
@@ -105,6 +106,18 @@ public class Level1DataManager implements NeuralDataManager {
 		}
 
 		return data;
+	}
+
+	/**
+	 * @see NeuralDataManager#getInputData(List, int)
+	 */
+	@Override
+	public MLData getInputData(List<Level1> data, int index) {
+		// Get input data
+		List<Level1> inputWindow = data.subList(
+				index - neuralContext.getLevel1WindowSize(), index + 1);
+		MLData inputData = entitiesToMLData(inputWindow);
+		return inputData;
 	}
 
 	/**
@@ -124,18 +137,6 @@ public class Level1DataManager implements NeuralDataManager {
 		// Create data pair for encog and add to dataset
 		MLDataPair pair = new BasicMLDataPair(inputData, outputData);
 		return pair;
-	}
-
-	/**
-	 * @see NeuralDataManager#getInputData(List, int)
-	 */
-	@Override
-	public MLData getInputData(List<Level1> data, int index) {
-		// Get input data
-		List<Level1> inputWindow = data.subList(
-				index - neuralContext.getLevel1WindowSize(), index + 1);
-		MLData inputData = entitiesToMLData(inputWindow);
-		return inputData;
 	}
 
 	/**
@@ -178,13 +179,10 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * @param data
-	 * @param index
-	 *            Current item index. Prediction window starts next item after
-	 *            index
-	 * @return
+	 * @see NeuralDataManager#getOutputData(List, int)a
 	 */
-	private MLData getOutputData(List<Level1> data, int index) {
+	@Override
+	public MLData getOutputData(List<Level1> data, int index) {
 		// Get output data - min, max
 		Level1 currentLevel1 = data.get(index);
 		List<Level1> predictionWindow = data.subList(index + 1, index + 1
@@ -278,15 +276,18 @@ public class Level1DataManager implements NeuralDataManager {
 		// Prepare parameters to use further in this function
 		int windowSize = neuralContext.getLevel1WindowSize();
 		int trainStep = neuralContext.getTrainingContext().getTrainStep();
-		int predictionSize = neuralContext.getPredictionSize();
 		int trainSamples = neuralContext.getTrainingContext().getTrainSamples();
-		// int predictionSamples = neuralContext.getTrainingContext()
+		int trainDataSize = windowSize + trainStep*trainSamples;
+		
+		int predictionSize = neuralContext.getPredictionSize();
+		int predictionDataSize = neuralContext.getPredictionSize() * predictionSamples;
+		//int predictionSamples = neuralContext.getTrainingContext()
 		// .getPredictionSamples();
 
 		// Train and prediction offsets offset from end
 		int predictionOffset = predictionSize * predictionSamples;
-		int trainOffset = predictionOffset + windowSize * trainSamples;
-		int dataSize = trainOffset;
+		int trainOffset = predictionOffset + trainStep * trainSamples;
+		int dataSize = trainDataSize + predictionDataSize;
 
 		// Load last data from database
 		int instrumentId = neuralContext.getTradingApplicationContext()

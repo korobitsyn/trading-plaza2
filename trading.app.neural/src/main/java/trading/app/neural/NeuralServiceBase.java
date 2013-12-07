@@ -3,12 +3,17 @@ package trading.app.neural;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogDirectoryPersistence;
 
+import trading.app.neural.events.TestIterationCompletedEvent;
 import trading.data.model.Level1;
 
 import com.google.common.eventbus.*;
@@ -107,7 +112,13 @@ public abstract class NeuralServiceBase implements NeuralService {
 	/**
 	 * Train network on last data
 	 */
-	public abstract void trainNetworkAdditional();	
+	public abstract void trainNetworkAdditional();
+
+	/**
+	 * @see NeuralService#testNetwork()
+	 */
+	@Override
+	public abstract void testNetwork();
 	
 
 }

@@ -41,6 +41,13 @@ public interface NeuralService {
 	 * Train network on last data
 	 */
 	public abstract void trainNetworkAdditional();
+	/**
+	 * Test and learn every iteration
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public abstract void testNetwork();
 	
 	/**
 	 * Get context

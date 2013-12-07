@@ -22,6 +22,7 @@ import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
@@ -209,48 +210,48 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 						Double.toString(train.getError())));
 		train.finishTraining();
 	}
-
+	
 	/**
 	 * Test and learn every iteration
-	 * 
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	* @see NeuralServiceBase#testNetwork()
 	 */
+	@Override
 	public void testNetwork() {
 		BasicNetwork network = neuralContext.getNetwork();
 		List<Level1> data = neuralContext.getNeuralDataManager().loadTestData();
-
+	
 		// ??? ToDo: rework, predict
-		int startIndex = neuralContext.getLevel1WindowSize() + neuralContext.getPredictionSize();
+		int startIndex = neuralContext.getLevel1WindowSize()+neuralContext.getPredictionSize();
 		int step = 1;
 		// Go through all prediction window
 		for (int i = startIndex; i < startIndex + neuralContext.getTrainingContext().getPredictionSamples()* step; i += step) {
 			// Get input - ideal data pair
-			MLDataPair mlDataPair = neuralContext.getNeuralDataManager()
-					.getMLDataPair(data, i);
+			MLData input = neuralContext.getNeuralDataManager().getInputData(data, i);
 			// Predict
-			MLData output = network.compute(mlDataPair.getInput());
-
+			MLData output = network.compute(input);
+			// No learning if no previous predictions happened
+//			if(i < neuralContext.getLevel1WindowSize() + neuralContext.getPredictionSize()){
+//				continue;
+//			}
+			// Learning based on previous prediction and real data comparison	
+			MLData ideal = neuralContext.getNeuralDataManager().getOutputData(data, i);
+			MLDataPair pair = new BasicMLDataPair(input, ideal);
+			MLDataSet dataSet= new BasicMLDataSet(Arrays.asList(new MLDataPair[]{pair}));
+			// Train
+			trainNetwork(dataSet);
+			double error = network.calculateError(dataSet);
 			
-			// Event generation
+			// Fire event
 			// Last level1 in input window. Prediction window starts next item
 			Level1 level1 = data.get(i);
-			// Calculate error
-			MLDataSet dataSet= new BasicMLDataSet(Arrays.asList(new MLDataPair[]{mlDataPair}));
-			double error = network.calculateError(null);
-			// Fire event
 			TestIterationCompletedEvent event = new TestIterationCompletedEvent(
-					level1, output.getData(0), // predicted low
+					level1, 
+					output.getData(0), // predicted low
 					output.getData(1), // predicted high
-					mlDataPair.getIdeal().getData(0), // real low
-					mlDataPair.getIdeal().getData(1), // real high
+					ideal.getData(0), // real low
+					ideal.getData(1), // real high
 					error); 
 			eventBus.post(event);
-
-			// Train
-			MLDataSet ds = new BasicMLDataSet();
-			ds.add(mlDataPair);
-			trainNetwork(ds);
 		}
-	}
+	}		
 }

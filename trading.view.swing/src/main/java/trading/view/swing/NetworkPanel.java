@@ -443,7 +443,7 @@ public class NetworkPanel extends JPanel {
 		}
 
 		// Update layers from network
-		String layersString = "0,0,2";
+		String layersString = "0,100,2";
 		if (neuralContext.getNetwork() != null) {
 			// Update layers text
 			StringBuilder sb = new StringBuilder();

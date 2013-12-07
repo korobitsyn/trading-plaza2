@@ -45,6 +45,15 @@ public interface NeuralDataManager {
 	 *            index
 	 * @return input data for neural network
 	 */
-	public abstract MLData getInputData(List<Level1> data, int index);	
+	public abstract MLData getInputData(List<Level1> data, int index);
+	
+	/**
+	 * @param data
+	 * @param index
+	 *            Current item index. Prediction window starts next item after
+	 *            index
+	 * @return
+	 */
+	public abstract MLData getOutputData(List<Level1> data, int index);	
 
 }

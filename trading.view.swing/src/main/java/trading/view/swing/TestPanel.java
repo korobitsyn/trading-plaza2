@@ -3,6 +3,8 @@ package trading.view.swing;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,9 +17,18 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.TimeSeriesDataItem;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
+import com.google.common.eventbus.Subscribe;
+
 import trading.app.neural.NeuralContext;
+import trading.app.neural.events.TestIterationCompletedEvent;
 
 /**
  * Test neural network view with charts
@@ -32,15 +43,15 @@ public class TestPanel extends JPanel {
 
 	JFreeChart chartAbsolute;
 
-	TimeSeries idealHighSeriesAbsolute;
-	TimeSeries idealLowSeriesAbsolute;
-	TimeSeries predictedHighSeriesAbsolute;
-	TimeSeries predictedLowSeriesAbsolute;
+	XYSeries idealHighSeriesAbsolute;
+	XYSeries idealLowSeriesAbsolute;
+	XYSeries predictedHighSeriesAbsolute;
+	XYSeries predictedLowSeriesAbsolute;
 	JFreeChart chartRelative;
-	TimeSeries idealHighSeriesRelative;
-	TimeSeries idealLowSeriesRelative;
-	TimeSeries predictedHighSeriesRelative;
-	TimeSeries predictedLowSeriesRelative;
+	XYSeries idealHighSeriesRelative;
+	XYSeries idealLowSeriesRelative;
+	XYSeries predictedHighSeriesRelative;
+	XYSeries predictedLowSeriesRelative;
 	/**
 	 * Create the panel.
 	 */
@@ -91,6 +102,9 @@ public class TestPanel extends JPanel {
 		ChartPanel relativeChartPanel = new ChartPanel(chartRelative);
 		chartsPanel.setTopComponent(absoluteChartPanel);
 		chartsPanel.setBottomComponent(relativeChartPanel);
+		
+		// Attach to events
+		neuralContext.getNeuralService().getEventBus().register(this);
 
 	}
 
@@ -100,11 +114,11 @@ public class TestPanel extends JPanel {
 	private void createChartAbsolute() {
 		// Create dataset and series
 		//TableXYDataset ds = new DefaultTableXYDataset();
-		TimeSeriesCollection seriesCollection = new TimeSeriesCollection();
-		idealHighSeriesAbsolute = new TimeSeries("Ideal High");
-		idealLowSeriesAbsolute = new TimeSeries("Ideal Low");
-		predictedHighSeriesAbsolute = new TimeSeries("Predicted High");
-		predictedLowSeriesAbsolute = new TimeSeries("Predicted Low");
+		XYSeriesCollection seriesCollection = new XYSeriesCollection();
+		idealHighSeriesAbsolute = new XYSeries("Ideal High");
+		idealLowSeriesAbsolute = new XYSeries("Ideal Low");
+		predictedHighSeriesAbsolute = new XYSeries("Predicted High");
+		predictedLowSeriesAbsolute = new XYSeries("Predicted Low");
 		seriesCollection.addSeries(idealHighSeriesAbsolute);
 		seriesCollection.addSeries(idealLowSeriesAbsolute);
 		seriesCollection.addSeries(predictedHighSeriesAbsolute);
@@ -130,11 +144,11 @@ public class TestPanel extends JPanel {
 	private void createChartRelative() {
 		// Create dataset and series
 		//TableXYDataset ds = new DefaultTableXYDataset();
-		TimeSeriesCollection seriesCollection = new TimeSeriesCollection();
-		idealHighSeriesRelative = new TimeSeries("Ideal High");
-		idealLowSeriesRelative = new TimeSeries("Ideal Low");
-		predictedHighSeriesRelative = new TimeSeries("Predicted High");
-		predictedLowSeriesRelative = new TimeSeries("Predicted Low");
+		XYSeriesCollection seriesCollection = new XYSeriesCollection();
+		idealHighSeriesRelative = new XYSeries("Ideal High");
+		idealLowSeriesRelative = new XYSeries("Ideal Low");
+		predictedHighSeriesRelative = new XYSeries("Predicted High");
+		predictedLowSeriesRelative = new XYSeries("Predicted Low");
 		seriesCollection.addSeries(idealHighSeriesRelative);
 		seriesCollection.addSeries(idealLowSeriesRelative);
 		seriesCollection.addSeries(predictedHighSeriesRelative);
@@ -179,13 +193,66 @@ public class TestPanel extends JPanel {
 	 * Test neural network
 	 */
 	private void testNetwork() {
-		// neuralContext.getNeuralService().Network();
+		// Delete previous chart
+		clearCharts();
+
+		// Start testing thread and continue this form 
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				neuralContext.getNeuralService().testNetwork();
+			}})
+		.start();
 	}
 
 	/**
 	 * Update view from context
 	 */
-	public void updateView() {
+	private void updateView() {
 		testButton.setEnabled(neuralContext != null);
 	}
+	
+	/**
+	 * Clear all series in charts
+	 */
+	private void clearCharts(){
+		idealHighSeriesAbsolute.clear();
+		idealLowSeriesAbsolute.clear();;
+		predictedHighSeriesAbsolute.clear();
+		predictedLowSeriesAbsolute.clear();
+		
+		idealHighSeriesRelative.clear();
+		idealLowSeriesRelative.clear();
+		predictedHighSeriesRelative.clear();
+		predictedLowSeriesRelative.clear();		
+
+	}
+
+	/**
+	 * Add predicted and ideal data to charts
+	 * @param e
+	 */
+	@Subscribe
+	public void onTestIterationCompleted(TestIterationCompletedEvent e){
+		// Get x value (time axis)
+//		Calendar cal = GregorianCalendar.getInstance();
+//		cal.setTime(e.getLevel1().getDate());
+//		RegularTimePeriod x = RegularTimePeriod.createInstance(Millisecond.class, e.getLevel1().getDate(), cal.getTimeZone());
+		// Add xy values to the charts
+		double x = new Integer(predictedLowSeriesRelative.getItemCount()).doubleValue();
+		// Relative chart
+		predictedLowSeriesRelative.add(x, e.getPredictedLow()/0.01);
+		predictedHighSeriesRelative.add(x, e.getPredictedHigh()/0.01);
+		idealLowSeriesRelative.add(x, e.getIdealLow()/0.01);
+		idealHighSeriesRelative.add(x, e.getIdealHigh()/0.01);
+		// Absolute prices chart
+		predictedLowSeriesAbsolute.add(x,e.getLevel1().getBid().doubleValue() * (1+e.getPredictedLow()));
+		predictedHighSeriesAbsolute.add(x,e.getLevel1().getAsk().doubleValue() * (1+e.getPredictedHigh()));
+		idealLowSeriesAbsolute.add(x,e.getLevel1().getBid().doubleValue() * (1+e.getIdealLow()));
+		idealHighSeriesAbsolute.add(x,e.getLevel1().getAsk().doubleValue() * (1+e.getIdealHigh()));
+		
+		repaint();
+	}
+	
+	
 }
