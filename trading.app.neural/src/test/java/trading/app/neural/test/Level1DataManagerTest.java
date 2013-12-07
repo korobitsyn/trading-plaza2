@@ -60,6 +60,23 @@ public class Level1DataManagerTest extends AbstractTest {
 	});
 	
 	/**
+	 * Test method for {@link trading.app.neural.mlData.Level1DataManager#getInputData(List, int)
+	 */
+	@Test
+	public void getInputDataTest(){
+		TradingApplicationContext appContext = new TradingApplicationContext();
+		NeuralContext context = new NeuralContext(appContext);
+		context.setLevel1WindowSize(1);
+		context.setPredictionSize(1);
+		NeuralDataManager manager = new Level1DataManager(context);
+		// Invoke
+		MLData inputData = manager.getInputData(level1List, 1);
+		// Assert input data in pair
+		assertMLDataContainsLevel1(manager, inputData, 0, level1List.get(1), level1List.get(0));
+		assertEquals(Level1DataManager.LEVEL1_DATA_SIZE, inputData.size());
+	}
+	
+	/**
 	 * Test method for
 	 * {@link trading.app.neural.mlData.Level1DataManager#getMLDataPair(List, int)}.
 	 */
@@ -154,6 +171,8 @@ public class Level1DataManagerTest extends AbstractTest {
 		Integer singleLevel1Size = (Integer) ReflectionTestUtils.getField(loader, "LEVEL1_DATA_SIZE");		
 		assertMLDataContainsLevel1(loader, mlData, singleLevel1Size, entities.get(2), entities.get(1));
 	}
+	
+	
 	
 	/**
 	 * Test method for

@@ -2,6 +2,7 @@ package trading.app.neural.mlData;
 
 import java.util.List;
 
+import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 
@@ -33,6 +34,17 @@ public interface NeuralDataManager {
 	 * Load list of items for neural network test
 	 * @return
 	 */
-	public abstract List<Level1> loadTestData();	
+	public abstract List<Level1> loadTestData();
+	
+	/**
+	 * Returns input for prediction
+	 * 
+	 * @param data
+	 * @param index
+	 *            Current item index. Prediction window starts next item after
+	 *            index
+	 * @return input data for neural network
+	 */
+	public abstract MLData getInputData(List<Level1> data, int index);	
 
 }

@@ -90,7 +90,7 @@ public class Level1DataManager implements NeuralDataManager {
 	 */
 	private MLData entitiesToMLData(List<Level1> entityList) {
 		// Contains network input data
-		MLData data = new BasicMLData(LEVEL1_DATA_SIZE * entityList.size());
+		MLData data = new BasicMLData(LEVEL1_DATA_SIZE * (entityList.size()-1));
 
 		Level1 lastEntity = null;
 		int pos = 0;
@@ -127,14 +127,9 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * Returns input for prediction
-	 * 
-	 * @param data
-	 * @param index
-	 *            Current item index. Prediction window starts next item after
-	 *            index
-	 * @return input data for neural network
+	 * @see NeuralDataManager#getInputData(List, int)
 	 */
+	@Override
 	public MLData getInputData(List<Level1> data, int index) {
 		// Get input data
 		List<Level1> inputWindow = data.subList(
