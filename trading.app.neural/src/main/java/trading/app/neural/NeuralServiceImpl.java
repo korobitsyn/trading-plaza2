@@ -99,7 +99,8 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 
 		// // Activation function
 		pattern.setActivationFunction(new ActivationTANH());
-		//pattern.setActivationFunction(new ActivationLinear());
+//		pattern.setActivationFunction(new ActivationLinear());
+
 		// //pattern.setActivationFunction(new ActivationElliott());
 
 		// Create network
@@ -147,6 +148,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 		// ResilientPropagation train = new ResilientPropagation(network, ds, 0,
 		// RPROPConst.DEFAULT_MAX_STEP);
 		ResilientPropagation train = new ResilientPropagation(network, dataSet);
+
 		// Backpropagation train = new Backpropagation(network, ds);
 		train.setThreadCount(10);
 		neuralContext.getTrainingContext().setTrain(train);
