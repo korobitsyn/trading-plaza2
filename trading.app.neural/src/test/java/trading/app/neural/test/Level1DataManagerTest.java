@@ -79,7 +79,7 @@ public class Level1DataManagerTest extends AbstractTest {
 
 		// Invoke
 		MLData rightOutput = ReflectionTestUtils.invokeMethod(manager, "getOutputData",
-				level1List.get(1), level1List.subList(2, 3));	
+				level1List,1);	
 		
 		assertEquals(rightOutput.getData(0), output.getData(0), Constants.DOUBLE_COMPARISON_PRECISION); 
 		assertEquals(rightOutput.getData(1), output.getData(1), Constants.DOUBLE_COMPARISON_PRECISION); 
@@ -161,7 +161,12 @@ public class Level1DataManagerTest extends AbstractTest {
 	 */
 	@Test
 	public void getOutputDataTest() {
-		NeuralDataManager loader = new Level1DataManager(null);
+		TradingApplicationContext appContext = new TradingApplicationContext();
+		NeuralContext context = new NeuralContext(appContext);
+		context.setLevel1WindowSize(1);
+		context.setPredictionSize(2);		
+		
+		NeuralDataManager loader = new Level1DataManager(context);
 		// Prepare params
 		Level1 item1 = level1List.get(0);
 		Level1 item2 = level1List.get(1);
@@ -174,7 +179,7 @@ public class Level1DataManagerTest extends AbstractTest {
 				/ item1.getAsk().doubleValue();
 		// Invoke
 		MLData data = ReflectionTestUtils.invokeMethod(loader, "getOutputData",
-				item1, Arrays.asList(new Level1[] { item2, item3 }));
+				Arrays.asList(new Level1[] {item1, item2, item3 }),0);
 		// Assert
 		assertEquals(data.getData(0), minBid,
 				Constants.DOUBLE_COMPARISON_PRECISION);

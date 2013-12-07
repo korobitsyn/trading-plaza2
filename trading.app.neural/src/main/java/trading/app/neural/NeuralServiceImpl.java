@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import org.encog.util.simple.EncogUtility;
 import com.google.common.eventbus.EventBus;
 
 import trading.app.neural.NeuralContext;
+import trading.app.neural.events.TestIterationCompletedEvent;
 //import trading.data.MLBarDataConverter;
 //import trading.data.MLBarDataLoader;
 //import trading.data.model.BarEntity;
@@ -207,47 +209,7 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 						Double.toString(train.getError())));
 		train.finishTraining();
 	}
-	//
-	// /**
-	// * Train on samples window
-	// * @param pairs
-	// * @param currentIndex
-	// */
-	// private static void train(List<DataPair> pairs, int currentIndex) throws
-	// FileNotFoundException, IOException{
-	// // Train on previous samples window
-	// List<DataPair> trainPairs = pairs.subList(currentIndex -
-	// NeuralContext.NetworkSettings.getSmallBarsWindowSize()+1,
-	// currentIndex+1);
-	// MLDataSet trainSet = MLBarDataLoader.getMLDataSet(trainPairs);
-	// NeuralService.trainNetwork(trainSet);
-	// }
-	// /**
-	// * Test on samples window
-	// * @param pairs
-	// * @param currentIndex
-	// */
-	// private static void test(List<DataPair> pairs, int currentIndex){
-	// BasicNetwork network = NeuralContext.Network.getNetwork();
-	//
-	// // Prepare data for prediction
-	// DataPair currentPair = pairs.get(currentIndex);
-	// MLData input =
-	// MLBarDataConverter.inputEntityToMLData(currentPair.getInputEntity());
-	// // Compute network prediction
-	// MLData output = network.compute(input);
-	// // Get network output
-	// OutputEntity idealEntity = currentPair.getOutputEntity();
-	// OutputEntity predictedEntity =
-	// OutputEntity.createFromRelativeData(idealEntity.getCurrentBarEntity(),
-	// idealEntity.getFutureIntervalMillis(), output.getData(0),
-	// output.getData(1));
-	//
-	// // Store values in context
-	// NeuralContext.Test.setIdealEntity(idealEntity);
-	// NeuralContext.Test.setPredictedEntity(predictedEntity);
-	// }
-	//
+
 	/**
 	 * Test and learn every iteration
 	 * 
@@ -257,17 +219,34 @@ public class NeuralServiceImpl extends NeuralServiceBase {
 	public void testNetwork() {
 		BasicNetwork network = neuralContext.getNetwork();
 		List<Level1> data = neuralContext.getNeuralDataManager().loadTestData();
-		
+
+		// ??? ToDo: rework, predict
+		int startIndex = neuralContext.getLevel1WindowSize() + neuralContext.getPredictionSize();
+		int step = 1;
 		// Go through all prediction window
-		for(int i = 1; i < neuralContext.getTrainingContext().getPredictionSamples(); i ++){
+		for (int i = startIndex; i < startIndex + neuralContext.getTrainingContext().getPredictionSamples()* step; i += step) {
 			// Get input - ideal data pair
-			MLDataPair mlDataPair = neuralContext.getNeuralDataManager().getMLDataPair(data, i);
+			MLDataPair mlDataPair = neuralContext.getNeuralDataManager()
+					.getMLDataPair(data, i);
 			// Predict
 			MLData output = network.compute(mlDataPair.getInput());
 
 			
-			
-			
+			// Event generation
+			// Last level1 in input window. Prediction window starts next item
+			Level1 level1 = data.get(i);
+			// Calculate error
+			MLDataSet dataSet= new BasicMLDataSet(Arrays.asList(new MLDataPair[]{mlDataPair}));
+			double error = network.calculateError(null);
+			// Fire event
+			TestIterationCompletedEvent event = new TestIterationCompletedEvent(
+					level1, output.getData(0), // predicted low
+					output.getData(1), // predicted high
+					mlDataPair.getIdeal().getData(0), // real low
+					mlDataPair.getIdeal().getData(1), // real high
+					error); 
+			eventBus.post(event);
+
 			// Train
 			MLDataSet ds = new BasicMLDataSet();
 			ds.add(mlDataPair);

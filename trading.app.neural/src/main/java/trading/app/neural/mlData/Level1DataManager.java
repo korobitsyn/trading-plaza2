@@ -33,8 +33,8 @@ public class Level1DataManager implements NeuralDataManager {
 	 */
 	public static final int LEVEL1_DATA_SIZE = 7;
 
-	
 	public static final int OUTPUT_SIZE = 2;
+
 	/**
 	 * Constructor for context
 	 * 
@@ -43,8 +43,7 @@ public class Level1DataManager implements NeuralDataManager {
 	public Level1DataManager(NeuralContext context) {
 		neuralContext = context;
 	}
-	
-	
+
 	/**
 	 * Convert level1 to array data
 	 * 
@@ -82,7 +81,7 @@ public class Level1DataManager implements NeuralDataManager {
 
 		return pos;
 	}
-	
+
 	/**
 	 * Convert level1 list to mldata
 	 * 
@@ -118,22 +117,30 @@ public class Level1DataManager implements NeuralDataManager {
 	 */
 	@Override
 	public MLDataPair getMLDataPair(List<Level1> data, int index) {
+		// Get input and output
+		MLData inputData = getInputData(data, index);
+		MLData outputData = getOutputData(data, index);
+
+		// Create data pair for encog and add to dataset
+		MLDataPair pair = new BasicMLDataPair(inputData, outputData);
+		return pair;
+	}
+
+	/**
+	 * Returns input for prediction
+	 * 
+	 * @param data
+	 * @param index
+	 *            Current item index. Prediction window starts next item after
+	 *            index
+	 * @return input data for neural network
+	 */
+	public MLData getInputData(List<Level1> data, int index) {
 		// Get input data
 		List<Level1> inputWindow = data.subList(
 				index - neuralContext.getLevel1WindowSize(), index + 1);
 		MLData inputData = entitiesToMLData(inputWindow);
-
-		// Get output data - min, max
-		Level1 lastInputLevel1 = inputWindow.get(inputWindow.size() - 1);
-		List<Level1> predictionWindow = data.subList(index+1, index + 1
-				+ neuralContext.getPredictionSize());
-		MLData outputData = getOutputData(lastInputLevel1, predictionWindow);
-
-		// Create data pair for encog and add to dataset
-		MLDataPair pair = new BasicMLDataPair(inputData, outputData);
-
-		return pair;
-
+		return inputData;
 	}
 
 	/**
@@ -160,6 +167,7 @@ public class Level1DataManager implements NeuralDataManager {
 				/ prev.doubleValue();
 		return normalized;
 	}
+
 	/**
 	 * Get normalized value for volume
 	 * 
@@ -175,13 +183,18 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * Get output data from prediction window
-	 * 
-	 * @param predictionWindow
+	 * @param data
+	 * @param index
+	 *            Current item index. Prediction window starts next item after
+	 *            index
 	 * @return
 	 */
-	private MLData getOutputData(Level1 currentLevel1,
-			List<Level1> predictionWindow) {
+	private MLData getOutputData(List<Level1> data, int index) {
+		// Get output data - min, max
+		Level1 currentLevel1 = data.get(index);
+		List<Level1> predictionWindow = data.subList(index + 1, index + 1
+				+ neuralContext.getPredictionSize());
+
 		MLData outputData = new BasicMLData(OUTPUT_SIZE);
 		Double minBid = Double.MAX_VALUE;
 		Double maxAsk = Double.MIN_VALUE;
@@ -205,32 +218,36 @@ public class Level1DataManager implements NeuralDataManager {
 	}
 
 	/**
-	 * Load dataset for additional training on last data
-	 * Is called when prediction interval completed and we can compare previous network prediction with reality happened.
+	 * Load dataset for additional training on last data Is called when
+	 * prediction interval completed and we can compare previous network
+	 * prediction with reality happened.
+	 * 
 	 * @return
 	 */
 	@Override
-	public MLDataSet loadAdditionalTrainMLDataSet(){
+	public MLDataSet loadAdditionalTrainMLDataSet() {
 		// Load data with one last prediction and related training windows
 		return loadTrainMLDataSet(1);
-		
+
 	}
 
 	/**
 	 * Load list of items for neural network test
+	 * 
 	 * @return
 	 */
 	@Override
-	public List<Level1> loadTestData(){
+	public List<Level1> loadTestData() {
 		// Prepare parameters to use further in this function
 		int windowSize = neuralContext.getLevel1WindowSize();
 		int testStep = 1;
 		int predictionSize = neuralContext.getPredictionSize();
-		int predictionSamples = neuralContext.getTrainingContext().getPredictionSamples();
+		int predictionSamples = neuralContext.getTrainingContext()
+				.getPredictionSamples();
 
 		// Train and prediction offsets offset from end
-		int predictionOffset = predictionSize * predictionSamples*testStep;
-		//int trainOffset = predictionOffset + windowSize * trainSamples;
+		int predictionOffset = predictionSize * predictionSamples * testStep;
+		// int trainOffset = predictionOffset + windowSize * trainSamples;
 		int dataSize = predictionOffset + windowSize;
 
 		// Load last data for current instrument from database
@@ -239,8 +256,8 @@ public class Level1DataManager implements NeuralDataManager {
 		HistoryProvider historyProvider = neuralContext
 				.getTradingApplicationContext().getHistoryProvider();
 		List<Level1> data = historyProvider.findLevel1Last(instrumentId,
-				dataSize);		
-		
+				dataSize);
+
 		return data;
 	}
 
@@ -249,7 +266,7 @@ public class Level1DataManager implements NeuralDataManager {
 	 * @see trading.app.neural.mlData.EncogDataManager#loadTrainMLDataSet()
 	 */
 	@Override
-	public MLDataSet loadTrainMLDataSet(){
+	public MLDataSet loadTrainMLDataSet() {
 		int predictionSamples = neuralContext.getTrainingContext()
 				.getPredictionSamples();
 		return loadTrainMLDataSet(predictionSamples);
@@ -257,7 +274,9 @@ public class Level1DataManager implements NeuralDataManager {
 
 	/**
 	 * 
-	 * @param predictionSamples prediction data samples in dataset. Got from context for main training and 1 for additional training on last data 
+	 * @param predictionSamples
+	 *            prediction data samples in dataset. Got from context for main
+	 *            training and 1 for additional training on last data
 	 * 
 	 */
 	public MLDataSet loadTrainMLDataSet(int predictionSamples) {
@@ -266,8 +285,8 @@ public class Level1DataManager implements NeuralDataManager {
 		int trainStep = neuralContext.getTrainingContext().getTrainStep();
 		int predictionSize = neuralContext.getPredictionSize();
 		int trainSamples = neuralContext.getTrainingContext().getTrainSamples();
-//		int predictionSamples = neuralContext.getTrainingContext()
-//				.getPredictionSamples();
+		// int predictionSamples = neuralContext.getTrainingContext()
+		// .getPredictionSamples();
 
 		// Train and prediction offsets offset from end
 		int predictionOffset = predictionSize * predictionSamples;
@@ -293,7 +312,7 @@ public class Level1DataManager implements NeuralDataManager {
 		MLDataSet dataSet = new BasicMLDataSet();
 		// Prepare samples for training
 		for (int i = 0; i < trainSamples; i += trainStep) {
-			MLDataPair pair = getMLDataPair(data, windowSize+i);
+			MLDataPair pair = getMLDataPair(data, windowSize + i);
 			dataSet.add(pair);
 		}
 		return dataSet;

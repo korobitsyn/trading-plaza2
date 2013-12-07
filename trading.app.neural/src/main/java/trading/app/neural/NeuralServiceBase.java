@@ -22,13 +22,6 @@ public abstract class NeuralServiceBase implements NeuralService {
 	EventBus eventBus = new EventBus();
 	protected NeuralContext neuralContext;
 
-	/* (non-Javadoc)
-	 * @see trading.app.neural.NeuralService#setNeuralContext(trading.app.neural.NeuralContext)
-	 */
-	@Override
-	public void setNeuralContext(NeuralContext neuralContext) {
-		this.neuralContext = neuralContext;
-	}
 	/**
 	 * Construct with neural context data
 	 * @param neuralContext
@@ -40,22 +33,29 @@ public abstract class NeuralServiceBase implements NeuralService {
 	 * @see trading.app.neural.NeuralService#createNetwork(java.util.List)
 	 */
     @Override
-	public abstract BasicNetwork createNetwork(List<Integer> layers); 
+	public abstract BasicNetwork createNetwork(List<Integer> layers);
+	/**
+	 * @return the eventBus
+	 */
+	@Override
+	public EventBus getEventBus() {
+		return eventBus;
+	} 
     
     /**
 	 * @see trading.app.neural.NeuralService#trainNetwork()
 	 */
 
     /**
-     * General train of network
-     */
-    @Override
-	public abstract void trainNetwork();
+	* @see NeuralService#getFirstLayerSize(int)
+	 */
+	@Override
+	public abstract int getFirstLayerSize(int entityListSize);
     
 	/**
-	 * Train network on last data
+	 * @see NeuralService#getLastLayerSize()
 	 */
-	public abstract void trainNetworkAdditional();    
+	public abstract int getLastLayerSize();    
     
     
 	/* (non-Javadoc)
@@ -64,14 +64,6 @@ public abstract class NeuralServiceBase implements NeuralService {
 	@Override
 	public NeuralContext getNeuralContext() {
 		return neuralContext;
-	}
-
-	/* (non-Javadoc)
-	 * @see trading.app.neural.NeuralService#saveNetwork(java.io.File)
-	 */
-	@Override
-	public void saveNetwork(File file) {
-	    EncogDirectoryPersistence.saveObject(file, neuralContext.getNetwork());
 	}
 
 	/* (non-Javadoc)
@@ -90,24 +82,32 @@ public abstract class NeuralServiceBase implements NeuralService {
 	public void resetNetwork() {
 	    neuralContext.getNetwork().reset();
 	}
-	/**
-	 * @return the eventBus
+
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#saveNetwork(java.io.File)
 	 */
 	@Override
-	public EventBus getEventBus() {
-		return eventBus;
+	public void saveNetwork(File file) {
+	    EncogDirectoryPersistence.saveObject(file, neuralContext.getNetwork());
+	}
+	/* (non-Javadoc)
+	 * @see trading.app.neural.NeuralService#setNeuralContext(trading.app.neural.NeuralContext)
+	 */
+	@Override
+	public void setNeuralContext(NeuralContext neuralContext) {
+		this.neuralContext = neuralContext;
 	}
 	
 	/**
-	* @see NeuralService#getFirstLayerSize(int)
-	 */
-	@Override
-	public abstract int getFirstLayerSize(int entityListSize);
+     * General train of network
+     */
+    @Override
+	public abstract void trainNetwork();
 	
 	/**
-	 * @see NeuralService#getLastLayerSize()
+	 * Train network on last data
 	 */
-	public abstract int getLastLayerSize();	
+	public abstract void trainNetworkAdditional();	
 	
 
 }
